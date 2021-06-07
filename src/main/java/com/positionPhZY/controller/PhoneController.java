@@ -3,6 +3,13 @@ package com.positionPhZY.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/phone")
 public class PhoneController {
 	
+	//http://139.196.143.225:8080/PositionPhZY/phone/goLogin
+	//https://www.liankexing.com/question/825
 	private static final String path="http://www.qrcodesy.com:8080/GoodsPublic/merchant";
 
 	@RequestMapping(value="/goLogin")
@@ -62,13 +71,20 @@ public class PhoneController {
 	}
 
 	@RequestMapping(value="/getCode")
-	@ResponseBody
-	public Map<String, Object> getCode() {
+	public void getCode() {
+		System.out.println("qqqqqqqqqqqqqq");
+		try {
+			post("http://139.196.143.225:8081/position/public/embeded.smd","");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
 		Map<String, Object> resultMap = null;
 		String url="http://139.196.143.225:8081/position/public/embeded.smd";
 		List<NameValuePair> params=new ArrayList<NameValuePair>();
 		params.add(0, new BasicNameValuePair("jsonrpc", "2.0"));
-		params.add(1, new BasicNameValuePair("params", "{\"tenantId\":\"sc19070007\",\"userId\":\"yyc\"},\"\":\"\", \"\":1}"));
+		params.add(1, new BasicNameValuePair("params", "{\"tenantId\":\"sc19070007\",\"userId\":\"yyc\"}"));
 		params.add(2, new BasicNameValuePair("method", "getCode"));
 		params.add(3, new BasicNameValuePair("id", "1"));
 			
@@ -80,7 +96,39 @@ public class PhoneController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return resultMap;
+		*/
+	}
+	
+	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control
+	public String post(String actionUrl, String params)
+			throws IOException {
+		String serverURL = actionUrl;
+		StringBuffer sbf = new StringBuffer(); 
+		String strRead = null; 
+		URL url = new URL(serverURL); 
+		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
+		connection.setRequestMethod("POST");//请求post方式
+		connection.setDoInput(true); 
+		connection.setDoOutput(true); 
+		//header内的的参数在这里set    
+		//connection.setRequestProperty("key", "value");
+		connection.setRequestProperty("Content-Type", "application/json");
+		connection.connect(); 
+		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
+		//body参数放这里
+		writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"sc19070007\",\"userId\":\"yyc\"}, \"method\":\"getCode\", \"id\":1 }"); 
+		writer.flush();
+		InputStream is = connection.getInputStream(); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
+		while ((strRead = reader.readLine()) != null) { 
+			sbf.append(strRead); 
+			sbf.append("\r\n"); 
+		}
+		reader.close(); 
+		connection.disconnect();
+		String results = sbf.toString();
+		System.out.println("results==="+results);
+		return results;
 	}
 	
 	public Map<String, Object> getRespJson(String url,List<NameValuePair> params) throws Exception {
@@ -89,6 +137,7 @@ public class PhoneController {
 		//POST的URL
 		//建立HttpPost对象
 		HttpPost httppost=new HttpPost(url);
+		httppost.setHeader("Content-Type", "application/json-rpc;charset=UTF-8");
 		//添加参数
 		if(params!=null)
 			httppost.setEntity(new UrlEncodedFormEntity(params,HTTP.UTF_8));

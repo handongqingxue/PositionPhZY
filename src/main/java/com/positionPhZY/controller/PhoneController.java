@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/phone")
 public class PhoneController {
 
+	@RequestMapping(value="/goLogin")
+	public String goLogin() {
+		
+		return "phone/login";
+	}
+
 	@RequestMapping(value="/goIndex")
 	public String goIndex() {
 		
-		System.out.println("11111111");
 		return "phone/index";
 	}
 }

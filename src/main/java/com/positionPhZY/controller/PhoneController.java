@@ -68,11 +68,9 @@ public class PhoneController {
 		String url="http://139.196.143.225:8081/position/public/embeded.smd";
 		List<NameValuePair> params=new ArrayList<NameValuePair>();
 		params.add(0, new BasicNameValuePair("jsonrpc", "2.0"));
-		params.add(1, new BasicNameValuePair("password", "E10ADC3949BA59ABBE56E057F20F883E"));
-		params.add(2, new BasicNameValuePair("from", ""));
-		params.add(3, new BasicNameValuePair("method", "getCode"));
-		params.add(4, new BasicNameValuePair("id", "1"));
-		//{"":"","params":{"tenantId":"sc19070007","userId":"yyc"},"":"", "":1},
+		params.add(1, new BasicNameValuePair("params", "{\"tenantId\":\"sc19070007\",\"userId\":\"yyc\"},\"\":\"\", \"\":1}"));
+		params.add(2, new BasicNameValuePair("method", "getCode"));
+		params.add(3, new BasicNameValuePair("id", "1"));
 			
 		try {
 			resultMap=getRespJson(url, params);

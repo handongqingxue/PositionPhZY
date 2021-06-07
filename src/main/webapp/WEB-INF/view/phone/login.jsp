@@ -12,12 +12,19 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 $(function(){
-	$.post("http://location.yz-cloud.com/position/public/embeded.smd",
+	$.post("login",
+		{},function(){
+		
+		}
+	,"json");
+	/*
+	$.post("http://139.196.143.225:8081/position/public/embeded.smd",
 		{"jsonrpc":"2.0","params":{"tenantId":"sc19070007","userId":"yyc"},"method":"getCode", "id":1},
 		function(data){
 			alert(data);
 		}
 	,"json");
+	*/
 });
 
 function submit(){

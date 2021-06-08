@@ -77,15 +77,16 @@ public class PhoneController {
 
 	@RequestMapping(value="/getCode")
 	@ResponseBody
-	public Map<String, Object> getCode() {
-		System.out.println("qqqqqqqqqqqqqq");
+	public Map<String, Object> getCode(String tenantId, String userId) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			JSONObject paramJO=new JSONObject();
-			paramJO.put("tenantId", "ts00000006");
-			paramJO.put("userId", "test001");
+			//paramJO.put("tenantId", "ts00000006");
+			paramJO.put("tenantId", tenantId);
+			//paramJO.put("userId", "test001");
+			paramJO.put("userId", userId);
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("method", "getCode");
 			bodyParamJO.put("id", 1);
@@ -126,17 +127,19 @@ public class PhoneController {
 
 	@RequestMapping(value="/login")
 	@ResponseBody
-	public Map<String, Object> login(){
-		Map<String, Object> resultMap = null;
+	public Map<String, Object> login(String tenantId, String userId, String password){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			JSONObject paramJO=new JSONObject();
-			paramJO.put("tenantId", "ts00000006");
-			paramJO.put("userId", "test001");
+			//paramJO.put("tenantId", "ts00000006");
+			paramJO.put("tenantId", tenantId);
+			//paramJO.put("userId", "test001");
+			paramJO.put("userId", userId);
 			//paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
-			String vsCode = getCode().get("result").toString();
-			paramJO.put("key", SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+vsCode));
+			String vsCode = getCode(tenantId,userId).get("result").toString();
+			paramJO.put("key", SHA256Utils.getSHA256(tenantId+userId+password+vsCode));
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("method", "login");
 			bodyParamJO.put("id", 1);
@@ -145,11 +148,16 @@ public class PhoneController {
 			//result==={"result":{"role":1,"staffId":null},"id":1,"jsonrpc":"2.0"}
 			//result==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":"ts00000006: code miss"}}
 			System.out.println("resultJO==="+resultJO.toString());
+			JSONObject resJO=(JSONObject)resultJO.get("result");
+			System.out.println(">>>=="+resultJO.get("result"));
+			resultMap.put("role", resJO.get("role"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		finally {
 			return resultMap;
+		}
 	}
 	
 	public static void main(String[] args) {

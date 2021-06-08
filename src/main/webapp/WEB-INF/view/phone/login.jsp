@@ -13,8 +13,9 @@
 <script type="text/javascript">
 $(function(){
 	$.post("login",
-		{},function(){
-		
+		{tenantId:"ts00000006",userId:"test001",password:"test001"},
+		function(data){
+			alert(data.role);
 		}
 	,"json");
 	/*

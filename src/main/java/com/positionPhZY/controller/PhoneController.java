@@ -29,6 +29,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.positionPhZY.util.sha256.SHA256Utils;
+
 @Controller
 @RequestMapping("/phone")
 public class PhoneController {
@@ -36,6 +38,7 @@ public class PhoneController {
 	//http://139.196.143.225:8080/PositionPhZY/phone/goLogin
 	//https://www.liankexing.com/question/825
 	private static final String path="http://www.qrcodesy.com:8080/GoodsPublic/merchant";
+	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -49,6 +52,7 @@ public class PhoneController {
 		return "phone/index";
 	}
 
+	/*
 	@RequestMapping(value="/login")
 	@ResponseBody
 	public Map<String, Object> login(String staffsNo, String password, String companyID, boolean remPwd, HttpSession session) {
@@ -69,16 +73,36 @@ public class PhoneController {
 		}
 		return resultMap;
 	}
+	*/
 
 	@RequestMapping(value="/getCode")
-	public void getCode() {
+	@ResponseBody
+	public Map<String, Object> getCode() {
 		System.out.println("qqqqqqqqqqqqqq");
+		Map<String, Object> resultMap = null;
 		try {
-			post("http://139.196.143.225:8081/position/public/embeded.smd","");
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("tenantId", "ts00000006");
+			paramJO.put("userId", "test001");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("method", "getCode");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(PUBLIC_URL,bodyParamJO);
+			String result=resultJO.get("result").toString();
+			System.out.println("==="+result);
+			resultMap.put("result", result);
+			//results==={"result":"d9c137a48f074cc9a2d799dfc480be2c","id":1,"jsonrpc":"2.0"}
+			//results==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":null}}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		finally {
+			return resultMap;
+		}
+		
 		/*
 		Map<String, Object> resultMap = null;
 		String url="http://139.196.143.225:8081/position/public/embeded.smd";
@@ -99,10 +123,44 @@ public class PhoneController {
 		*/
 	}
 	
+
+	@RequestMapping(value="/login")
+	@ResponseBody
+	public Map<String, Object> login(){
+		Map<String, Object> resultMap = null;
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("tenantId", "ts00000006");
+			paramJO.put("userId", "test001");
+			paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
+			//String vsCode = getCode().get("result").toString();
+			//paramJO.put("key", SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+vsCode));
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("method", "login");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(PUBLIC_URL,bodyParamJO);
+			//bodyParamStr==={"method":"login","id":1,"jsonrpc":"2.0","params":{"tenantId":"ts00000006","userId":"test001","key":"415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda"}}
+			//result==={"result":{"role":1,"staffId":null},"id":1,"jsonrpc":"2.0"}
+			//result==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":"ts00000006: code miss"}}
+			System.out.println("resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return resultMap;
+	}
+	
+	public static void main(String[] args) {
+		String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"8b2057332ed342b1af47460ba6d95c5d");
+		//415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda
+		System.out.println("s==="+s);
+	}
+	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control
-	public String post(String actionUrl, String params)
+	public JSONObject postBody(String serverURL, JSONObject bodyParamJO)
 			throws IOException {
-		String serverURL = actionUrl;
 		StringBuffer sbf = new StringBuffer(); 
 		String strRead = null; 
 		URL url = new URL(serverURL); 
@@ -116,7 +174,10 @@ public class PhoneController {
 		connection.connect(); 
 		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
 		//body参数放这里
-		writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"sc19070007\",\"userId\":\"yyc\"}, \"method\":\"getCode\", \"id\":1 }"); 
+		String bodyParamStr = bodyParamJO.toString();
+		System.out.println("bodyParamStr==="+bodyParamStr);
+		writer.write(bodyParamStr);
+		//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
 		writer.flush();
 		InputStream is = connection.getInputStream(); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
@@ -126,9 +187,10 @@ public class PhoneController {
 		}
 		reader.close(); 
 		connection.disconnect();
-		String results = sbf.toString();
-		System.out.println("results==="+results);
-		return results;
+		String result = sbf.toString();
+		System.out.println("result==="+result);
+		JSONObject resultJO = new JSONObject(result);
+		return resultJO;
 	}
 	
 	public Map<String, Object> getRespJson(String url,List<NameValuePair> params) throws Exception {

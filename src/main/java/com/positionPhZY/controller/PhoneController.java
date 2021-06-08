@@ -79,7 +79,7 @@ public class PhoneController {
 	@ResponseBody
 	public Map<String, Object> getCode() {
 		System.out.println("qqqqqqqqqqqqqq");
-		Map<String, Object> resultMap = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
@@ -134,9 +134,9 @@ public class PhoneController {
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("tenantId", "ts00000006");
 			paramJO.put("userId", "test001");
-			paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
-			//String vsCode = getCode().get("result").toString();
-			//paramJO.put("key", SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+vsCode));
+			//paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
+			String vsCode = getCode().get("result").toString();
+			paramJO.put("key", SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+vsCode));
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("method", "login");
 			bodyParamJO.put("id", 1);

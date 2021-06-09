@@ -245,7 +245,7 @@ public class PhoneController {
 		}
 		reader.close(); 
 		
-		if(serverURL.contains("public")) {
+		if(serverURL.contains("public")&&"login".equals(method)) {
 			if(!checkCookieInSession(session)) {
 				getCookieFromHeader(connection,session);
 			}

@@ -11,6 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
+var path='<%=basePath %>';
+var phonePath=path+"phone/";
 $(function(){
 	
 });
@@ -29,7 +31,8 @@ function login(){
 	$.post("login",
 		{tenantId:"ts00000006",userId:"test001",password:"test001"},
 		function(data){
-			alert(data.role);
+			//alert(data.role);
+			location.href=phonePath+"goIndex";
 		}
 	,"json");
 	/*
@@ -139,7 +142,7 @@ function checkPassword(){
     border-radius: 4px;
   }
 </style>
-<title>Insert title here</title>
+<title>登录</title>
 </head>
 <body>
 <div class="loginPage_div">
@@ -148,19 +151,19 @@ function checkPassword(){
        <div class="tenantId_div">
            <img alt="" src="<%=basePath %>resource/image/001.png" style="width: 20px;height:26px;">
            <div class="tenantId_inp_div">
-               <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" onfocus="focusTenantId()" onblur="checkTenantId()"/>
+               <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" value="ts00000006" onfocus="focusTenantId()" onblur="checkTenantId()"/>
            </div>
        </div>
        <div class="userId_div">
            <img alt="" src="<%=basePath %>resource/image/001.png" style="width: 20px;height:26px;">
            <div class="userId_inp_div">
-               <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" onfocus="focusUserId()" onblur="checkUserId()"/>
+               <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" value="test001" onfocus="focusUserId()" onblur="checkUserId()"/>
            </div>
        </div>
        <div class="password_div">
            <img alt="" src="<%=basePath %>resource/image/002.png" style="width: 24px;height:23px;">
            <div class="password_inp_div">
-               <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" onblur="checkPassword()"/>
+               <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" value="test001" onblur="checkPassword()"/>
            </div>
        </div>
        <div class="loginBut_div" onclick="checkLogin()">登录</div>

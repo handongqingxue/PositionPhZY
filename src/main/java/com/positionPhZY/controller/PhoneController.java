@@ -582,6 +582,465 @@ public class PhoneController {
 			return resultMap;
 		}
 	}
+
+	/**
+	 * 获取定位点列表（暂无数据）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getLocationPoints")
+	@ResponseBody
+	public Map<String, Object> getLocationPoints(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getLocationPoints");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("areaId", 0);
+			//paramJO.put("deviceType", "");
+			paramJO.put("pageIndex", 0);
+			paramJO.put("maxCount", 100);
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationPoints",request);
+			System.out.println("getLocationPoints:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取定位点（暂无数据）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getLocationPoint")
+	@ResponseBody
+	public Map<String, Object> getLocationPoint(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getLocationPoint");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("id", 1);
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationPoint",request);
+			System.out.println("getLocationPoint:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取定位引擎接入点列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getEngines")
+	@ResponseBody
+	public Map<String, Object> getEngines(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getEngines");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEngines",request);
+			System.out.println("getEngines:resultJO==="+resultJO.toString());
+			/*
+			 {"result":[
+				 {"initMark":2104230190,"lastRecordId":0,"clientLogoutTime":0,"isEditing":true,"clientLoginTime":0,"id":"a1","clientVersion":0,"schemaTime":1618277921076,"open":true},
+				 {"initMark":0,"lastRecordId":0,"clientLogoutTime":0,"isEditing":false,"clientLoginTime":0,"id":"a2","clientVersion":0,"schemaTime":1611898047515,"open":false}
+			 ],"id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取根地图列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getRootAreas")
+	@ResponseBody
+	public Map<String, Object> getRootAreas(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getRootAreas");
+			JSONObject paramJO=new JSONObject();
+			//paramJO.put("engineId", "");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getRootAreas",request);
+			System.out.println("getRootAreas:resultJO==="+resultJO.toString());
+			/*
+			{"result":[
+			{
+				"partitions":[
+					{"fillColor":"#e33558","areaId":1,"shape":4,"name":"红色",
+					"coordinates":[
+						{"x":3.46,"y":664.52},
+						{"x":367.37,"y":664.52},
+						{"x":367.37,"y":340.13},
+						{"x":3.46,"y":340.13}
+					],
+					"id":10003,"height":5},
+					{"fillColor":"#8fc219","areaId":1,"shape":1,"coordinates":{"r":107.3,"x":608.58,"y":64.6},"name":"ceshi001","id":10002,"height":5}
+				],
+				"length":670.49,
+				"gps":{"altitude":5.9,"latitude":32.262528,"angle2":0,"longitude":119.108227},
+				"platform":{"brightness":2.6,"chart_time_out":120000},
+				"parentId":-1,"path":"/sc20080092/area/area2d-1.jpg?t=1598952912791","path1":"/sc20080092/area/area3d-1.gltf?t=1598952912791",
+				"name":"总图",
+				"width":720.52,"x":0,"y":0,"angle":0,"z":0,"id":1,"file_2d":{},"floor":0,"file_3d":{},"engineId":"a1"}
+			],"id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取设备及状态列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getDevices")
+	@ResponseBody
+	public Map<String, Object> getDevices(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getDevices");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("prefix", "BTI");
+			paramJO.put("containState", true);
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDevices",request);
+			System.out.println("getDevices:resultJO==="+resultJO.toString());
+			/*
+			 {"result":[
+			 {"deviceType":"BTI","blocks":["BTI24007015"],"activeTime":1619538518223,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24007015","voltUnit":"V","labelId":7015,"volt":3650,"state":0,"id":"BTI24007015","time":"2021-04-27T23:48:38.223+0800","rootAreaId":1},
+			 {"deviceType":"BTI","blocks":["BTI24007632"],"activeTime":1619535291622,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24007632","voltUnit":"V","labelId":7632,"volt":3650,"state":0,"id":"BTI24007632","time":"2021-04-27T22:54:51.622+0800","rootAreaId":1},
+			 {"deviceType":"BTI","blocks":["BTI24006228"],"activeTime":1619536980523,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24006228","voltUnit":"V","labelId":6228,"volt":3650,"state":0,"id":"BTI24006228","time":"2021-04-27T23:23:00.523+0800","rootAreaId":1},
+			 {"deviceType":"BTI","blocks":["BTI24007532"],"activeTime":1619531894024,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24007532","voltUnit":"V","labelId":7532,"volt":3650,"state":0,"id":"BTI24007532","time":"2021-04-27T21:58:14.024+0800","rootAreaId":1},
+			 {"deviceType":"BTI","blocks":["BTI24006644"],"activeTime":1619537356659,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24006644","voltUnit":"V","labelId":6644,"volt":3650,"state":0,"id":"BTI24006644","time":"2021-04-27T23:29:16.659+0800","rootAreaId":1},
+			 {"deviceType":"BTI","blocks":["BTI24006914"],"activeTime":1619531663248,"rssiM":70,"rssiN":3.5,"deviceId":"BTI24006914","voltUnit":"V","labelId":6914,"volt":3650,"state":0,"id":"BTI24006914","time":"2021-04-27T21:54:23.248+0800","rootAreaId":1},
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 读取标签实时状态
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getTagStateMap")
+	@ResponseBody
+	public Map<String, Object> getTagStateMap(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getTagStateMap");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("areaId", 1);
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getTagStateMap",request);
+			System.out.println("getTagStateMap:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取历史轨迹
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getLocationRecords")
+	@ResponseBody
+	public Map<String, Object> getLocationRecords(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getLocationRecords");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("tagId", "BTT34039771");
+			paramJO.put("areaId", "1");
+			paramJO.put("startTime", "1518277921076");
+			paramJO.put("endTime", "1618277921076");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
+			System.out.println("getLocationRecords:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 闸机记录读取
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getDoorRecord")
+	@ResponseBody
+	public Map<String, Object> getDoorRecord(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getDoorRecord");
+			JSONObject paramJO=new JSONObject();
+			//paramJO.put("pid", 0);
+			paramJO.put("startTime", "1518277921076");
+			paramJO.put("endTime", "1618277921076");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDoorRecord",request);
+			System.out.println("getDoorRecord:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取电子围栏列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getEnclosures")
+	@ResponseBody
+	public Map<String, Object> getEnclosures(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getEnclosures");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("areaId", "2");
+			//paramJO.put("type", "1");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEnclosures",request);
+			System.out.println("getEnclosures:resultJO==="+resultJO.toString());
+			/*
+			 {"result":[
+				 {"mode":0,"enclosureType":25,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":531.8,"y":116.28},
+						 {"x":679.46,"y":116.28},
+						 {"x":679.46,"y":9.23},
+						 {"x":531.8,"y":9.23}
+					 ],
+				 	"name":"巡检1号","overtime":300,"threshold":10,"id":1},
+				 {"mode":0,"enclosureType":24,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":119.08119,"y":508.03805},
+						 {"x":238.56203000000002,"y":508.03805},
+						 {"x":238.56203000000002,"y":336.66589999999997},
+						 {"x":119.08119,"y":336.66589999999997}
+					 ],
+				 	"name":"1123","entitytypes":["staff"],"overtime":300,"threshold":10,"id":20},
+				 {"mode":0,"enclosureType":21,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":-3.3955900000000003,"y":614.30016},
+						 {"x":178.43221000000003,"y":614.30016},
+						 {"x":178.43221000000003,"y":482.13828},
+						 {"x":-3.3955900000000003,"y":482.13828}
+					 ]
+				 	,"name":"2222","entitytypes":["car"],"overtime":300,"threshold":10,"id":6},
+				 {"mode":0,"enclosureType":20,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":48.79572,"y":610.93298},
+						 {"x":222.20557000000002,"y":610.93298},
+						 {"x":222.20557000000002,"y":475.40393},
+						 {"x":48.79572,"y":475.40393}
+					 ],
+				 	"name":"333","entitytypes":["staff"],"overtime":300,"threshold":10,"id":7},
+				 {"mode":0,"enclosureType":22,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":196.95171000000002,"y":528.43704},
+						 {"x":341.74051000000003,"y":528.43704},
+						 {"x":341.74051000000003,"y":430.78877},
+						 {"x":196.95171000000002,"y":430.78877}
+					 ],
+				 	"name":"9999","entitytypes":["car"],"overtime":300,"threshold":10,"id":8}
+			 	],"id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取电子围栏
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getEnclosure")
+	@ResponseBody
+	public Map<String, Object> getEnclosure(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getEnclosure");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("id", "1");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEnclosure",request);
+			System.out.println("getEnclosure:resultJO==="+resultJO.toString());
+			/*
+			 {"result":
+			 	{
+				 "mode":0,"enclosureType":25,"areaId":2,"shape":4,
+					 "coordinates":[
+						 {"x":531.8,"y":116.28},
+						 {"x":679.46,"y":116.28},
+						 {"x":679.46,"y":9.23},
+						 {"x":531.8,"y":9.23}
+					 ],
+				 "name":"巡检1号","overtime":300,"threshold":10,"id":1
+			 	},
+			 "id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取电子围栏进出历史记录
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getEnclosureRecords")
+	@ResponseBody
+	public Map<String, Object> getEnclosureRecords(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getEnclosureRecords");
+			JSONObject paramJO=new JSONObject();
+			//paramJO.put("enclosureId", "");
+			//paramJO.put("tagId", "");
+			paramJO.put("startTime", "1518277921076");
+			paramJO.put("endTime", "1618277921076");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEnclosureRecords",request);
+			System.out.println("getEnclosureRecords:resultJO==="+resultJO.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	@RequestMapping(value="/getDutys")
+	@ResponseBody
+	public Map<String, Object> getDutys(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getDutys");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDutys",request);
+			System.out.println("getDutys:resultJO==="+resultJO.toString());
+			/*
+			 {"result":[
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-1.png?t=1605840646476","name":"员工","offlineIcon":"/sc20080092/duty/offlineIcon-1.png?t=1605840646476","id":1,"cnEntityType":"人员","key":1},
+				 {"entityType":"car","onlineIcon":"/sc20080092/duty/onlineIcon-2.png?t=1605841283591","name":"内部车辆","offlineIcon":"/sc20080092/duty/offlineIcon-2.png?t=1605841283591","id":2,"cnEntityType":"车辆","onlineColor":"","key":2,"offlineColor":""},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon--992.png?t=1605841880539","name":"危险作业人员","offlineIcon":"/sc20080092/duty/offlineIcon--992.png?t=1605841880539","id":-992,"cnEntityType":"人员","key":-992},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-5.png?t=1605857821060","name":"仪电","offlineIcon":"/sc20080092/duty/offlineIcon-5.png?t=1605857598742","id":5,"cnEntityType":"人员","onlineColor":"","key":5,"offlineColor":""},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-3.png?t=1605857827419","name":"管理人员","offlineIcon":"/sc20080092/duty/offlineIcon-3.png?t=1605840746705","id":3,"cnEntityType":"人员","onlineColor":"","key":3,"offlineColor":""},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-4.png?t=1605858310995","name":"安环","offlineIcon":"/sc20080092/duty/offlineIcon-4.png?t=1605840775158","id":4,"cnEntityType":"人员","onlineColor":"","key":4,"offlineColor":""},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-6.png?t=1605858330564","name":"EOG","offlineIcon":"/sc20080092/duty/offlineIcon-6.png?t=1605858330564","id":6,"onlineColor":"","offlineColor":""},
+				 {"entityType":"car","onlineIcon":"/sc20080092/duty/onlineIcon--991.png?t=1607394653543","name":"外来车辆","offlineIcon":"/sc20080092/duty/offlineIcon--991.png?t=1607394653543","id":-991,"cnEntityType":"车辆","key":-991},
+				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon--990.png?t=1607568753403","name":"外来人员","offlineIcon":"/sc20080092/duty/offlineIcon--990.png?t=1607568753403","id":-990,"cnEntityType":"人员","key":-990}
+			 ],
+			 "id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
 	
 	public static void main(String[] args) {
 		String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"6bc270da3ef14cc6af0f3b1ef37267a2");

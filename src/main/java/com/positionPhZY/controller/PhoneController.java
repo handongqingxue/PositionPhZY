@@ -1007,6 +1007,11 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 获取员工职务列表
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getDutys")
 	@ResponseBody
 	public Map<String, Object> getDutys(HttpServletRequest request) {
@@ -1033,6 +1038,184 @@ public class PhoneController {
 			 ],
 			 "id":1,"jsonrpc":"2.0"}
 			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取职务/车型/资产类别
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getDuty")
+	@ResponseBody
+	public Map<String, Object> getDuty(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getDuty");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("id", "1");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDuty",request);
+			System.out.println("getDuty:resultJO==="+resultJO.toString());
+			/*
+			{"result":{"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-1.png?t=1605840646476","name":"员工","offlineIcon":"/sc20080092/duty/offlineIcon-1.png?t=1605840646476","id":1,"cnEntityType":"人员","key":1},"id":1,"jsonrpc":"2.0"} 
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取报警触发器列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getWarnTriggers")
+	@ResponseBody
+	public Map<String, Object> getWarnTriggers(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getWarnTriggers");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnTriggers",request);
+			System.out.println("getWarnTriggers:resultJO==="+resultJO.toString());
+			/*
+			 {
+			 "result":[
+				 {"warnType":4,"name":"超速报警","id":-1,"enclosureId":null,"conditions":{"dutyIds":[2,-991],"maxSpeed":1000}},
+				 {"warnType":1,"name":"按键报警","id":1,"enclosureId":null,"conditions":{"areaIds":[2,3,4,5,6,1]}}
+			 ],
+			 "id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 获取报警触发条件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getWarnTrigger")
+	@ResponseBody
+	public Map<String, Object> getWarnTrigger(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getWarnTrigger");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("id", "1");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnTrigger",request);
+			System.out.println("getWarnTrigger:resultJO==="+resultJO.toString());
+			/*
+			 {"result":{"warnType":1,"name":"按键报警","id":1,"enclosureId":null,"conditions":{"areaIds":[2,3,4,5,6,1]}},"id":1,"jsonrpc":"2.0"}
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 报获取警记录
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getWarnRecords")
+	@ResponseBody
+	public Map<String, Object> getWarnRecords(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getWarnRecords");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("triggerIds", "[1]");
+			paramJO.put("startTime", "1518277921076");
+			paramJO.put("endTime", "1618277921076");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);
+			System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
+			/*
+			 {"result":[
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060088742,"x":39.26,"y":360.83,"z":0,"startTime":1605060088742,"id":3056,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060110380,"x":39.26,"y":360.83,"z":0,"startTime":1605060110380,"id":3057,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060128936,"x":39.26,"y":360.83,"z":0,"startTime":1605060128936,"id":3058,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":1,"absolute":false,"raiseTime":1605060149170,"x":39.26,"y":360.83,"z":0,"startTime":1605060149170,"id":3059,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":1,"absolute":false,"raiseTime":1605060170580,"x":39.26,"y":360.83,"z":0,"startTime":1605060170580,"id":3060,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060199076,"x":89.422,"y":331.935,"z":0,"startTime":1605060199076,"id":3061,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060209222,"x":116.498,"y":340.598,"z":0,"startTime":1605060209222,"id":3062,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188344346,"x":465.039,"y":181.861,"z":0,"startTime":1605188344346,"id":3145,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188354669,"x":465.172,"y":182.583,"z":0,"startTime":1605188354669,"id":3146,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188364805,"x":465.304,"y":183.314,"z":0,"startTime":1605188364805,"id":3147,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188373845,"x":465.426,"y":184.049,"z":0,"startTime":1605188373845,"id":3148,"rootAreaId":1},
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 报警记录汇总
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/summaryWarn")
+	@ResponseBody
+	public Map<String, Object> summaryWarn(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "summaryWarn");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("warnType", "1");
+			paramJO.put("areaId", "0");
+			paramJO.put("cascade", "false");
+			paramJO.put("year", "2021");
+			paramJO.put("month", "5");
+			paramJO.put("day", "9");
+			//paramJO.put("zone", "");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryWarn",request);
+			System.out.println("summaryWarn:resultJO==="+resultJO.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

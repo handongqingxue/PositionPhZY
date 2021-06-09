@@ -14,7 +14,7 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 $(function(){
-	$.post("getEntityTypes",
+	$.post("getTag",
 		function(data){
 			
 		}

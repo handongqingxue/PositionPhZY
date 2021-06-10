@@ -33,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.positionPhZY.util.sha256.SHA256Utils;
 
 @Controller
@@ -1105,6 +1106,7 @@ public class PhoneController {
 			 ],
 			 "id":1,"jsonrpc":"2.0"}
 			 */
+			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1207,11 +1209,11 @@ public class PhoneController {
 			bodyParamJO.put("method", "summaryWarn");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("warnType", "1");
-			paramJO.put("areaId", "2");
-			paramJO.put("cascade", "false");
-			paramJO.put("year", "2020");
-			paramJO.put("month", "11");
-			paramJO.put("day", "11");
+			paramJO.put("areaId", "0");
+			paramJO.put("cascade", "true");
+			paramJO.put("year", "2021");
+			paramJO.put("month", "6");
+			paramJO.put("day", "10");
 			//paramJO.put("zone", "");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
@@ -1247,7 +1249,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=EBC165B71F8AF902CE36000363C29491; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=86215C0ECB79DA8B7C9A3943AC56293D; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 			//457BF5E945A9739041B361881CC0B55A
 			//7A33387C72991CF195AEA5034705BD1B

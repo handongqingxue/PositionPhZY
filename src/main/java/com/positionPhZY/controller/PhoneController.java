@@ -41,10 +41,11 @@ public class PhoneController {
 	
 	//http://139.196.143.225:8080/PositionPhZY/phone/goLogin
 	//https://www.liankexing.com/question/825
-	private static final String path="http://www.qrcodesy.com:8080/GoodsPublic/merchant";
+	
+	//private static final String PUBLIC_URL="http://121.33.253.235:8081/position/public/embeded.smd";
 	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
+	//private static final String SERVICE_URL="http://121.33.253.235:8081/position/service/embeded.smd";
 	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
-	private String J_SESSION_ID;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -1206,11 +1207,11 @@ public class PhoneController {
 			bodyParamJO.put("method", "summaryWarn");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("warnType", "1");
-			paramJO.put("areaId", "0");
+			paramJO.put("areaId", "2");
 			paramJO.put("cascade", "false");
-			paramJO.put("year", "2021");
-			paramJO.put("month", "5");
-			paramJO.put("day", "9");
+			paramJO.put("year", "2020");
+			paramJO.put("month", "11");
+			paramJO.put("day", "11");
 			//paramJO.put("zone", "");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
@@ -1246,7 +1247,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=02D3E8E3A820CC15ADB380AFD656C6F2; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=EBC165B71F8AF902CE36000363C29491; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 			//457BF5E945A9739041B361881CC0B55A
 			//7A33387C72991CF195AEA5034705BD1B

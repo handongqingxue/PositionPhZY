@@ -16,6 +16,25 @@
 	</bean>
 	<!-- 扫描包 -->
 	<context:component-scan base-package="com.positionPhZY.**" />
+	<!-- 引入数据库配置文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+	<!-- 数据库配置 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置mapper文件的位置 -->
+		<property name="mapperLocations" value="classpath:Mapper/*.xml" />
+	</bean>
+	<!-- 扫描mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.positionPhZY.dao " />
+	</bean>
 
 	<!-- 配置拦截请求，让拦截请求不拦截静态加载文件 -->
 	<mvc:default-servlet-handler />

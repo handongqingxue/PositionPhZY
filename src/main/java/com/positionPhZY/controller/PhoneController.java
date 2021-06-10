@@ -1,8 +1,5 @@
 package com.positionPhZY.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,14 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpResponse;
@@ -25,15 +19,18 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.positionPhZY.entity.*;
+import com.positionPhZY.service.*;
+import com.positionPhZY.util.date.DateUtil;
 import com.positionPhZY.util.sha256.SHA256Utils;
 
 @Controller
@@ -47,6 +44,9 @@ public class PhoneController {
 	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
 	//private static final String SERVICE_URL="http://121.33.253.235:8081/position/service/embeded.smd";
 	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
+	
+	@Autowired
+	private WarnRecordService warnRecordService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -64,6 +64,36 @@ public class PhoneController {
 	public String goWarnCount() {
 
 		return "phone/warnCount";
+	}
+
+	@RequestMapping(value="/insertWarnRecordData")
+	@ResponseBody
+	public Map<String, Object> insertWarnRecordData(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> wrrMap = getWarnRecords(request);
+		//result
+		List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
+		System.out.println("==="+warnRecordList.size());
+		int count=warnRecordService.add(warnRecordList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化报警记录失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化报警记录成功");
+		}
+		return resultMap;
+	}
+
+	@RequestMapping(value="/selectWarnCountBarData")
+	@ResponseBody
+	public Map<String, Object> selectWarnCountBarData() {
+		Map<String, Object> resultMap = null;
+		List<WarnRecord> wrList=warnRecordService.select();
+		//System.out.println("size==="+wrList.size());
+		return resultMap;
 	}
 
 	/*
@@ -1170,6 +1200,7 @@ public class PhoneController {
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);
 			System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
+			resultMap=JSON.parseObject(resultJO.toString());
 			/*
 			 {"result":[
 			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060088742,"x":39.26,"y":360.83,"z":0,"startTime":1605060088742,"id":3056,"rootAreaId":1},
@@ -1229,9 +1260,9 @@ public class PhoneController {
 	}
 	
 	public static void main(String[] args) {
-		String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"6bc270da3ef14cc6af0f3b1ef37267a2");
+		//String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"6bc270da3ef14cc6af0f3b1ef37267a2");
 		//52ac4c72590ec0d129fac7ffa3f0a2c4841875334709fbe0ac9ba65a104cc2ca
-		System.out.println("s==="+s);
+		System.out.println(DateUtil.convertLongToString(1605060088742L));
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control
@@ -1249,7 +1280,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=86215C0ECB79DA8B7C9A3943AC56293D; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=AEC40D155774AA555C884D7327816F6E; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 			//457BF5E945A9739041B361881CC0B55A
 			//7A33387C72991CF195AEA5034705BD1B

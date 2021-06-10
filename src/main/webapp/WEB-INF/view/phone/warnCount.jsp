@@ -19,15 +19,13 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	/*
-	$.post("summaryWarn",
+	$.post("selectWarnCountBarData",
 		function(data){
 			
 		}
 	,"json");
-	*/
-	initJRBJTJSLDiv();
-	initBarChartDiv();
+	//initJRBJTJSLDiv();
+	//initBarChartDiv();
 });
 
 //初始化今日报警统计数量

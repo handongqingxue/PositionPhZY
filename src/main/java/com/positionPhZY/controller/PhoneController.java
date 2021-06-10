@@ -90,9 +90,16 @@ public class PhoneController {
 	@RequestMapping(value="/selectWarnCountBarData")
 	@ResponseBody
 	public Map<String, Object> selectWarnCountBarData() {
-		Map<String, Object> resultMap = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<WarnRecord> wrList=warnRecordService.select();
-		//System.out.println("size==="+wrList.size());
+		if(wrList.size()==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "ÔÝÎÞÊý¾Ý");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("wrList", wrList);
+		}
 		return resultMap;
 	}
 
@@ -1280,7 +1287,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=AEC40D155774AA555C884D7327816F6E; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=8103CA5EFA9ADE48024D382366F835E8; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 			//457BF5E945A9739041B361881CC0B55A
 			//7A33387C72991CF195AEA5034705BD1B

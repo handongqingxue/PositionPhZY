@@ -21,11 +21,11 @@ var xzzh;
 $(function(){
 	$.post("selectWarnCountBarData",
 		function(data){
-			
+			alert(data.wrList.length);
 		}
 	,"json");
-	//initJRBJTJSLDiv();
-	//initBarChartDiv();
+	initJRBJTJSLDiv();
+	initBarChartDiv();
 });
 
 //初始化今日报警统计数量

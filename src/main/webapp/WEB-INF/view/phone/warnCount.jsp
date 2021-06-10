@@ -14,6 +14,8 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
+var zhAlignWithLabel=false;
+var zhxzzh=10;//综合X轴字号
 $(function(){
 	/*
 	$.post("summaryWarn",
@@ -47,7 +49,19 @@ function initBarChartDiv(){
 	    xAxis: [
 	        {
 	            type: 'category',
-	            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+	            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+	            axisTick:{alignWithLabel:zhAlignWithLabel},
+	            axisLine:{
+	                lineStyle:{
+	                    color:"#999",
+	                    width:0.5
+	                }
+	            },
+	            axisLabel: {
+	                fontSize:zhxzzh,
+	                interval:0
+	                //rotate:45
+	            }
 	        }
 	    ],
 	    yAxis: [

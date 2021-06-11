@@ -19,34 +19,36 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	$.post("selectWarnCountBarData",
+	/*
+	$.post("insertWarnTriggerData",
 		function(data){
 			alert(data.wrList.length);
 		}
 	,"json");
+	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv();
 });
 
 //初始化今日报警统计数量
 function initJRBJTJSLDiv(){
-	$.post("getWarnTriggers",
+	$.post("initTodayWarnCount",
 		function(data){
+			var twList=data.todayWarnList;
 			var countListDiv=$("#jrbjtjsl_div #count_list_div");
-			var wtList=data.result;
-			for(var i=0;i<wtList.length;i++){
+			for(var i=0;i<twList.length;i++){
 				var itemStr="";
-				var wt=wtList[i];
+				var tw=twList[i];
 				if(i%2==0){
 					itemStr+="<div class=\"item_div\" style=\"margin-top:0px;margin-left:0px\">";
-						itemStr+="<span class=\"text_span\">"+wt.name+"</span>";
-						itemStr+="<span class=\"count_span\">0</span>";
+						itemStr+="<span class=\"text_span\">"+tw.name+"</span>";
+						itemStr+="<span class=\"count_span\">"+tw.count+"</span>";
 					itemStr+="</div>";
 				}
 				else{
 					itemStr+="<div class=\"item_div\" style=\"margin-top:-30px;margin-left:180px;\">";
-						itemStr+="<div class=\"text_span\">"+wt.name+"</div>";
-						itemStr+="<span class=\"count_span\">0</span>";
+						itemStr+="<div class=\"text_span\">"+tw.name+"</div>";
+						itemStr+="<span class=\"count_span\">"+tw.count+"</span>";
 					itemStr+="</div>";
 				}
 				countListDiv.append(itemStr);
@@ -144,19 +146,37 @@ function initBarChartDiv(){
 	    ],
 	    yAxis: [
 	        {
-	            type: 'value'
+	        	type:'value',
+                minInterval: 1,
+                axisLine:{
+                    lineStyle:{
+                        color:"#999",
+                        width:0.5
+                    }
+                },
+                axisLabel:{
+                    fontSize:9
+                },
+                splitLine:{
+                    lineStyle:{
+                        color:"#ddd",
+                        width:0.5
+                    }
+                }
 	        }
 	    ],
 	    series: [
 	        {
 	            name: '蒸发量',
 	            type: 'bar',
-	            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+	            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+	            barGap:0
 	        },
 	        {
 	            name: '降水量',
 	            type: 'bar',
-	            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+	            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+	            barGap:0
 	        }
 	    ]
 	};

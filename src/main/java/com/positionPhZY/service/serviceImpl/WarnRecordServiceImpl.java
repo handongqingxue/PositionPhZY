@@ -29,10 +29,10 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 		int count=0;
 		for (WarnRecord warnRecord : warnRecordList) {
 			Long raiseTime = warnRecord.getRaiseTime();
-			if(StringUtils.isEmpty(String.valueOf(raiseTime)))
+			if(!StringUtils.isEmpty(String.valueOf(raiseTime)))
 				warnRecord.setRaiseTimeYMD(DateUtil.convertLongToString(raiseTime));
 			Long startTime = warnRecord.getStartTime();
-			if(StringUtils.isEmpty(String.valueOf(startTime)))
+			if(!StringUtils.isEmpty(String.valueOf(startTime)))
 				warnRecord.setStartTimeYMD(DateUtil.convertLongToString(startTime));
 			count+=warnRecordDao.add(warnRecord);
 		}

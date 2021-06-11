@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,8 @@ public class PhoneController {
 	
 	@Autowired
 	private WarnRecordService warnRecordService;
+	@Autowired
+	private WarnTriggerService warnTriggerService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -66,13 +69,60 @@ public class PhoneController {
 		return "phone/warnCount";
 	}
 
+	@RequestMapping(value="/initTodayWarnCount")
+	@ResponseBody
+	public Map<String, Object> initTodayWarnCount() {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<Map<String, Object>> todayWarnList = new ArrayList<Map<String,Object>>();
+		List<WarnTrigger> warnTriggerList = warnTriggerService.select();
+		List<WarnRecord> warnRecordList = warnRecordService.select();
+		for (int i = 0; i < warnTriggerList.size(); i++) {
+			Map<String, Object> todayWarnMap=new HashMap<String, Object>();
+			WarnTrigger warnTrigger = warnTriggerList.get(i);
+			int warnCount=0;
+			for (int j = 0; j < warnRecordList.size(); j++) {
+				WarnRecord warnRecord = warnRecordList.get(j);
+				if(warnTrigger.getWarnType()==warnRecord.getWarnType()) {
+					warnCount++;
+				}
+			}
+			todayWarnMap.put("name", warnTrigger.getName());
+			todayWarnMap.put("count", warnCount);
+			todayWarnList.add(todayWarnMap);
+		}
+		
+		resultMap.put("todayWarnList", todayWarnList);
+		
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertWarnTriggerData")
+	@ResponseBody
+	public Map<String, Object> insertWarnTriggerData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> wtrMap = getWarnTriggers(request);
+		List<WarnTrigger> warnTriggerList = JSON.parseArray(wtrMap.get("result").toString(),WarnTrigger.class);
+		System.out.println("==="+warnTriggerList.size());
+		int count=warnTriggerService.add(warnTriggerList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化报警触发器失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化报警触发器成功");
+		}
+		return resultMap;
+	}
+
 	@RequestMapping(value="/insertWarnRecordData")
 	@ResponseBody
 	public Map<String, Object> insertWarnRecordData(HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Map<String, Object> wrrMap = getWarnRecords(request);
-		//result
 		List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
 		System.out.println("==="+warnRecordList.size());
 		int count=warnRecordService.add(warnRecordList);
@@ -1201,7 +1251,7 @@ public class PhoneController {
 			bodyParamJO.put("method", "getWarnRecords");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("triggerIds", "[1]");
-			paramJO.put("startTime", "1518277921076");
+			paramJO.put("startTime", "1618267921076");
 			paramJO.put("endTime", "1618277921076");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
@@ -1287,11 +1337,8 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=8103CA5EFA9ADE48024D382366F835E8; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=86256331CEC769C708211DB7197EAA56; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
-			//457BF5E945A9739041B361881CC0B55A
-			//7A33387C72991CF195AEA5034705BD1B
-			//8CB757C8DFEE3BF2B292D0099EAE3931
 		}
 		connection.setRequestMethod("POST");//请求post方式
 		connection.setDoInput(true); 

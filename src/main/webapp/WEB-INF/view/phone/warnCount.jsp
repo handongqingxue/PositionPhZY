@@ -19,13 +19,11 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	/*
-	$.post("insertWarnTriggerData",
+	$.post("initBJTJBarChartData",
 		function(data){
 			alert(data.wrList.length);
 		}
 	,"json");
-	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv();
 });
@@ -109,79 +107,94 @@ function getAddDate(days){
 
 function initBarChartDiv(){
 	//https://echarts.apache.org/examples/zh/editor.html?c=bar1
-	var chartDom = document.getElementById('bar_chart_div');
-	var myChart = echarts.init(chartDom);
-	var option;
-	option = {
-	    tooltip: {
-	        trigger: 'axis'
-	    },
-	    legend: {
-               itemWidth:10,
-               itemHeight:10,
-               x:'center',
-               y: '15px',
-               textStyle:{
-                   fontSize:9
-               },
-	        data: ['蒸发量', '降水量']
-	    },
-	    xAxis: [
-	        {
-	            type: 'category',
-	            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-	            axisTick:{alignWithLabel:zhAlignWithLabel},
-	            axisLine:{
-	                lineStyle:{
-	                    color:"#999",
-	                    width:0.5
-	                }
-	            },
-	            axisLabel: {
-	                fontSize:zhxzzh,
-	                interval:0
-	                //rotate:45
-	            }
-	        }
-	    ],
-	    yAxis: [
-	        {
-	        	type:'value',
-                minInterval: 1,
-                axisLine:{
-                    lineStyle:{
-                        color:"#999",
-                        width:0.5
-                    }
-                },
-                axisLabel:{
-                    fontSize:9
-                },
-                splitLine:{
-                    lineStyle:{
-                        color:"#ddd",
-                        width:0.5
-                    }
-                }
-	        }
-	    ],
-	    series: [
-	        {
-	            name: '蒸发量',
-	            type: 'bar',
-	            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-	            barGap:0
-	        },
-	        {
-	            name: '降水量',
-	            type: 'bar',
-	            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
-	            barGap:0
-	        }
-	    ]
-	};
+	$.post("initBJTJBarChartData",
+		function(data){
+			alert(JSON.stringify(data.seriesList));
+			var legendDataList=data.legendDataList;
+			var xAxisDataLabelList=data.xAxisDataLabelList;
+			var seriesList=data.seriesList;
+			
+			var chartDom = document.getElementById('bar_chart_div');
+			var myChart = echarts.init(chartDom);
+			var option;
+			option = {
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    legend: {
+		               itemWidth:10,
+		               itemHeight:10,
+		               x:'center',
+		               y: '15px',
+		               textStyle:{
+		                   fontSize:9
+		               },
+			        //data: ['蒸发量', '降水量']
+				    data: legendDataList
+			    },
+			    xAxis: [
+			        {
+			            type: 'category',
+			            //data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+			            data: xAxisDataLabelList,
+			            axisTick:{alignWithLabel:zhAlignWithLabel},
+			            axisLine:{
+			                lineStyle:{
+			                    color:"#999",
+			                    width:0.5
+			                }
+			            },
+			            axisLabel: {
+			                fontSize:zhxzzh,
+			                interval:0
+			                //rotate:45
+			            }
+			        }
+			    ],
+			    yAxis: [
+			        {
+			        	type:'value',
+		                minInterval: 1,
+		                axisLine:{
+		                    lineStyle:{
+		                        color:"#999",
+		                        width:0.5
+		                    }
+		                },
+		                axisLabel:{
+		                    fontSize:9
+		                },
+		                splitLine:{
+		                    lineStyle:{
+		                        color:"#ddd",
+		                        width:0.5
+		                    }
+		                }
+			        }
+			    ],
+			    /*
+			    series: [
+			        {
+			            name: '超速报警',
+			            type: 'bar',
+			            data: [2.0, 4.9, 7.0],
+			            barGap:0
+			        },
+			        {
+			            name: '按键报警',
+			            type: 'bar',
+			            data: [2.6, 5.9, 9.0],
+			            barGap:0
+			        }
+			    ]
+			    */
+			    //series:[{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"超速报警\",\"type\":\"bar\"},{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"按键报警\",\"type\":\"bar\"}]
+			    series:seriesList
+			};
 
-	option && myChart.setOption(option);
+			option && myChart.setOption(option);
+		}
+	,"json");
 }
 
 function goPage(page){

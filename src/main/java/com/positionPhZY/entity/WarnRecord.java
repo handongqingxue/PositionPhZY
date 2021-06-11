@@ -21,6 +21,9 @@ public class WarnRecord {
 	private String startTimeYMD;
 	private Integer id;
 	private Integer rootAreaId;
+	private String wtName;
+	private String xAxisDataLabel;
+	private Integer warnCount;
 	public String getTagId() {
 		return tagId;
 	}
@@ -134,5 +137,23 @@ public class WarnRecord {
 	}
 	public void setRootAreaId(Integer rootAreaId) {
 		this.rootAreaId = rootAreaId;
+	}
+	public String getWtName() {
+		return wtName;
+	}
+	public void setWtName(String wtName) {
+		this.wtName = wtName;
+	}
+	public String getxAxisDataLabel() {
+		return xAxisDataLabel;
+	}
+	public void setxAxisDataLabel(String xAxisDataLabel) {
+		this.xAxisDataLabel = xAxisDataLabel;
+	}
+	public Integer getWarnCount() {
+		return warnCount;
+	}
+	public void setWarnCount(Integer warnCount) {
+		this.warnCount = warnCount;
 	}
 }

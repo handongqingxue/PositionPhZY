@@ -38,4 +38,10 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 		}
 		return count;
 	}
+
+	@Override
+	public List<WarnRecord> selectBarChartData(String startTime, String endTime) {
+		// TODO Auto-generated method stub
+		return warnRecordDao.selectBarChartData(startTime,endTime);
+	}
 }

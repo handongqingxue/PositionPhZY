@@ -97,6 +97,88 @@ public class PhoneController {
 		return resultMap;
 	}
 
+	@RequestMapping(value="/initBJTJBarChartData")
+	@ResponseBody
+	public Map<String, Object> initBJTJBarChartData() {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<String> legendDataList=new ArrayList<String>();
+		List<String> xAxisDataLabelList=new ArrayList<String>();
+		
+		List<WarnRecord> warnRecordList = warnRecordService.selectBarChartData("2021-03-14","2021-04-16");
+		for (int i = 0; i < warnRecordList.size(); i++) {
+			WarnRecord warnRecord = warnRecordList.get(i);
+			String wtName = warnRecord.getWtName();
+			if(!checkWarnRecordWtNameExist(legendDataList,wtName))
+				legendDataList.add(wtName);
+			xAxisDataLabelList.add(warnRecord.getxAxisDataLabel());
+		}
+		System.out.println("legendDataList==="+legendDataList.size());
+		System.out.println("xAxisDataLabelList==="+xAxisDataLabelList.size());
+		List<Map<String, Object>> seriesList = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < legendDataList.size(); i++) {
+			Map<String, Object> legendDataMap=new HashMap<String, Object>();
+			List<Integer> seriesDataList = new ArrayList<Integer>();
+			List<Map<String, Object>> seriesLsDataList = new ArrayList<Map<String, Object>>();
+			for (int j = 0; j < xAxisDataLabelList.size(); j++) {
+				Map<String, Object> seriesLsDataMap=new HashMap<String, Object>();
+				seriesLsDataMap.put("key",xAxisDataLabelList.get(j));
+				seriesLsDataMap.put("value",0);
+				seriesLsDataList.add(seriesLsDataMap);
+				
+				seriesDataList.add(0);
+			}
+			legendDataMap.put("name",legendDataList.get(i));
+			legendDataMap.put("type","bar");
+			legendDataMap.put("lsData", seriesLsDataList);
+			legendDataMap.put("data", seriesDataList);
+			legendDataMap.put("barGap",0);
+			seriesList.add(legendDataMap);
+		}
+
+		for (int i = 0; i < legendDataList.size(); i++) {
+			for (int j = 0; j < xAxisDataLabelList.size(); j++) {
+				Map<String, Object> legendDataMap = seriesList.get(i);
+				String name = legendDataMap.get("name").toString();
+				List<Integer> seriesIntegerDataList = new ArrayList<Integer>();
+				List<Map<String, Object>> seriesLsDataList = (List<Map<String, Object>>)legendDataMap.get("lsData");
+				Map<String, Object> seriesLsDataMap = seriesLsDataList.get(j);
+				String key = seriesLsDataMap.get("key").toString();
+				int warnCount=0;
+				for (int k = 0; k < warnRecordList.size(); k++) {
+					WarnRecord warnRecord = warnRecordList.get(k);
+					if(name.equals(warnRecord.getWtName())&&key.equals(warnRecord.getxAxisDataLabel())) {
+						System.out.println("name="+name+",xAxisDataLabel="+key);
+						warnCount+=warnRecord.getWarnCount();
+					}
+				}
+				System.out.println("warnCount==="+warnCount);
+				seriesIntegerDataList.add(warnCount);
+				System.out.println(name+",seriesDataList==="+seriesIntegerDataList.toString());
+				legendDataMap.put("data", seriesIntegerDataList);
+				//seriesDataMap.put("value", warnCount);
+			}
+		}
+		System.out.println("seriesList==="+seriesList.toString());
+		
+		resultMap.put("legendDataList", legendDataList);
+		resultMap.put("xAxisDataLabelList", xAxisDataLabelList);
+		resultMap.put("seriesList", seriesList);
+		
+		return resultMap;
+	}
+	
+	public boolean checkWarnRecordWtNameExist(List<String> legendDataList, String wtName) {
+		boolean exist = false;
+		for (String legendData : legendDataList) {
+			if(wtName.equals(legendData)) {
+				exist=true;
+				break;
+			}
+		}
+		return exist;
+	}
+
 	@RequestMapping(value="/insertWarnTriggerData")
 	@ResponseBody
 	public Map<String, Object> insertWarnTriggerData(HttpServletRequest request) {

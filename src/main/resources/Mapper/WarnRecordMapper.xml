@@ -128,4 +128,9 @@
 	<select id="select" resultType="com.positionPhZY.entity.WarnRecord">
 		select * from warn_record
 	</select>
+	<select id="selectBarChartData" resultType="com.positionPhZY.entity.WarnRecord">
+		select *,count(*) warnCount from 
+		(select wt.name wtName,startTimeYMD,CONCAT(month(startTimeYMD),'-',day(startTimeYMD)) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
+		 GROUP BY t.xAxisDataLabel
+	</select>
 </mapper>

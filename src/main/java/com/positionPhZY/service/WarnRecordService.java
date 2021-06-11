@@ -10,6 +10,6 @@ public interface WarnRecordService {
 
 	int add(List<WarnRecord> warnRecordList);
 
-	List<WarnRecord> selectBarChartData(String startTime, String endTime);
+	List<WarnRecord> selectBarChartData(String startTime, String endTime, String flag);
 
 }

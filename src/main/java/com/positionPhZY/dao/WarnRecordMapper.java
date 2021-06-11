@@ -12,6 +12,8 @@ public interface WarnRecordMapper {
 
 	int add(WarnRecord warnRecord);
 
-	List<WarnRecord> selectBarChartData(@Param("startTime")String startTime, @Param("endTime")String endTime);
+	List<WarnRecord> selectBarChartDateData(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+	List<WarnRecord> selectBarChartMonthData(@Param("startTime")String startTime, @Param("endTime")String endTime);
 
 }

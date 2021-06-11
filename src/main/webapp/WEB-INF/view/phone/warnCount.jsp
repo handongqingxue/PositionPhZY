@@ -19,13 +19,13 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	$.post("initBJTJBarChartData",
+	$.post("summaryWarn",
 		function(data){
 			alert(data.wrList.length);
 		}
 	,"json");
 	initJRBJTJSLDiv();
-	initBarChartDiv();
+	initBarChartDiv("date");
 });
 
 //初始化今日报警统计数量
@@ -55,7 +55,25 @@ function initJRBJTJSLDiv(){
 	,"json");
 }
 
-function initBarList(flag){
+function getTodayDate(){
+	var date=new Date();
+	var year=date.getFullYear();
+	var month=date.getMonth()+1;
+	var dateOfMonth=date.getDate();
+	var todayDate=year+"-"+(month<10?"0"+month:month)+"-"+(dateOfMonth<10?"0"+dateOfMonth:dateOfMonth);
+    return todayDate;
+}
+
+function getAddDate(days){
+	var date=new Date();
+    date=new Date(date.setDate(date.getDate()+days));
+    var year=date.getFullYear();
+    var month=date.getMonth()+1;
+    var dateOfMonth=date.getDate();
+    return year+"-"+(month<10?"0"+month:month)+"-"+(dateOfMonth<10?"0"+dateOfMonth:dateOfMonth);
+}
+
+function initBarChartDiv(flag){
 	var days;
 	$("#bar_search_type_div #but_div div").css("color","#000");
     $("#bar_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
@@ -83,31 +101,14 @@ function initBarList(flag){
         alignWithLabel=true;
 	}
     var barStartDate=getAddDate(days);
+    //var barStartDate="2021-03-14";
     var barEndDate=getTodayDate();
+    //var barEndDate="2021-04-16";
     alert(barStartDate+"-"+barEndDate);
-}
-
-function getTodayDate(){
-	var date=new Date();
-	var year=date.getFullYear();
-	var month=date.getMonth()+1;
-	var dateOfMonth=date.getDate();
-	var todayDate=year+"-"+(month<10?"0"+month:month)+"-"+(dateOfMonth<10?"0"+dateOfMonth:dateOfMonth);
-    return todayDate;
-}
-
-function getAddDate(days){
-	var date=new Date();
-    date=new Date(date.setDate(date.getDate()+days));
-    var year=date.getFullYear();
-    var month=date.getMonth()+1;
-    var dateOfMonth=date.getDate();
-    return year+"-"+(month<10?"0"+month:month)+"-"+(dateOfMonth<10?"0"+dateOfMonth:dateOfMonth);
-}
-
-function initBarChartDiv(){
+	
 	//https://echarts.apache.org/examples/zh/editor.html?c=bar1
 	$.post("initBJTJBarChartData",
+		{startDate:barStartDate,endDate:barEndDate,flag:flag},
 		function(data){
 			alert(JSON.stringify(data.seriesList));
 			var legendDataList=data.legendDataList;
@@ -375,9 +376,9 @@ body{
 </div>
 <div class="bar_search_type_div" id="bar_search_type_div">
     <div class="but_div" id="but_div">
-        <div class="date_but_div" id="date_but_div" onclick="initBarList('date');">日</div>
-        <div class="week_but_div" id="week_but_div" onclick="initBarList('week');">周</div>
-        <div class="month_but_div" id="month_but_div" onclick="initBarList('month');">月</div>
+        <div class="date_but_div" id="date_but_div" onclick="initBarChartDiv('date');">日</div>
+        <div class="week_but_div" id="week_but_div" onclick="initBarChartDiv('week');">周</div>
+        <div class="month_but_div" id="month_but_div" onclick="initBarChartDiv('month');">月</div>
     </div>
 </div>
 <div id="bar_chart_div" style="width:100%;height: 300px;"></div>

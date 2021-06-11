@@ -99,13 +99,13 @@ public class PhoneController {
 
 	@RequestMapping(value="/initBJTJBarChartData")
 	@ResponseBody
-	public Map<String, Object> initBJTJBarChartData() {
+	public Map<String, Object> initBJTJBarChartData(String startDate,String endDate,String flag) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<String> legendDataList=new ArrayList<String>();
 		List<String> xAxisDataLabelList=new ArrayList<String>();
 		
-		List<WarnRecord> warnRecordList = warnRecordService.selectBarChartData("2021-03-14","2021-04-16");
+		List<WarnRecord> warnRecordList = warnRecordService.selectBarChartData(startDate,endDate,flag);
 		for (int i = 0; i < warnRecordList.size(); i++) {
 			WarnRecord warnRecord = warnRecordList.get(i);
 			String wtName = warnRecord.getWtName();
@@ -113,7 +113,7 @@ public class PhoneController {
 				legendDataList.add(wtName);
 			xAxisDataLabelList.add(warnRecord.getxAxisDataLabel());
 		}
-		System.out.println("legendDataList==="+legendDataList.size());
+		System.out.println("legendDataList==="+legendDataList.toString());
 		System.out.println("xAxisDataLabelList==="+xAxisDataLabelList.size());
 		List<Map<String, Object>> seriesList = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < legendDataList.size(); i++) {
@@ -1377,7 +1377,7 @@ public class PhoneController {
 			bodyParamJO.put("method", "summaryWarn");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("warnType", "1");
-			paramJO.put("areaId", "0");
+			paramJO.put("areaIds", "0");
 			paramJO.put("cascade", "true");
 			paramJO.put("year", "2021");
 			paramJO.put("month", "6");
@@ -1417,7 +1417,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=86256331CEC769C708211DB7197EAA56; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=993A3D7F2067178EC1230372EC1AD197; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//ÇëÇópost·½Ê½

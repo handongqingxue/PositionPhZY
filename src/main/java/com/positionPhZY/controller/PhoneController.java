@@ -140,23 +140,21 @@ public class PhoneController {
 			for (int j = 0; j < xAxisDataLabelList.size(); j++) {
 				Map<String, Object> legendDataMap = seriesList.get(i);
 				String name = legendDataMap.get("name").toString();
-				List<Integer> seriesIntegerDataList = new ArrayList<Integer>();
 				List<Map<String, Object>> seriesLsDataList = (List<Map<String, Object>>)legendDataMap.get("lsData");
 				Map<String, Object> seriesLsDataMap = seriesLsDataList.get(j);
 				String key = seriesLsDataMap.get("key").toString();
-				int warnCount=0;
+				List<Integer> seriesDataList = (List<Integer>)legendDataMap.get("data");
+				int warnCount = seriesDataList.get(j);
 				for (int k = 0; k < warnRecordList.size(); k++) {
 					WarnRecord warnRecord = warnRecordList.get(k);
 					if(name.equals(warnRecord.getWtName())&&key.equals(warnRecord.getxAxisDataLabel())) {
-						System.out.println("name="+name+",xAxisDataLabel="+key);
+						//System.out.println("name="+name+",xAxisDataLabel="+key);
 						warnCount+=warnRecord.getWarnCount();
+						//System.out.println("warnCount==="+warnCount);
+						seriesDataList.set(j,warnCount);
 					}
 				}
-				System.out.println("warnCount==="+warnCount);
-				seriesIntegerDataList.add(warnCount);
-				System.out.println(name+",seriesDataList==="+seriesIntegerDataList.toString());
-				legendDataMap.put("data", seriesIntegerDataList);
-				//seriesDataMap.put("value", warnCount);
+				//System.out.println(name+",seriesDataList==="+seriesDataList.toString());
 			}
 		}
 		System.out.println("seriesList==="+seriesList.toString());

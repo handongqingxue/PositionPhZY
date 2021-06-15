@@ -46,6 +46,9 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 		if("date".equals(flag)) {
 			list=warnRecordDao.selectBarChartDateData(startTime,endTime);
 		}
+		else if("week".equals(flag)) {
+			list=warnRecordDao.selectBarChartWeekData(startTime,endTime);
+		}
 		else if("month".equals(flag)) {
 			list=warnRecordDao.selectBarChartMonthData(startTime,endTime);
 		}

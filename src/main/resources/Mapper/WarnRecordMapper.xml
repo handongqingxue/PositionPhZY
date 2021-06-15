@@ -133,9 +133,33 @@
 		(select wt.name wtName,startTimeYMD,CONCAT(month(startTimeYMD),'-',day(startTimeYMD)) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
 		 GROUP BY t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
+	<select id="selectBarChartWeekData" resultType="com.positionPhZY.entity.WarnRecord">
+		select *,count(*) warnCount from 
+		(select wt.name wtName,startTimeYMD,
+		case 
+		when day(startTimeYMD) between 1 and 7 then CONCAT(month(startTimeYMD),'.1-',month(startTimeYMD),'.7')
+		when day(startTimeYMD) between 8 and 14 then CONCAT(month(startTimeYMD),'.8-',month(startTimeYMD),'.14')
+		when day(startTimeYMD) between 15 and 21 then CONCAT(month(startTimeYMD),'.15-',month(startTimeYMD),'.21')
+		else
+		case
+			when month(startTimeYMD)=1||month(startTimeYMD)=3||month(startTimeYMD)=5||month(startTimeYMD)=7||month(startTimeYMD)=8||month(startTimeYMD)=10||month(startTimeYMD)=12 
+			then 
+				CONCAT(month(startTimeYMD),'.22-',month(startTimeYMD),'.31')
+			when month(startTimeYMD)=4||month(startTimeYMD)=6||month(startTimeYMD)=9||month(startTimeYMD)=11 
+			then CONCAT(month(startTimeYMD),'.22-',month(startTimeYMD),'.30')
+			else
+				case
+					when year(startTimeYMD)%4=0 then CONCAT(month(startTimeYMD),'.22-',month(startTimeYMD),'.29')
+					else
+						CONCAT(month(startTimeYMD),'.22-',month(startTimeYMD),'.28')
+				end
+			end
+		end  xAxisDataLabel
+		 from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
+	</select>
 	<select id="selectBarChartMonthData" resultType="com.positionPhZY.entity.WarnRecord">
 		select *,count(*) warnCount from 
 		(select wt.name wtName,startTimeYMD,month(startTimeYMD) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
-		 GROUP BY t.xAxisDataLabel ORDER BY startTimeYMD
+		 GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
 </mapper>

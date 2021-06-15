@@ -111,7 +111,9 @@ public class PhoneController {
 			String wtName = warnRecord.getWtName();
 			if(!checkWarnRecordWtNameExist(legendDataList,wtName))
 				legendDataList.add(wtName);
-			xAxisDataLabelList.add(warnRecord.getxAxisDataLabel());
+			String xAxisDataLabel=warnRecord.getxAxisDataLabel();
+			if(!checkXAxisDataLabel(xAxisDataLabelList,xAxisDataLabel))
+				xAxisDataLabelList.add(xAxisDataLabel);
 		}
 		System.out.println("legendDataList==="+legendDataList.toString());
 		System.out.println("xAxisDataLabelList==="+xAxisDataLabelList.size());
@@ -148,13 +150,13 @@ public class PhoneController {
 				for (int k = 0; k < warnRecordList.size(); k++) {
 					WarnRecord warnRecord = warnRecordList.get(k);
 					if(name.equals(warnRecord.getWtName())&&key.equals(warnRecord.getxAxisDataLabel())) {
-						//System.out.println("name="+name+",xAxisDataLabel="+key);
+						System.out.println("name="+name+",xAxisDataLabel="+key);
 						warnCount+=warnRecord.getWarnCount();
 						//System.out.println("warnCount==="+warnCount);
 						seriesDataList.set(j,warnCount);
+						System.out.println(name+",seriesDataList==="+seriesDataList.toString());
 					}
 				}
-				//System.out.println(name+",seriesDataList==="+seriesDataList.toString());
 			}
 		}
 		System.out.println("seriesList==="+seriesList.toString());
@@ -170,6 +172,17 @@ public class PhoneController {
 		boolean exist = false;
 		for (String legendData : legendDataList) {
 			if(wtName.equals(legendData)) {
+				exist=true;
+				break;
+			}
+		}
+		return exist;
+	}
+	
+	public boolean checkXAxisDataLabel(List<String> xAxisDataLabelList, String xAxisData) {
+		boolean exist = false;
+		for (String xAxisDataLabel : xAxisDataLabelList) {
+			if(xAxisData.equals(xAxisDataLabel)) {
 				exist=true;
 				break;
 			}
@@ -1417,7 +1430,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=993A3D7F2067178EC1230372EC1AD197; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=58B9536CDB4AB1B877277A280A113898; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//«Î«Ûpost∑Ω Ω

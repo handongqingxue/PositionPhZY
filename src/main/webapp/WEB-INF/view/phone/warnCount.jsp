@@ -25,7 +25,7 @@ $(function(){
 		}
 	,"json");
 	initJRBJTJSLDiv();
-	initBarChartDiv("date");
+	initBarChartDiv("week");
 });
 
 //初始化今日报警统计数量
@@ -100,10 +100,10 @@ function initBarChartDiv(flag){
         xzzh=9;
         alignWithLabel=true;
 	}
-    var barStartDate=getAddDate(days);
-    //var barStartDate="2021-03-14";
-    var barEndDate=getTodayDate();
-    //var barEndDate="2021-04-16";
+    //var barStartDate=getAddDate(days);
+    var barStartDate="2021-03-01";
+    //var barEndDate=getTodayDate();
+    var barEndDate="2021-04-01";
     alert(barStartDate+"-"+barEndDate);
 	
 	//https://echarts.apache.org/examples/zh/editor.html?c=bar1

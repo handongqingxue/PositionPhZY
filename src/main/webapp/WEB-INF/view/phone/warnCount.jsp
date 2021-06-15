@@ -26,6 +26,7 @@ $(function(){
 	,"json");
 	initJRBJTJSLDiv();
 	initBarChartDiv("week");
+	initPieChartDiv("date");
 });
 
 //初始化今日报警统计数量
@@ -196,6 +197,50 @@ function initBarChartDiv(flag){
 			option && myChart.setOption(option);
 		}
 	,"json");
+}
+
+function initPieChartDiv(){
+	var chartDom = document.getElementById('pie_chart_div');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	option = {
+	    title: {
+	        text: '某站点用户访问来源',
+	        subtext: '纯属虚构',
+	        left: 'center'
+	    },
+	    tooltip: {
+	        trigger: 'item'
+	    },
+	    legend: {
+	        orient: 'vertical',
+	        left: 'left',
+	    },
+	    series: [
+	        {
+	            name: '访问来源',
+	            type: 'pie',
+	            radius: '50%',
+	            data: [
+	                {value: 1048, name: '搜索引擎'},
+	                {value: 735, name: '直接访问'},
+	                {value: 580, name: '邮件营销'},
+	                {value: 484, name: '联盟广告'},
+	                {value: 300, name: '视频广告'}
+	            ],
+	            emphasis: {
+	                itemStyle: {
+	                    shadowBlur: 10,
+	                    shadowOffsetX: 0,
+	                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+	                }
+	            }
+	        }
+	    ]
+	};
+
+	option && myChart.setOption(option);
 }
 
 function goPage(page){
@@ -390,5 +435,6 @@ body{
         <div class="three_month_but_div" id="three_month_but_div">三个月</div>
     </div>
 </div>
+<div id="pie_chart_div" style="width:100%;height: 300px;"></div>
 </body>
 </html>

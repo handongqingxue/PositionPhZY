@@ -32,22 +32,25 @@ $(function(){
     }
     */
     
-    var man1 = document.getElementById("man-1");
+    var point_img = document.getElementById("point_img");
     var canvasBg = document.getElementById("bg1");
 	var canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
 	// 制作背景图
-	 var patBg = ctx.createPattern(canvasBg, "repeat");
-	 ctx.rect(0, 0, 750, 1180);
-	 ctx.fillStyle = patBg;
-	 ctx.fill();
-	 
-	// 将man1,man2,man3,man4,sen1,btn加入画布
-	 ctx.drawImage(man1, 40, 40, 10, 10);
+	var patBg = ctx.createPattern(canvasBg, "repeat");
+	ctx.rect(0, 0, 750, 1180);
+	ctx.fillStyle = patBg;
+	ctx.fill();
+
+	ctx.drawImage(point_img, 40, 40, 10, 10);
+	ctx.drawImage(point_img, 140, 40, 10, 10);
+	ctx.drawImage(point_img, 240, 40, 10, 10);
 });
 
 function small(){
-	$("#myCanvas").css("width","250px");
+	var myCanvas=$("#myCanvas");
+	var width=myCanvas.css("width");
+	myCanvas.css("width","250px");
 	$("#myCanvas").css("height","250px");
 }
 
@@ -91,7 +94,7 @@ body{
 <canvas id="myCanvas" style="width:367px;height:325px;background-size: 100%, 100%;">
 </canvas>
 <img src="<%=basePath %>resource/image/003.jpg" id="bg1" alt="" style="display: none;">
-<img src="<%=basePath %>resource/image/004.png" class="man man-1" id="man-1" alt="" style="display: none;">
+<img src="<%=basePath %>resource/image/004.png" id="point_img" alt="" style="display: none;">
 <input type="button" value="缩小" onclick="small();"/>
 <input type="button" value="放大" onclick="big();"/>
 </div>

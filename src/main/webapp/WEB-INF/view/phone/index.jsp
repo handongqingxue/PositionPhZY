@@ -45,6 +45,22 @@ $(function(){
 	ctx.drawImage(point_img, 40, 40, 10, 10);
 	ctx.drawImage(point_img, 140, 40, 10, 10);
 	ctx.drawImage(point_img, 240, 40, 10, 10);
+	
+	ctx.beginPath();
+    ctx.lineWidth = "1";
+    ctx.strokeStyle = "blue";
+    ctx.fillStyle = "orange";
+    ctx.moveTo(55, 90);
+    ctx.lineTo(55, 60);
+    //ctx.lineTo(30, 30);
+    //ctx.lineTo(30, 80);
+    //ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+	
+	ctx.font="10px bold 黑体";
+	ctx.fillStyle = "#fff";
+	ctx.fillText("李天赐",60,80);
 });
 
 function small(){

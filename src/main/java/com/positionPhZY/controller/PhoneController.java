@@ -1430,7 +1430,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=58B9536CDB4AB1B877277A280A113898; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=BB960DF1F2C3B6DCF9227EDB60F7B9B0; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//«Î«Ûpost∑Ω Ω

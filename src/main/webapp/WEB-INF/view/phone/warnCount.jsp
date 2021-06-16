@@ -19,11 +19,13 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
+	/*
 	$.post("summaryWarn",
 		function(data){
 			alert(data.wrList.length);
 		}
 	,"json");
+	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv("week");
 	initPieChartDiv("date");
@@ -105,13 +107,13 @@ function initBarChartDiv(flag){
     var barStartDate="2021-03-01";
     //var barEndDate=getTodayDate();
     var barEndDate="2021-04-01";
-    alert(barStartDate+"-"+barEndDate);
+    //alert(barStartDate+"-"+barEndDate);
 	
 	//https://echarts.apache.org/examples/zh/editor.html?c=bar1
 	$.post("initBJTJBarChartData",
 		{startDate:barStartDate,endDate:barEndDate,flag:flag},
 		function(data){
-			alert(JSON.stringify(data.seriesList));
+			//alert(JSON.stringify(data.seriesList));
 			var legendDataList=data.legendDataList;
 			var xAxisDataLabelList=data.xAxisDataLabelList;
 			var seriesList=data.seriesList;
@@ -206,22 +208,39 @@ function initPieChartDiv(){
 
 	option = {
 	    title: {
-	        text: '某站点用户访问来源',
-	        subtext: '纯属虚构',
+	        text: '车间报警统计',
 	        left: 'center'
 	    },
 	    tooltip: {
 	        trigger: 'item'
 	    },
 	    legend: {
-	        orient: 'vertical',
-	        left: 'left',
+	    	bottom: 0,
+            left: 'center',
+            //data: this.state.zhPieLegendData,
+            //selected:this.state.zhPieLegendSelected
 	    },
 	    series: [
 	        {
-	            name: '访问来源',
 	            type: 'pie',
 	            radius: '50%',
+                center: ['50%', '50%'],
+                label: {
+                    position: 'inner',
+                    /*
+                    formatter:
+                        this.state.bjqyList.length<=4
+                            ?
+                            function(json){
+                                return ""
+                            }
+                            :
+                            function(json){
+                                return json["data"]["name"]
+                            }
+                                */
+                },
+                selectedMode: 'single',
 	            data: [
 	                {value: 1048, name: '搜索引擎'},
 	                {value: 735, name: '直接访问'},
@@ -229,13 +248,11 @@ function initPieChartDiv(){
 	                {value: 484, name: '联盟广告'},
 	                {value: 300, name: '视频广告'}
 	            ],
-	            emphasis: {
-	                itemStyle: {
-	                    shadowBlur: 10,
-	                    shadowOffsetX: 0,
-	                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-	                }
-	            }
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
 	        }
 	    ]
 	};

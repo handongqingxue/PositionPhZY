@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpResponse;
@@ -25,7 +26,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -1567,11 +1570,40 @@ public class PhoneController {
 			return resultMap;
 		}
 	}
+
+	@RequestMapping(value="/receiveDate", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> receiveDate(HttpServletRequest request, HttpServletResponse response, @RequestBody String json) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		com.alibaba.fastjson.JSONObject jsonJO = JSON.parseObject(json);
+		if(jsonJO.containsKey("Location")) {
+			System.out.println("size==="+jsonJO.getJSONArray("Location").size());
+			System.out.println("deviceType==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("deviceType"));
+			System.out.println("uid==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("uid"));
+			System.out.println("rootAreaId==="+jsonJO.getJSONArray("Location").getJSONObject(0).getInteger("rootAreaId"));
+			System.out.println("areaId==="+jsonJO.getJSONArray("Location").getJSONObject(0).getInteger("areaId"));
+			System.out.println("locationTime==="+jsonJO.getJSONArray("Location").getJSONObject(0).getLong("locationTime"));
+			System.out.println("lostTime==="+jsonJO.getJSONArray("Location").getJSONObject(0).getLong("lostTime"));
+			System.out.println("x==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("x"));
+			System.out.println("y==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("y"));
+			System.out.println("z==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("z"));
+			System.out.println("abslute==="+jsonJO.getJSONArray("Location").getJSONObject(0).getBoolean("abslute"));
+			System.out.println("speed==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("speed"));
+			System.out.println("LocationFloor==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("floor"));
+			System.out.println("out==="+jsonJO.getJSONArray("Location").getJSONObject(0).getBoolean("out"));
+			System.out.println("longitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("longitude"));
+			System.out.println("latitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("latitude"));
+			System.out.println("altitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("altitude"));
+		}
+		return resultMap;
+	}
 	
 	public static void main(String[] args) {
-		//String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"6bc270da3ef14cc6af0f3b1ef37267a2");
+		String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"3bdfd7b5731143cda58cef2d659a4976");
+		System.out.println("s==="+s);
 		//52ac4c72590ec0d129fac7ffa3f0a2c4841875334709fbe0ac9ba65a104cc2ca
-		System.out.println(DateUtil.convertLongToString(1605060088742L));
+		//System.out.println(DateUtil.convertLongToString(1605060088742L));
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control

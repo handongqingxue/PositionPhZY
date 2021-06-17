@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.positionPhZY.entity.*;
 import com.positionPhZY.service.*;
 import com.positionPhZY.util.date.DateUtil;
@@ -53,6 +54,8 @@ public class PhoneController {
 	private WarnRecordService warnRecordService;
 	@Autowired
 	private WarnTriggerService warnTriggerService;
+	@Autowired
+	private LocationService locationService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -1578,6 +1581,9 @@ public class PhoneController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		com.alibaba.fastjson.JSONObject jsonJO = JSON.parseObject(json);
 		if(jsonJO.containsKey("Location")) {
+			JSONArray locationJA = jsonJO.getJSONArray("Location");
+			
+			/*
 			System.out.println("size==="+jsonJO.getJSONArray("Location").size());
 			System.out.println("deviceType==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("deviceType"));
 			System.out.println("uid==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("uid"));
@@ -1590,11 +1596,52 @@ public class PhoneController {
 			System.out.println("z==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("z"));
 			System.out.println("abslute==="+jsonJO.getJSONArray("Location").getJSONObject(0).getBoolean("abslute"));
 			System.out.println("speed==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("speed"));
-			System.out.println("LocationFloor==="+jsonJO.getJSONArray("Location").getJSONObject(0).getString("floor"));
+			System.out.println("LocationFloor==="+jsonJO.getJSONArray("Location").getJSONObject(0).getInteger("floor"));
 			System.out.println("out==="+jsonJO.getJSONArray("Location").getJSONObject(0).getBoolean("out"));
 			System.out.println("longitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("longitude"));
 			System.out.println("latitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("latitude"));
 			System.out.println("altitude==="+jsonJO.getJSONArray("Location").getJSONObject(0).getFloat("altitude"));
+			*/
+			
+			for(int i=0;i<locationJA.size();i++) {
+				com.alibaba.fastjson.JSONObject locationJO = locationJA.getJSONObject(i);
+				String deviceType = locationJO.getString("deviceType");
+				String uid = locationJO.getString("uid");
+				Integer rootAreaId = locationJO.getInteger("rootAreaId");
+				Integer areaId = locationJO.getInteger("areaId");
+				Long locationTime = locationJO.getLong("locationTime");
+				Long lostTime = locationJO.getLong("lostTime");
+				Float x = locationJO.getFloat("x");
+				Float y = locationJO.getFloat("y");
+				Float z = locationJO.getFloat("z");
+				Boolean abslute = locationJO.getBoolean("abslute");
+				Float speed = locationJO.getFloat("speed");
+				Integer floor = locationJO.getInteger("floor");
+				Boolean out = locationJO.getBoolean("out");
+				Float longitude = locationJO.getFloat("longitude");
+				Float latitude = locationJO.getFloat("latitude");
+				Float altitude = locationJO.getFloat("altitude");
+				
+				Location location = new Location();
+				location.setDeviceType(deviceType);
+				location.setUid(uid);
+				location.setRootAreaId(rootAreaId);
+				location.setAreaId(areaId);
+				location.setLocationTime(locationTime);
+				location.setLostTime(lostTime);
+				location.setX(x);
+				location.setY(y);
+				location.setZ(z);
+				location.setAbslute(abslute);
+				location.setSpeed(speed);
+				location.setFloor(floor);
+				location.setOut(out);
+				location.setLongitude(longitude);
+				location.setLatitude(latitude);
+				location.setAltitude(altitude);
+				
+				locationService.add(location);
+			}
 		}
 		return resultMap;
 	}

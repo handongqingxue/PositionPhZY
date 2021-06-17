@@ -56,6 +56,8 @@ public class PhoneController {
 	private WarnTriggerService warnTriggerService;
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private EntityService entityService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -194,6 +196,25 @@ public class PhoneController {
 			}
 		}
 		return exist;
+	}
+	
+	@RequestMapping(value="/insertEntityData")
+	@ResponseBody
+	public Map<String, Object> insertEntityData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> erMap = getEntities(request);
+		List<Entity> entityList = JSON.parseArray(erMap.get("result").toString(),Entity.class);
+		int count=entityService.add(entityList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化实体信息失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化实体信息成功");
+		}
+		return resultMap;
 	}
 
 	@RequestMapping(value="/insertWarnTriggerData")
@@ -1366,8 +1387,8 @@ public class PhoneController {
 			bodyParamJO.put("method", "getEntities");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("entityType", "staff");
-			paramJO.put("pageIndex", "0");
-			paramJO.put("maxCount", "100");
+			//paramJO.put("pageIndex", "0");
+			//paramJO.put("maxCount", "100");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEntities",request);
@@ -1668,7 +1689,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=0B9DC57A3E2096184BF57D6CBE14EBA3; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=CA9A8B680E280DA9715F296710F46EC3; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//请求post方式

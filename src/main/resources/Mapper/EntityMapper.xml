@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.positionPhZY.dao.EntityMapper">
+ 	<insert id="add" parameterType="com.positionPhZY.entity.Entity">
+ 		insert into entity
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="entityType!=null">
+ 				entityType,
+ 			</if>
+ 			<if test="sex!=null">
+ 				sex,
+ 			</if>
+ 			<if test="departmentId!=null">
+ 				departmentId,
+ 			</if>
+ 			<if test="photo!=null">
+ 				photo,
+ 			</if>
+ 			<if test="pid!=null">
+ 				pid,
+ 			</if>
+ 			<if test="userId!=null">
+ 				userId,
+ 			</if>
+ 			<if test="post!=null">
+ 				post,
+ 			</if>
+ 			<if test="phone!=null">
+ 				phone,
+ 			</if>
+ 			<if test="name!=null">
+ 				name,
+ 			</if>
+ 			<if test="dutyId!=null">
+ 				dutyId,
+ 			</if>
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="age!=null">
+ 				age,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="entityType!=null">
+ 				#{entityType},
+ 			</if>
+ 			<if test="sex!=null">
+ 				#{sex},
+ 			</if>
+ 			<if test="departmentId!=null">
+ 				#{departmentId},
+ 			</if>
+ 			<if test="photo!=null">
+ 				#{photo},
+ 			</if>
+ 			<if test="pid!=null">
+ 				#{pid},
+ 			</if>
+ 			<if test="userId!=null">
+ 				#{userId},
+ 			</if>
+ 			<if test="post!=null">
+ 				#{post},
+ 			</if>
+ 			<if test="phone!=null">
+ 				#{phone},
+ 			</if>
+ 			<if test="name!=null">
+ 				#{name},
+ 			</if>
+ 			<if test="dutyId!=null">
+ 				#{dutyId},
+ 			</if>
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="age!=null">
+ 				#{age},
+ 			</if>
+ 		</trim>
+ 	</insert>
+</mapper>

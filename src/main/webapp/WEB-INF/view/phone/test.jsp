@@ -141,7 +141,16 @@ function big(){
 }
 
 function load(flag){
-	$("#load_div").css("display",flag==1?"block":"none");
+	if(flag==1){
+		$("#small_but").attr("disabled",true);
+		$("#big_but").attr("disabled",true);
+		$("#load_div").css("display","block");
+	}
+	else{
+		$("#small_but").attr("disabled",false);
+		$("#big_but").attr("disabled",false);
+		$("#load_div").css("display","none");
+	}
 }
 
 function setEntityLocation(ctx,x,y){
@@ -195,7 +204,7 @@ body {
 	<canvas id="myCanvas" style="width:720.52px;height:670.49px;">
 	</canvas>
 </div>
-<input type="button" value="缩小" onclick="small();"/>
-<input type="button" value="放大" onclick="big();"/>
+<input type="button" id="small_but" value="缩小" onclick="small();"/>
+<input type="button" id="big_but" value="放大" onclick="big();"/>
 </body>
 </html>

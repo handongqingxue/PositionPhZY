@@ -12,6 +12,7 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <!-- https://www.cnblogs.com/chenjy1225/p/10924293.html -->
 <!-- https://www.jb51.net/article/165400.htm -->
+<!-- https://segmentfault.com/a/1190000016819776 -->
 <script type="text/javascript">
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
@@ -32,19 +33,24 @@ $(function(){
     }
     */
     
+    //https://blog.csdn.net/weixin_42164004/article/details/116020172
     var point_img = document.getElementById("point_img");
     var canvasBg = document.getElementById("bg1");
 	var canvas = document.getElementById("myCanvas");
+	canvas.style.width="720px";
+	canvas.style.height="670px";
+	canvas.width=720;
+	canvas.height=670;
 	ctx = canvas.getContext("2d");
 	// 制作背景图
 	var patBg = ctx.createPattern(canvasBg, "repeat");
-	ctx.rect(0, 0, 750, 1180);
+	ctx.rect(0, 0, 720, 670);
 	ctx.fillStyle = patBg;
 	ctx.fill();
 
-	ctx.drawImage(point_img, 40, 40, 10, 10);
-	ctx.drawImage(point_img, 140, 40, 10, 10);
-	ctx.drawImage(point_img, 240, 40, 10, 10);
+	ctx.drawImage(point_img, 40, 10, 10, 10);
+	//ctx.drawImage(point_img, 140, 40, 10, 10);
+	//ctx.drawImage(point_img, 240, 40, 10, 10);
 	
 	ctx.beginPath();
     ctx.lineWidth = "1";
@@ -107,7 +113,7 @@ body{
 </head>
 <body>
 <div style="width: 100%;height: 500px;text-align: center;">这是显示定位地图
-<canvas id="myCanvas" style="width:367px;height:325px;background-size: 100%, 100%;">
+<canvas id="myCanvas">
 </canvas>
 <img src="<%=basePath %>resource/image/003.jpg" id="bg1" alt="" style="display: none;">
 <img src="<%=basePath %>resource/image/004.png" id="point_img" alt="" style="display: none;">

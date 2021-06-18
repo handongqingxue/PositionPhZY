@@ -77,6 +77,12 @@ public class PhoneController {
 		return "phone/warnCount";
 	}
 
+	@RequestMapping(value="/goTest")
+	public String goTest() {
+
+		return "phone/test";
+	}
+
 	@RequestMapping(value="/initTodayWarnCount")
 	@ResponseBody
 	public Map<String, Object> initTodayWarnCount() {

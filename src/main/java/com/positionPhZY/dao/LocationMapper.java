@@ -14,6 +14,6 @@ public interface LocationMapper {
 
 	int edit(Location location);
 
-	List<Location> selectSSDWCanvasData();
+	List<Location> selectSSDWCanvasData(@Param("floor")Integer floor);
 
 }

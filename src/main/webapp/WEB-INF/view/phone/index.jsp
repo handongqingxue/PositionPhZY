@@ -51,7 +51,6 @@ function initSSDWCanvas(reSizeFlag){
 	
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
-	//ssdwCanvas = document.getElementById("ssdwCanvas");
 	ssdwCanvas = document.createElement("canvas");
 	ssdwCanvas.id="ssdwCanvas";
 	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";
@@ -62,7 +61,9 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvasImg.onload=function(){
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
 
+		var floor=$("#floor_sel").val();
 		$.post("initSSDWCanvasData",
+			{floor:floor},
 			function(data){
 				if(data.status=="ok"){
 					var locationList=data.list;
@@ -71,11 +72,11 @@ function initSSDWCanvas(reSizeFlag){
 						//console.log(location.x+location.y+location.entityName+","+","+","+location.floor);
 						setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
 					}
-					var preSsdwCanvas=document.getElementById("ssdwCanvas");
-					preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
-					var mainDiv=document.getElementById("main_div");
-					mainDiv.appendChild(ssdwCanvas);
 				}
+				var preSsdwCanvas=document.getElementById("ssdwCanvas");
+				preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
+				var mainDiv=document.getElementById("main_div");
+				mainDiv.appendChild(ssdwCanvas);
 			}
 		,"json");
 		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
@@ -86,8 +87,6 @@ function initSSDWCanvas(reSizeFlag){
 
 function changeCanvasSize(flag){
 	loadSSDWCanvas(flag);
-    var mainDiv=$("#main_div");
-    //mainDiv.empty();
     var mcw=ssdwCanvasStyleWidth;
 	var mch=ssdwCanvasStyleHeight;
 	if(flag==1)
@@ -116,7 +115,6 @@ function changeCanvasSize(flag){
 	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
 	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
-    //mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
 	initSSDWCanvas(1);
 }
 
@@ -143,18 +141,15 @@ function setEntityLocation(context,x,y,name,floor){
 function loadSSDWCanvas(flag){
 	var smallBut=$("#small_but");
 	var bigBut=$("#big_but");
-	var loadDiv=$("#load_div");
 	if(flag==1){
 		smallBut.attr("disabled",true);
 		bigBut.attr("disabled",true);
-		loadDiv.css("display","block");
 	}
 	else{
 		setTimeout(function(){
 			smallBut.attr("disabled",false);
 			bigBut.attr("disabled",false);
 		},"1000");
-		loadDiv.css("display","none");
 	}
 }
 
@@ -169,6 +164,9 @@ function goPage(page){
 <style type="text/css">
 body{
 	margin: 0;
+}
+.main_div{
+	width: 100%;height: 600px;overflow: auto;
 }
 .bottom_div{
 	width: 100%;height: 50px;line-height: 50px;background-color: #eee;bottom: 0;position: fixed;
@@ -189,10 +187,16 @@ body{
 <title>首页</title>
 </head>
 <body>
-<div id="load_div" style="width: 100%;height:100%;text-align:center;background-color: rgba(0,0,0,0.8);position: fixed;display: none;">
-	<div class="text_div" style="width: 100%;margin-top: 100px;color: #fff;text-align: center;">地图加载中...</div>
-</div>
-<div id="main_div" style="width: 100%;height: 600px;overflow: auto;">
+<div class="main_div" id="main_div">
+	<div style="width: 100%;">
+		<select id="floor_sel" onchange="initSSDWCanvas();">
+			<option value="1">1层</option>
+			<option value="2">2层</option>
+			<option value="3">3层</option>
+			<option value="4">4层</option>
+			<option value="5">5层</option>
+		</select>
+	</div>
 	<canvas id="ssdwCanvas">
 	</canvas>
 </div>

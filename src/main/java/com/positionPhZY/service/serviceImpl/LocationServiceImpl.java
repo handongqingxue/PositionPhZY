@@ -27,8 +27,8 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public List<Location> selectSSDWCanvasData() {
+	public List<Location> selectSSDWCanvasData(Integer floor) {
 		// TODO Auto-generated method stub
-		return locationDao.selectSSDWCanvasData();
+		return locationDao.selectSSDWCanvasData(floor);
 	}
 }

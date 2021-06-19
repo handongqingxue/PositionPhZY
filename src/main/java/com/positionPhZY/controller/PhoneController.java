@@ -206,10 +206,10 @@ public class PhoneController {
 
 	@RequestMapping(value="/initSSDWCanvasData")
 	@ResponseBody
-	public Map<String, Object> initSSDWCanvasData() {
+	public Map<String, Object> initSSDWCanvasData(Integer floor) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		List<Location> locationList = locationService.selectSSDWCanvasData();
+		List<Location> locationList = locationService.selectSSDWCanvasData(floor);
 		if(locationList.size()==0) {
 			resultMap.put("status", "no");
 			resultMap.put("message", "ÔÝÎÞÊý¾Ý");

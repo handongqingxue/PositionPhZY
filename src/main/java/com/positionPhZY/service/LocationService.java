@@ -8,6 +8,6 @@ public interface LocationService {
 
 	int add(Location location);
 
-	List<Location> selectSSDWCanvasData();
+	List<Location> selectSSDWCanvasData(Integer floor);
 
 }

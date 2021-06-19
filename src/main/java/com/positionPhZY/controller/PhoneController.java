@@ -203,6 +203,23 @@ public class PhoneController {
 		}
 		return exist;
 	}
+
+	@RequestMapping(value="/initSSDWCanvasData")
+	@ResponseBody
+	public Map<String, Object> initSSDWCanvasData() {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<Location> locationList = locationService.selectSSDWCanvasData();
+		if(locationList.size()==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "ÔÝÎÞÊý¾Ý");
+		}
+		else{
+			resultMap.put("status", "ok");
+			resultMap.put("list", locationList);
+		}
+		return resultMap;
+	}
 	
 	@RequestMapping(value="/insertEntityData")
 	@ResponseBody

@@ -1,5 +1,7 @@
 package com.positionPhZY.service.serviceImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,11 @@ public class LocationServiceImpl implements LocationService {
 		else
 			count=locationDao.edit(location);
 		return count;
+	}
+
+	@Override
+	public List<Location> selectSSDWCanvasData() {
+		// TODO Auto-generated method stub
+		return locationDao.selectSSDWCanvasData();
 	}
 }

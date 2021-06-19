@@ -17,10 +17,14 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 var ssdwCanvas;
-var ssdwCanvasStyleWidth=720.52;
-var ssdwCanvasStyleHeight=670.49;
-var ssdwCanvasWidth=2841;
-var ssdwCanvasHeight=2643;
+var ssdwCanvasMinWidth=720.52;
+var ssdwCanvasMinHeight=670.49;
+var ssdwCanvasMaxWidth=2841;
+var ssdwCanvasMaxHeight=2643;
+var ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
+var ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+var ssdwCanvasWidth=ssdwCanvasMaxWidth;
+var ssdwCanvasHeight=ssdwCanvasMaxHeight;
 var widthScale;
 var heightScale;
 var arcR=20;
@@ -30,14 +34,10 @@ var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
-var xl=187;
 $(function(){
-	initSSDWCanvas();
 	jiSuanScale();
+	//initSSDWCanvas(0);
 	setInterval(function(){
-		xl+=3;
-		if(xl>300)
-			xl=187;
 		initSSDWCanvas(0);
 	},"3000");
 });
@@ -48,6 +48,7 @@ function jiSuanScale(){
 }
 
 function initSSDWCanvas(reSizeFlag){
+	
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
 	ssdwCanvas = document.getElementById("ssdwCanvas");
@@ -58,7 +59,19 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvasContext = ssdwCanvas.getContext("2d");
 	ssdwCanvasImg.onload=function(){
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
-		setEntityLocation(ssdwCanvasContext,xl,448,"龚永强",1);
+
+		$.post("initSSDWCanvasData",
+			function(data){
+				if(data.status=="ok"){
+					var locationList=data.list;
+					for(var i=0;i<locationList.length;i++){
+						var location=locationList[i];
+						//console.log(location.x+location.y+location.entityName+","+","+","+location.floor);
+						setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
+					}
+				}
+			}
+		,"json");
 		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
 		if(reSizeFlag==1)
 			loadSSDWCanvas(0);
@@ -75,6 +88,20 @@ function changeCanvasSize(flag){
 		ssdwCanvasStyleWidth+=30;
 	else
 		ssdwCanvasStyleWidth-=30;
+	
+	if(ssdwCanvasStyleWidth<ssdwCanvasMinWidth){
+		ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
+	}
+	else if(ssdwCanvasStyleWidth>ssdwCanvasMaxWidth){
+		ssdwCanvasStyleWidth=ssdwCanvasMaxWidth;
+	}
+
+	if(ssdwCanvasStyleHeight<ssdwCanvasMinHeight){
+		ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+	}
+	else if(ssdwCanvasStyleHeight>ssdwCanvasMaxHeight){
+		ssdwCanvasStyleHeight=ssdwCanvasMaxHeight;
+	}
 	ssdwCanvasStyleHeight=ssdwCanvasStyleWidth*ssdwCanvasHeight/ssdwCanvasWidth;
 	arcR=arcR*mcw/ssdwCanvasStyleWidth;
 	rectWidth=rectWidth*mcw/ssdwCanvasStyleWidth;
@@ -84,7 +111,6 @@ function changeCanvasSize(flag){
 	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
     mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
-	//repaint();
 	initSSDWCanvas(1);
 }
 

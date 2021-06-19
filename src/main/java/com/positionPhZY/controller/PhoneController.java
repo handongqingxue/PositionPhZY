@@ -319,6 +319,13 @@ public class PhoneController {
 	}
 	*/
 
+	/**
+	 * 2.1.1 获取验证码
+	 * @param tenantId
+	 * @param userId
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getCode")
 	@ResponseBody
 	public Map<String, Object> getCode(String tenantId, String userId,HttpServletRequest request) {
@@ -368,6 +375,14 @@ public class PhoneController {
 		*/
 	}
 	
+	/**
+	 * 2.1.2 登录
+	 * @param tenantId
+	 * @param userId
+	 * @param password
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/login")
 	@ResponseBody
 	public Map<String, Object> login(String tenantId, String userId, String password,HttpServletRequest request){
@@ -405,7 +420,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取用户列表
+	 * 2.1.3 获取用户列表
 	 * @param request
 	 * @return
 	 */
@@ -431,7 +446,7 @@ public class PhoneController {
 	}
 	
 	/**
-	 * 获取定位设备类型表
+	 * 2.2.1 获取定位设备类型表
 	 * @param request
 	 * @return
 	 */
@@ -491,7 +506,7 @@ public class PhoneController {
 	}
 	
 	/**
-	 *  获取定位标签类型表
+	 *  2.2.2 获取定位标签类型表
 	 * @param request
 	 * @return
 	 */
@@ -559,7 +574,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位标签信息
+	 * 2.2.3 获取定位标签信息
 	 * @param request
 	 * @return
 	 */
@@ -589,7 +604,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取系统实体类型
+	 * 2.2.4 获取系统实体类型
 	 * @param request
 	 * @return
 	 */
@@ -669,6 +684,11 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 2.2.5获取定位标签列表
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getTags")
 	@ResponseBody
 	public Map<String, Object> getTags(HttpServletRequest request) {
@@ -732,7 +752,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位引擎配置信息
+	 * 2.2.6获取定位引擎配置信息
 	 * @param request
 	 * @return
 	 */
@@ -788,7 +808,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位点数量
+	 * 2.2.7获取定位点数量
 	 * @param request
 	 * @return
 	 */
@@ -819,7 +839,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位点列表
+	 * 2.2.9获取定位点列表
 	 * @param request
 	 * @return
 	 */
@@ -908,7 +928,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位点（暂无数据）
+	 * 2.2.8获取定位点（暂无数据）
 	 * @param request
 	 * @return
 	 */
@@ -937,7 +957,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取定位引擎接入点列表
+	 * 2.2.15获取定位引擎接入点列表
 	 * @param request
 	 * @return
 	 */
@@ -969,7 +989,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取根地图列表
+	 * 2.2.16获取根地图列表
 	 * @param request
 	 * @return
 	 */
@@ -1020,7 +1040,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取设备及状态列表
+	 * 2.7.17获取设备及状态列表
 	 * @param request
 	 * @return
 	 */
@@ -1059,7 +1079,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 读取标签实时状态
+	 * 2.2.18读取标签实时状态
 	 * @param request
 	 * @return
 	 */
@@ -1091,7 +1111,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取历史轨迹
+	 * 2.2.19获取历史轨迹
 	 * @param request
 	 * @return
 	 */
@@ -1123,7 +1143,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 闸机记录读取
+	 * 2.4.2闸机记录读取
 	 * @param request
 	 * @return
 	 */
@@ -1154,7 +1174,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取电子围栏列表
+	 * 2.5.1获取电子围栏列表
 	 * @param request
 	 * @return
 	 */
@@ -1228,7 +1248,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取电子围栏
+	 * 2.5.2获取电子围栏
 	 * @param request
 	 * @return
 	 */
@@ -1271,7 +1291,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取电子围栏进出历史记录
+	 * 2.5.5获取电子围栏进出历史记录
 	 * @param request
 	 * @return
 	 */
@@ -1303,7 +1323,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取员工职务列表
+	 * 2.6.2获取员工职务列表
 	 * @param request
 	 * @return
 	 */
@@ -1343,7 +1363,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取职务/车型/资产类别
+	 * 2.6.1获取职务/车型/资产类别
 	 * @param request
 	 * @return
 	 */
@@ -1374,6 +1394,11 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 2.6.5 获取实体数量
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getEntityCount")
 	@ResponseBody
 	public Map<String, Object> getEntityCount(HttpServletRequest request) {
@@ -1399,6 +1424,11 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 2.6.9 获取实体列表
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getEntities")
 	@ResponseBody
 	public Map<String, Object> getEntities(HttpServletRequest request) {
@@ -1442,6 +1472,11 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 2.6.6 获取实体信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getEntity")
 	@ResponseBody
 	public Map<String, Object> getEntity(HttpServletRequest request) {
@@ -1471,7 +1506,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取报警触发器列表
+	 * 2.7.1获取报警触发器列表
 	 * @param request
 	 * @return
 	 */
@@ -1506,7 +1541,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 获取报警触发条件
+	 * 2.7.4获取报警触发条件
 	 * @param request
 	 * @return
 	 */
@@ -1538,7 +1573,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 报获取警记录
+	 * 2.7.3报获取警记录
 	 * @param request
 	 * @return
 	 */
@@ -1584,7 +1619,7 @@ public class PhoneController {
 	}
 
 	/**
-	 * 报警记录汇总
+	 * 2.8.3报警记录汇总
 	 * @param request
 	 * @return
 	 */
@@ -1618,13 +1653,20 @@ public class PhoneController {
 		}
 	}
 
+	/**
+	 * 接收推送消息
+	 * @param request
+	 * @param response
+	 * @param json
+	 * @return
+	 */
 	@RequestMapping(value="/receiveDate", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> receiveDate(HttpServletRequest request, HttpServletResponse response, @RequestBody String json) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		com.alibaba.fastjson.JSONObject jsonJO = JSON.parseObject(json);
-		if(jsonJO.containsKey("Location")) {
+		if(jsonJO.containsKey("Location")) {//定位消息
 			JSONArray locationJA = jsonJO.getJSONArray("Location");
 			
 			/*

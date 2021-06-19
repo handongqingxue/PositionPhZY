@@ -168,6 +168,9 @@ body{
 .main_div{
 	width: 100%;height: 600px;overflow: auto;
 }
+.main_div .tool_div{
+	width: 100%;
+}
 .bottom_div{
 	width: 100%;height: 50px;line-height: 50px;background-color: #eee;bottom: 0;position: fixed;
 }
@@ -188,7 +191,7 @@ body{
 </head>
 <body>
 <div class="main_div" id="main_div">
-	<div style="width: 100%;">
+	<div class="tool_div">
 		<select id="floor_sel" onchange="initSSDWCanvas();">
 			<option value="1">1层</option>
 			<option value="2">2层</option>

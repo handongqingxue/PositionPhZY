@@ -30,9 +30,16 @@ var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
+var xl=187;
 $(function(){
 	initSSDWCanvas();
 	jiSuanScale();
+	setInterval(function(){
+		xl+=3;
+		if(xl>300)
+			xl=187;
+		initSSDWCanvas();
+	},"3000");
 });
 
 function jiSuanScale(){
@@ -51,8 +58,8 @@ function initSSDWCanvas(){
 	ssdwCanvasContext = ssdwCanvas.getContext("2d");
 	ssdwCanvasImg.onload=function(){
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
-		setEntityLocation(ssdwCanvasContext,187,448,"龚永强",1);
-		setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
+		setEntityLocation(ssdwCanvasContext,xl,448,"龚永强",1);
+		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
 		loadSSDWCanvas(0);
 	}
 }

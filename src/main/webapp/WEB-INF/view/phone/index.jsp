@@ -36,7 +36,7 @@ var fontSize=50;
 var fontMarginLeft=45;
 $(function(){
 	jiSuanScale();
-	//initSSDWCanvas(0);
+	initSSDWCanvas(0);
 	setInterval(function(){
 		initSSDWCanvas(0);
 	},"3000");
@@ -51,7 +51,9 @@ function initSSDWCanvas(reSizeFlag){
 	
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
-	ssdwCanvas = document.getElementById("ssdwCanvas");
+	//ssdwCanvas = document.getElementById("ssdwCanvas");
+	ssdwCanvas = document.createElement("canvas");
+	ssdwCanvas.id="ssdwCanvas";
 	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";
 	ssdwCanvas.style.height=ssdwCanvasStyleHeight+"px";
 	ssdwCanvas.width=ssdwCanvasWidth;
@@ -69,6 +71,10 @@ function initSSDWCanvas(reSizeFlag){
 						//console.log(location.x+location.y+location.entityName+","+","+","+location.floor);
 						setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
 					}
+					var preSsdwCanvas=document.getElementById("ssdwCanvas");
+					preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
+					var mainDiv=document.getElementById("main_div");
+					mainDiv.appendChild(ssdwCanvas);
 				}
 			}
 		,"json");
@@ -81,7 +87,7 @@ function initSSDWCanvas(reSizeFlag){
 function changeCanvasSize(flag){
 	loadSSDWCanvas(flag);
     var mainDiv=$("#main_div");
-    mainDiv.empty();
+    //mainDiv.empty();
     var mcw=ssdwCanvasStyleWidth;
 	var mch=ssdwCanvasStyleHeight;
 	if(flag==1)
@@ -110,7 +116,7 @@ function changeCanvasSize(flag){
 	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
 	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
-    mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
+    //mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
 	initSSDWCanvas(1);
 }
 
@@ -144,8 +150,10 @@ function loadSSDWCanvas(flag){
 		loadDiv.css("display","block");
 	}
 	else{
-		smallBut.attr("disabled",false);
-		bigBut.attr("disabled",false);
+		setTimeout(function(){
+			smallBut.attr("disabled",false);
+			bigBut.attr("disabled",false);
+		},"1000");
 		loadDiv.css("display","none");
 	}
 }

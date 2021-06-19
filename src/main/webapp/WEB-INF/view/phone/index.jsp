@@ -16,69 +16,104 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
+var ssdwCanvas;
+var ssdwCanvasStyleWidth=720.52;
+var ssdwCanvasStyleHeight=670.49;
+var ssdwCanvasWidth=2841;
+var ssdwCanvasHeight=2643;
+var widthScale;
+var heightScale;
+var arcR=20;
+var rectWidth=330;
+var rectHeight=100;
+var arSpace=43;
+var atSpace=78;
+var fontSize=50;
+var fontMarginLeft=45;
 $(function(){
-	/*
-	var c=document.getElementById("canvas");
-	var cxt=c.getContext("2d");
-	var img=new Image()
-	var img2=new Image()
-	img.src=path+"resource/image/001.png"
-	img2.src=path+"resource/image/002.png"
-	// 等待加载完成再绘制
-    img.onload = function(){
-        cxt.drawImage(img, 0,0,50, 50);
-    }
-    img2.onload = function(){
-        cxt.drawImage(img2, 10,0,50, 50);
-    }
-    */
-    
-    //https://blog.csdn.net/weixin_42164004/article/details/116020172
-    var point_img = document.getElementById("point_img");
-    var canvasBg = document.getElementById("bg1");
-	var canvas = document.getElementById("myCanvas");
-	canvas.style.width="720px";
-	canvas.style.height="670px";
-	canvas.width=720;
-	canvas.height=670;
-	ctx = canvas.getContext("2d");
-	// 制作背景图
-	var patBg = ctx.createPattern(canvasBg, "repeat");
-	ctx.rect(0, 0, 720, 670);
-	ctx.fillStyle = patBg;
-	ctx.fill();
-
-	ctx.drawImage(point_img, 40, 10, 10, 10);
-	//ctx.drawImage(point_img, 140, 40, 10, 10);
-	//ctx.drawImage(point_img, 240, 40, 10, 10);
-	
-	ctx.beginPath();
-    ctx.lineWidth = "1";
-    ctx.strokeStyle = "blue";
-    ctx.fillStyle = "orange";
-    ctx.moveTo(55, 90);
-    ctx.lineTo(55, 60);
-    //ctx.lineTo(30, 30);
-    //ctx.lineTo(30, 80);
-    //ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-	
-	ctx.font="10px bold 黑体";
-	ctx.fillStyle = "#fff";
-	ctx.fillText("李天赐",60,80);
+	initSSDWCanvas();
+	jiSuanScale();
 });
 
-function small(){
-	var myCanvas=$("#myCanvas");
-	var width=myCanvas.css("width");
-	myCanvas.css("width","250px");
-	$("#myCanvas").css("height","250px");
+function jiSuanScale(){
+	widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
+	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
 }
 
-function big(){
-	$("#myCanvas").css("width","500px");
-	$("#myCanvas").css("height","500px");
+function initSSDWCanvas(){
+	var ssdwCanvasImg = new Image();
+	ssdwCanvasImg.src=path+"resource/image/003.jpg";
+	ssdwCanvas = document.getElementById("ssdwCanvas");
+	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";
+	ssdwCanvas.style.height=ssdwCanvasStyleHeight+"px";
+	ssdwCanvas.width=ssdwCanvasWidth;
+	ssdwCanvas.height=ssdwCanvasHeight;
+	ssdwCanvasContext = ssdwCanvas.getContext("2d");
+	ssdwCanvasImg.onload=function(){
+		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
+		setEntityLocation(ssdwCanvasContext,187,448,"龚永强",1);
+		setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
+		loadSSDWCanvas(0);
+	}
+}
+
+function changeCanvasSize(flag){
+	loadSSDWCanvas(flag);
+    var mainDiv=$("#main_div");
+    mainDiv.empty();
+    var mcw=ssdwCanvasStyleWidth;
+	var mch=ssdwCanvasStyleHeight;
+	if(flag==1)
+		ssdwCanvasStyleWidth+=30;
+	else
+		ssdwCanvasStyleWidth-=30;
+	ssdwCanvasStyleHeight=ssdwCanvasStyleWidth*ssdwCanvasHeight/ssdwCanvasWidth;
+	arcR=arcR*mcw/ssdwCanvasStyleWidth;
+	rectWidth=rectWidth*mcw/ssdwCanvasStyleWidth;
+	rectHeight=rectHeight*mch/ssdwCanvasStyleHeight;
+	arSpace=arSpace*mch/ssdwCanvasStyleHeight;
+	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
+	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
+	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
+    mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
+	//repaint();
+	initSSDWCanvas();
+}
+
+function setEntityLocation(context,x,y,name,floor){
+	context.beginPath();
+	context.strokeStyle = 'red';//点填充
+	context.fillStyle='red';
+	context.lineWidth=arcR*1.5;
+	context.arc(x/widthScale,ssdwCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
+	context.stroke();
+
+	context.beginPath();
+	context.lineWidth = "1";
+	context.fillStyle = "blue";
+	context.fillRect(x/widthScale-rectWidth/2,ssdwCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+	context.stroke();
+
+	context.font=fontSize+"px bold 黑体";
+	context.fillStyle = "#fff";
+	context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ssdwCanvasHeight-y/heightScale-atSpace);
+	context.stroke();
+}
+
+function loadSSDWCanvas(flag){
+	var smallBut=$("#small_but");
+	var bigBut=$("#big_but");
+	var loadDiv=$("#load_div");
+	if(flag==1){
+		smallBut.attr("disabled",true);
+		bigBut.attr("disabled",true);
+		loadDiv.css("display","block");
+	}
+	else{
+		smallBut.attr("disabled",false);
+		bigBut.attr("disabled",false);
+		loadDiv.css("display","none");
+	}
 }
 
 function goPage(page){
@@ -112,14 +147,15 @@ body{
 <title>首页</title>
 </head>
 <body>
-<div style="width: 100%;height: 500px;text-align: center;">这是显示定位地图
-<canvas id="myCanvas">
-</canvas>
-<img src="<%=basePath %>resource/image/003.jpg" id="bg1" alt="" style="display: none;">
-<img src="<%=basePath %>resource/image/004.png" id="point_img" alt="" style="display: none;">
-<input type="button" value="缩小" onclick="small();"/>
-<input type="button" value="放大" onclick="big();"/>
+<div id="load_div" style="width: 100%;height:100%;text-align:center;background-color: rgba(0,0,0,0.8);position: fixed;display: none;">
+	<div class="text_div" style="width: 100%;margin-top: 100px;color: #fff;text-align: center;">地图加载中...</div>
 </div>
+<div id="main_div" style="width: 100%;height: 600px;overflow: auto;">
+	<canvas id="ssdwCanvas">
+	</canvas>
+</div>
+<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
+<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
 <div class="bottom_div">
 	<div class="item_div" onclick="goPage('ssdw')">实时定位</div>
 	<div class="item_div ryss_div">人员搜索</div>

@@ -38,7 +38,7 @@ $(function(){
 		xl+=3;
 		if(xl>300)
 			xl=187;
-		initSSDWCanvas();
+		initSSDWCanvas(0);
 	},"3000");
 });
 
@@ -47,7 +47,7 @@ function jiSuanScale(){
 	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
 }
 
-function initSSDWCanvas(){
+function initSSDWCanvas(reSizeFlag){
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
 	ssdwCanvas = document.getElementById("ssdwCanvas");
@@ -60,7 +60,8 @@ function initSSDWCanvas(){
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
 		setEntityLocation(ssdwCanvasContext,xl,448,"龚永强",1);
 		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
-		loadSSDWCanvas(0);
+		if(reSizeFlag==1)
+			loadSSDWCanvas(0);
 	}
 }
 
@@ -84,7 +85,7 @@ function changeCanvasSize(flag){
 	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
     mainDiv.append("<canvas id=\"ssdwCanvas\"></canvas>");
 	//repaint();
-	initSSDWCanvas();
+	initSSDWCanvas(1);
 }
 
 function setEntityLocation(context,x,y,name,floor){

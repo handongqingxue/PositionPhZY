@@ -89,4 +89,7 @@
  			</if>
  		</trim>
  	</insert>
+ 	<select id="querySelectData" resultType="com.positionPhZY.entity.Entity">
+ 		select tagId,name,pid from entity where entityType=#{entityType} and tagId is not null order by name
+ 	</select>
 </mapper>

@@ -19,13 +19,11 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	/*
-	$.post("insertEntityData",
+	$.post("getLocationRecords",
 		function(data){
 			alert(data.wrList.length);
 		}
 	,"json");
-	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv("week");
 	initPieChartDiv("date");

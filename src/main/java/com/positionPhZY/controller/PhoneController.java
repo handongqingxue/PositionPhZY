@@ -71,6 +71,12 @@ public class PhoneController {
 		return "phone/index";
 	}
 
+	@RequestMapping(value="/goLocRecAna")
+	public String goLocRecAna() {
+		
+		return "phone/locRecAna";
+	}
+
 	@RequestMapping(value="/goWarnCount")
 	public String goWarnCount() {
 
@@ -81,6 +87,25 @@ public class PhoneController {
 	public String goTest() {
 
 		return "phone/test";
+	}
+
+	@RequestMapping(value="/initEntitySelect")
+	@ResponseBody
+	public Map<String, Object> initEntitySelect(String entityType) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<Entity> list=entityService.querySelectData(entityType);
+		
+		if(list.size()==0) {
+			resultMap.put("status","no");
+			resultMap.put("message", "暂无数据");
+		}
+		else {
+			resultMap.put("status","ok");
+			resultMap.put("list", list);
+		}
+			
+		return resultMap;
 	}
 
 	@RequestMapping(value="/initTodayWarnCount")
@@ -1125,7 +1150,7 @@ public class PhoneController {
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getLocationRecords");
 			JSONObject paramJO=new JSONObject();
-			paramJO.put("tagId", "BTT34039771");
+			paramJO.put("tagId", "BTT32003897");
 			paramJO.put("areaId", "1");
 			paramJO.put("startTime", "1518277921076");
 			paramJO.put("endTime", "1618277921076");
@@ -1754,7 +1779,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=CA9A8B680E280DA9715F296710F46EC3; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=3F423923CFCC41AEDBB9598C8DD1E064; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//请求post方式

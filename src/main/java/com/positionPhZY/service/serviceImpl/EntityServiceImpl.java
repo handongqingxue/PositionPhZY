@@ -24,4 +24,10 @@ public class EntityServiceImpl implements EntityService {
 		}
 		return count;
 	}
+
+	@Override
+	public List<Entity> querySelectData(String entityType) {
+		// TODO Auto-generated method stub
+		return entityDao.querySelectData(entityType);
+	}
 }

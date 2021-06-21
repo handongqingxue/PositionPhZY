@@ -8,4 +8,6 @@ public interface EntityService {
 
 	int add(List<Entity> entityList);
 
+	List<Entity> querySelectData(String entityType);
+
 }

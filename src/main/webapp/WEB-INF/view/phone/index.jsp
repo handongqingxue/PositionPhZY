@@ -155,6 +155,9 @@ function loadSSDWCanvas(flag){
 
 function goPage(page){
 	switch (page) {
+	case "gjfx":
+		location.href=phonePath+"goLocRecAna";
+		break;
 	case "bjtj":
 		location.href=phonePath+"goWarnCount";
 		break;
@@ -208,7 +211,7 @@ body{
 <div class="bottom_div">
 	<div class="item_div" onclick="goPage('ssdw')">实时定位</div>
 	<div class="item_div ryss_div">人员搜索</div>
-	<div class="item_div gjfx_div">轨迹分析</div>
+	<div class="item_div gjfx_div" onclick="goPage('gjfx')">轨迹分析</div>
 	<div class="item_div bjtj_div" onclick="goPage('bjtj')">报警统计</div>
 </div>
 </body>

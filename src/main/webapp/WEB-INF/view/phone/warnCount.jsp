@@ -33,7 +33,10 @@ $(function(){
 
 //初始化今日报警统计数量
 function initJRBJTJSLDiv(){
+    var todayDate=getTodayDate();
+    var nowTime=getNowTime();
 	$.post("initTodayWarnCount",
+		{todayDate:todayDate,nowTime:nowTime},
 		function(data){
 			var twList=data.todayWarnList;
 			var countListDiv=$("#jrbjtjsl_div #count_list_div");
@@ -42,20 +45,29 @@ function initJRBJTJSLDiv(){
 				var tw=twList[i];
 				if(i%2==0){
 					itemStr+="<div class=\"item_div\" style=\"margin-top:0px;margin-left:0px\">";
-						itemStr+="<span class=\"text_span\">"+tw.name+"</span>";
-						itemStr+="<span class=\"count_span\">"+tw.count+"</span>";
+						itemStr+="<span class=\"text_span\">"+tw.wtName+"</span>";
+						itemStr+="<span class=\"count_span\">"+tw.warnCount+"</span>";
 					itemStr+="</div>";
 				}
 				else{
 					itemStr+="<div class=\"item_div\" style=\"margin-top:-30px;margin-left:180px;\">";
-						itemStr+="<div class=\"text_span\">"+tw.name+"</div>";
-						itemStr+="<span class=\"count_span\">"+tw.count+"</span>";
+						itemStr+="<div class=\"text_span\">"+tw.wtName+"</div>";
+						itemStr+="<span class=\"count_span\">"+tw.warnCount+"</span>";
 					itemStr+="</div>";
 				}
 				countListDiv.append(itemStr);
 			}
 		}
 	,"json");
+}
+
+function getNowTime(){
+	var date=new Date();
+	var hour=date.getHours();
+	var minute=date.getMinutes();
+	var second=date.getSeconds();
+	var nowTime=hour+":"+minute+":"+second;
+    return nowTime;
 }
 
 function getTodayDate(){
@@ -312,7 +324,6 @@ body{
     font-weight: bold;
 }
 .jrbjtjsl_div .count_list_div{
-	width: 100%;
 	height: auto;
 	margin: 0 10px 0 10px;
 }

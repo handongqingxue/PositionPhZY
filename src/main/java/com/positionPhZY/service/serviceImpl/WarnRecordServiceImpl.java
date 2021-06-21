@@ -24,6 +24,12 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 	}
 
 	@Override
+	public List<WarnRecord> select(String todayDate, String nowTime) {
+		// TODO Auto-generated method stub
+		return warnRecordDao.select(todayDate+" 00:00:00",todayDate+" "+nowTime);
+	}
+
+	@Override
 	public int add(List<WarnRecord> warnRecordList) {
 		// TODO Auto-generated method stub
 		int count=0;

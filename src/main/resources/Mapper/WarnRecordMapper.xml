@@ -126,7 +126,10 @@
  		</trim>
  	</insert>
 	<select id="select" resultType="com.positionPhZY.entity.WarnRecord">
-		select * from warn_record
+		select * from warn_record where 1=1
+		<if test="startTime!=null&amp;startTime!=''&amp;endTime!=null&amp;endTime!=''">
+			and startTimeYMD BETWEEN #{startTime} and #{endTime}
+		</if>
 	</select>
 	<select id="selectBarChartDateData" resultType="com.positionPhZY.entity.WarnRecord">
 		select *,count(*) warnCount from 

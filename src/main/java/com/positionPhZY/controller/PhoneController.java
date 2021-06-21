@@ -85,12 +85,12 @@ public class PhoneController {
 
 	@RequestMapping(value="/initTodayWarnCount")
 	@ResponseBody
-	public Map<String, Object> initTodayWarnCount() {
+	public Map<String, Object> initTodayWarnCount(String todayDate, String nowTime) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<Map<String, Object>> todayWarnList = new ArrayList<Map<String,Object>>();
 		List<WarnTrigger> warnTriggerList = warnTriggerService.select();
-		List<WarnRecord> warnRecordList = warnRecordService.select();
+		List<WarnRecord> warnRecordList = warnRecordService.select(todayDate,nowTime);
 		for (int i = 0; i < warnTriggerList.size(); i++) {
 			Map<String, Object> todayWarnMap=new HashMap<String, Object>();
 			WarnTrigger warnTrigger = warnTriggerList.get(i);
@@ -101,8 +101,8 @@ public class PhoneController {
 					warnCount++;
 				}
 			}
-			todayWarnMap.put("name", warnTrigger.getName());
-			todayWarnMap.put("count", warnCount);
+			todayWarnMap.put("wtName", warnTrigger.getName());
+			todayWarnMap.put("warnCount", warnCount);
 			todayWarnList.add(todayWarnMap);
 		}
 		

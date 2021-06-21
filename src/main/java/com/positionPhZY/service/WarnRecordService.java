@@ -8,6 +8,8 @@ public interface WarnRecordService {
 
 	List<WarnRecord> select();
 
+	List<WarnRecord> select(String todayDate, String nowTime);
+
 	int add(List<WarnRecord> warnRecordList);
 
 	List<WarnRecord> selectBarChartData(String startTime, String endTime, String flag);

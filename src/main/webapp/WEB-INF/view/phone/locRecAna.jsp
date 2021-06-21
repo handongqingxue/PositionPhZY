@@ -13,11 +13,58 @@
 <script type="text/javascript" src="<%=basePath%>resource/js/calendar/calendar.js"></script>
 <script type="text/javascript" src="<%=basePath %>resource/js/calendar/WdatePicker.js"></script>
 <script type="text/javascript">
+var path='<%=basePath %>';
+var phonePath=path+"phone/";
+var gjfxCanvas;
+var gjfxCanvasMinWidth=720.52;
+var gjfxCanvasMinHeight=670.49;
+var gjfxCanvasMaxWidth=2841;
+var gjfxCanvasMaxHeight=2643;
+var gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
+var gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
+var gjfxCanvasWidth=gjfxCanvasMaxWidth;
+var gjfxCanvasHeight=gjfxCanvasMaxHeight;
+var widthScale;
+var heightScale;
+var arcR=20;
+var rectWidth=330;
+var rectHeight=100;
+var arSpace=43;
+var atSpace=78;
+var fontSize=50;
+var fontMarginLeft=45;
 $(function(){
+	jiSuanScale();
+	initGJFXCanvas();
 	initEntitySelect();
 	initStartTimePickerDiv();
 	initEndTimePickerDiv();
 });
+
+function jiSuanScale(){
+	widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
+	heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+}
+
+function initGJFXCanvas(){
+	var gjfxCanvasImg = new Image();
+	gjfxCanvasImg.src=path+"resource/image/003.jpg";
+	gjfxCanvas = document.createElement("canvas");
+	gjfxCanvas.id="gjfxCanvas";
+	gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+	gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+	gjfxCanvas.width=gjfxCanvasWidth;
+	gjfxCanvas.height=gjfxCanvasHeight;
+	gjfxCanvasContext = gjfxCanvas.getContext("2d");
+	gjfxCanvasImg.onload=function(){
+		gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+		setEntityLocation(gjfxCanvasContext,268,443,"陈广银",1);
+		var preGjfxCanvas=document.getElementById("gjfxCanvas");
+		preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+		var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+		gjfxCanvasDiv.appendChild(gjfxCanvas);
+	}
+}
 
 function initEntitySelect(){
 	$.post("initEntitySelect",
@@ -67,16 +114,39 @@ function initEndTimePickerDiv(){
 	$("#ets_sel option[value=\""+second+"\"]").attr("selected",true);
 	//var nowTime=hour+":"+minute+":"+second;
 }
+
+function setEntityLocation(context,x,y,name,floor){
+	context.beginPath();
+	context.strokeStyle = 'red';//点填充
+	context.fillStyle='red';
+	context.lineWidth=arcR*1.5;
+	context.arc(x/widthScale,gjfxCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
+	context.stroke();
+
+	context.beginPath();
+	context.lineWidth = "1";
+	context.fillStyle = "blue";
+	context.fillRect(x/widthScale-rectWidth/2,gjfxCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+	context.stroke();
+
+	context.font=fontSize+"px bold 黑体";
+	context.fillStyle = "#fff";
+	context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,gjfxCanvasHeight-y/heightScale-atSpace);
+	context.stroke();
+}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
 }
 .main_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
 }
 .main_div .tool_div{
 	width: 100%;
+}
+.gjfxCanvas_div{
+	width: 100%;height: 600px;overflow: auto;
 }
 </style>
 <title>轨迹分析</title>
@@ -114,8 +184,10 @@ body{
 			<input type="button" value="查询"/>
 		</div>
 	</div>
-	<canvas id="gjfxCanvas">
-	</canvas>
+	<div class="gjfxCanvas_div" id="gjfxCanvas_div">
+		<canvas id="gjfxCanvas">
+		</canvas>
+	</div>
 </div>
 </body>
 </html>

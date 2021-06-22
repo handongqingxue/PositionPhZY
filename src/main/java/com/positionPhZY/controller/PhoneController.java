@@ -1151,6 +1151,7 @@ public class PhoneController {
 			String todayDate=request.getParameter("todayDate");
 			String startTime=request.getParameter("startTime");
 			String endTime=request.getParameter("endTime");
+			Integer ysb = Integer.valueOf(request.getParameter("ysb"));
 		
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
@@ -1193,7 +1194,30 @@ public class PhoneController {
 			 {"altitude":5.9,"flag":0,"tagId":"BTT32003897","latitude":32.26546306070541,"engineType":null,"speed":8.294,"recordId":210610029309179778,"voltUnit":"V","labelId":null,"gateId":null,"routerId":"BTR13E2D61D","routerMark":273,"jGateId":null,"id":63728051,"state":0,"floor":1,"routerFlowId":121008,"flowId":603981959,"direction":1,"longitude":119.10932164579933,"entityId":24318,"raiseTime2":1624242054335,"uploadTime":1624242060236,"userId":"3897","beacons":"BTI24007039(3450),BTI24006196(12750)","blockId":null,"intensity":6866,"areaId":2,"absolute":true,"volt":3.7,"raiseTime":"2021-06-21T10:20:54.335+0800","x":103.137,"y":325.473,"gpsType":"wgs84","z":0,"step":4,"rootAreaId":1,"engineId":"a1"},
 			 {"altitude":5.9,"flag":0,"tagId":"BTT32003897","latitude":32.26546383313037,"engineType":null,"speed":5.871,"recordId":210610029309179515,"voltUnit":"V","labelId":"2160","gateId":"7036","routerId":"BTR0794E313","routerMark":274,"jGateId":"7036","id":63727945,"state":0,"floor":1,"routerFlowId":147867,"flowId":604047488,"direction":6,"longitude":119.10917778514415,"entityId":24318,"raiseTime2":1624242054474,"uploadTime":1624242054480,"userId":"3897","beacons":"BTI24007038(3050),BTI24007037(3250),BTI24007036(4500)","blockId":null,"intensity":3600,"areaId":2,"absolute":true,"volt":3.7,"raiseTime":"2021-06-21T10:20:54.474+0800","x":89.582,"y":325.559,"gpsType":"wgs84","z":0,"step":1,"rootAreaId":1,"engineId":"a1"}],"id":1,"jsonrpc":"2.0"}
 			 */
-			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
+			org.json.JSONArray resultLocRecJA = new org.json.JSONArray(resultJO.get("result").toString());
+			int rlrJALength = resultLocRecJA.length();
+			//System.out.println("rlrJALength==="+rlrJALength);
+			//System.out.println("ysb==="+ysb);
+			double space = (double)rlrJALength/ysb;
+			//System.out.println("space==="+space);
+			double cursor=0;
+			org.json.JSONArray locRecJA = new org.json.JSONArray();
+			for(int i=0;i<rlrJALength;i++) {
+				if(i==rlrJALength-1) {
+					//System.out.println("cursor1==="+cursor+",i==="+i);
+					JSONObject resultLocRecJO = (org.json.JSONObject)resultLocRecJA.get(i);
+					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
+					locRecJA.put(resultLocRecJO);
+				}
+				else if(i>=cursor) {
+					//System.out.println("cursor2==="+cursor+",i==="+i);
+					JSONObject resultLocRecJO = (org.json.JSONObject)resultLocRecJA.get(i);
+					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
+					locRecJA.put(resultLocRecJO);
+					cursor+=space;
+				}
+			}
+			resultMap.put("locRecList", JSON.parseArray(locRecJA.toString()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1798,6 +1822,7 @@ public class PhoneController {
 		//String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"3bdfd7b5731143cda58cef2d659a4976");
 		//System.out.println("s==="+s);
 		//52ac4c72590ec0d129fac7ffa3f0a2c4841875334709fbe0ac9ba65a104cc2ca
+		/*
 		System.out.println(DateUtil.convertLongToString(1624266053514L));
 		try {
 			System.out.println(DateUtil.convertStringToLong("2021-06-21 17:00:53:514"));
@@ -1805,6 +1830,9 @@ public class PhoneController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
+		double d=(double)19/5;
+		System.out.println(Math.ceil(d));
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control
@@ -1822,7 +1850,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=7780BD70580E434DAA09C0B6D00CA4A0; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=2C245ABAF3F6B8D74AA8F2ECC6C782E3; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//«Î«Ûpost∑Ω Ω

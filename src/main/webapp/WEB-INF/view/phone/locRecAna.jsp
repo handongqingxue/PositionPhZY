@@ -92,10 +92,11 @@ function initGJFXCanvas(){
 				var etm=$("#etm_sel").val();
 				var ets=$("#ets_sel").val();
 				var endTime=eth+":"+etm+":"+ets+":000";
+				var ysb=$("#ysb_inp").val();
 				$.post("getLocationRecords",
-					{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime},
+					{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
 					function(data){
-						var list=data.result;
+						var list=data.locRecList;
 						for(var i=0;i<list.length;i++){
 							var lr=list[i];
 							setPointLocation(gjfxCanvasContext,lr.x,lr.y);

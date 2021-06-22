@@ -34,11 +34,11 @@ var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
 $(function(){
-	jiSuanScale();
-	initGJFXCanvas();
 	initEntitySelect();
+	initTodayDateCalendar();
 	initStartTimePickerDiv();
 	initEndTimePickerDiv();
+	jiSuanScale();
 });
 
 function jiSuanScale(){
@@ -46,23 +46,70 @@ function jiSuanScale(){
 	heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
 }
 
+function checkStaff(){
+	var tagId=$("#staff_sel").val();
+	if(tagId==""||tagId==null){
+		alert("请选择人员");
+		return false;
+	}
+	else
+		return true;
+}
+
+function checkYsb(){
+	var ysb=$("#ysb_inp").val();
+	if(ysb==""||ysb==null){
+		alert("请输入压缩比");
+		return false;
+	}
+	else
+		return true;
+}
+
 function initGJFXCanvas(){
-	var gjfxCanvasImg = new Image();
-	gjfxCanvasImg.src=path+"resource/image/003.jpg";
-	gjfxCanvas = document.createElement("canvas");
-	gjfxCanvas.id="gjfxCanvas";
-	gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
-	gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
-	gjfxCanvas.width=gjfxCanvasWidth;
-	gjfxCanvas.height=gjfxCanvasHeight;
-	gjfxCanvasContext = gjfxCanvas.getContext("2d");
-	gjfxCanvasImg.onload=function(){
-		gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-		setEntityLocation(gjfxCanvasContext,268,443,"陈广银",1);
-		var preGjfxCanvas=document.getElementById("gjfxCanvas");
-		preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
-		var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
-		gjfxCanvasDiv.appendChild(gjfxCanvas);
+	if(checkStaff()){
+		if(checkYsb()){
+			var gjfxCanvasImg = new Image();
+			gjfxCanvasImg.src=path+"resource/image/003.jpg";
+			gjfxCanvas = document.createElement("canvas");
+			gjfxCanvas.id="gjfxCanvas";
+			gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+			gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+			gjfxCanvas.width=gjfxCanvasWidth;
+			gjfxCanvas.height=gjfxCanvasHeight;
+			gjfxCanvasContext = gjfxCanvas.getContext("2d");
+			gjfxCanvasImg.onload=function(){
+				gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+				
+				var tagId=$("#staff_sel").val();
+				var staffName=$("#staff_sel option:selected").text().split("(")[0];
+				var todayDate=$("#td_cal").val();
+				var sth=$("#sth_sel").val();
+				var stm=$("#stm_sel").val();
+				var sts=$("#sts_sel").val();
+				var startTime=sth+":"+stm+":"+sts+":000";
+				var eth=$("#eth_sel").val();
+				var etm=$("#etm_sel").val();
+				var ets=$("#ets_sel").val();
+				var endTime=eth+":"+etm+":"+ets+":000";
+				$.post("getLocationRecords",
+					{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime},
+					function(data){
+						var list=data.result;
+						for(var i=0;i<list.length;i++){
+							var lr=list[i];
+							setPointLocation(gjfxCanvasContext,lr.x,lr.y);
+							if(i==list.length-1)
+								setEntityLocation(gjfxCanvasContext,lr.x,lr.y,staffName,lr.floor);
+						}
+						var preGjfxCanvas=document.getElementById("gjfxCanvas");
+						preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+						var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+						gjfxCanvasDiv.appendChild(gjfxCanvas);
+					}
+				,"json");
+			}
+		}
 	}
 }
 
@@ -71,6 +118,7 @@ function initEntitySelect(){
 		{entityType:"staff"},
 		function(data){
 			var staffSel=$("#staff_sel");
+			staffSel.append("<option value=\"\">请选择</option>");
 			var staffList=data.list;
 			for(var i=0;i<staffList.length;i++){
 				var staff=staffList[i];
@@ -83,26 +131,26 @@ function initEntitySelect(){
 function initStartTimePickerDiv(){
 	var sthSel=$("#sth_sel");
 	for(var i=0;i<24;i++){
-		sthSel.append("<option>"+i+"</option>");
+		sthSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
 	}
 	var stmSel=$("#stm_sel");
 	var stsSel=$("#sts_sel");
 	for(var i=0;i<60;i++){
-		stmSel.append("<option>"+i+"</option>");
-		stsSel.append("<option>"+i+"</option>");
+		stmSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
+		stsSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
 	}
 }
 
 function initEndTimePickerDiv(){
 	var ethSel=$("#eth_sel");
 	for(var i=0;i<24;i++){
-		ethSel.append("<option value=\""+i+"\">"+i+"</option>");
+		ethSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
 	}
 	var etmSel=$("#etm_sel");
 	var etsSel=$("#ets_sel");
 	for(var i=0;i<60;i++){
-		etmSel.append("<option value=\""+i+"\">"+i+"</option>");
-		etsSel.append("<option value=\""+i+"\">"+i+"</option>");
+		etmSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
+		etsSel.append("<option value=\""+(i<10?"0"+i:i)+"\">"+(i<10?"0"+i:i)+"</option>");
 	}
 	
 	var date=new Date();
@@ -115,14 +163,25 @@ function initEndTimePickerDiv(){
 	//var nowTime=hour+":"+minute+":"+second;
 }
 
-function setEntityLocation(context,x,y,name,floor){
+function initTodayDateCalendar(){
+	var date=new Date();
+	var year=date.getFullYear();
+	var month=date.getMonth()+1;
+	var dateOfMonth=date.getDate();
+	var todayDate=year+"-"+(month<10?"0"+month:month)+"-"+(dateOfMonth<10?"0"+dateOfMonth:dateOfMonth);
+	$("#td_cal").val(todayDate);
+}
+
+function setPointLocation(context,x,y){
 	context.beginPath();
 	context.strokeStyle = 'red';//点填充
 	context.fillStyle='red';
 	context.lineWidth=arcR*1.5;
 	context.arc(x/widthScale,gjfxCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
 	context.stroke();
+}
 
+function setEntityLocation(context,x,y,name,floor){
 	context.beginPath();
 	context.lineWidth = "1";
 	context.fillStyle = "blue";
@@ -161,7 +220,7 @@ body{
 		</div>
 		<div style="margin-top: 5px;">
 			时间：
-			<input  type="text" class="Wdate" id="st" style="width: 90px;" onclick="WdatePicker()" readonly="readonly"/>
+			<input  type="text" class="Wdate" id="td_cal" style="width: 90px;" onclick="WdatePicker()" readonly="readonly"/>
 			<div class="stp_div" style="margin-left: 160px;margin-top: -25px;">
 				<select id="sth_sel">
 				</select>:
@@ -180,8 +239,8 @@ body{
 			</div>
 		</div>
 		<div style="margin-top: 5px;">
-			压缩比<input type="number" size="10" value="200"/>
-			<input type="button" value="查询"/>
+			压缩比<input type="number" id="ysb_inp" size="10" value="200"/>
+			<input type="button" value="查询" onclick="initGJFXCanvas();"/>
 		</div>
 	</div>
 	<div class="gjfxCanvas_div" id="gjfxCanvas_div">

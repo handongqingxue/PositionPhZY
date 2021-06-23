@@ -261,15 +261,21 @@ public class PhoneController {
 		
 		for (int i = 0; i < legendDataList.size(); i++) {
 			String areaName = legendDataList.get(i);
-			for (int j = 0; j < bjlxList.size(); j++) {
-				for (int k = 0; k < warnRecordList.size(); k++) {
-					WarnRecord warnRecord = warnRecordList.get(k);
-					if(areaName.equals(warnRecord.getAreaName())) {
-						System.out.println("areaWarnCount===");
-					}
+			for (int j = 0; j < warnRecordList.size(); j++) {
+				WarnRecord warnRecord = warnRecordList.get(j);
+				if(areaName.equals(warnRecord.getAreaName())) {
+					System.out.println("i==="+i);
+					Map<String, Object> seriesMap = seriesList.get(i);
+					Integer value = Integer.valueOf(seriesMap.get("value").toString());
+					value++;
+					seriesMap.put("value", value);
+				}
+				for (int k = 0; k < bjlxList.size(); k++) {
+					
 				}
 			}
 		}
+		System.out.println("seriesList1==="+seriesList.toString());
 		
 		resultMap.put("seriesList", seriesList);
 		

@@ -13,7 +13,7 @@ public interface WarnRecordService {
 
 	int add(List<WarnRecord> warnRecordList);
 
-	List<WarnRecord> selectBarChartData(String startTime, String endTime, String flag);
+	List<WarnRecord> selectBarChartData(String startDate, String endDate, String flag);
 
 	List<WarnRecord> selectPieChartData(String startDate, String endDate);
 

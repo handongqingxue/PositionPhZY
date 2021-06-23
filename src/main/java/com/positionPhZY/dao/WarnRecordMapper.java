@@ -15,11 +15,11 @@ public interface WarnRecordMapper {
 
 	int add(WarnRecord warnRecord);
 
-	List<WarnRecord> selectBarChartDateData(@Param("startTime")String startTime, @Param("endTime")String endTime);
+	List<WarnRecord> selectBarChartDateData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 
-	List<WarnRecord> selectBarChartWeekData(@Param("startTime")String startTime, @Param("endTime")String endTime);
+	List<WarnRecord> selectBarChartWeekData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 
-	List<WarnRecord> selectBarChartMonthData(@Param("startTime")String startTime, @Param("endTime")String endTime);
+	List<WarnRecord> selectBarChartMonthData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 
 	List<WarnRecord> selectPieChartData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 

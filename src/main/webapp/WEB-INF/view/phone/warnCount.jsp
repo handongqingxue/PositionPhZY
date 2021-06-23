@@ -30,7 +30,7 @@ $(function(){
 	,"json");
 	*/
 	initJRBJTJSLDiv();
-	initBarChartDiv("week");
+	initBarChartDiv("date");
 	initPieChartDiv("date");
 });
 
@@ -216,8 +216,38 @@ function initBarChartDiv(flag){
 	,"json");
 }
 
-function initPieChartDiv(){
+function initPieChartDiv(flag){
+	var days;
+	$("#pie_search_type_div #but_div div").css("color","#000");
+    $("#pie_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
+	if(flag=="date"){
+		$("#pie_search_type_div #date_but_div").css("color","#477A8F");
+        $("#pie_search_type_div #date_but_div").css("border-bottom","#497DD0 solid 1px");
+        days=-1;
+	}
+	else if(flag=="week"){
+		$("#pie_search_type_div #week_but_div").css("color","#477A8F");
+        $("#pie_search_type_div #week_but_div").css("border-bottom","#497DD0 solid 1px");
+        days=-7;
+	}
+	else if(flag=="month"){
+		$("#pie_search_type_div #month_but_div").css("color","#477A8F");
+        $("#pie_search_type_div #month_but_div").css("border-bottom","#497DD0 solid 1px");
+        days=-30;
+	}
+	else if(flag=="three_month"){
+		$("#pie_search_type_div #three_month_but_div").css("color","#477A8F");
+        $("#pie_search_type_div #three_month_but_div").css("border-bottom","#497DD0 solid 1px");
+        days=-90;
+	}
+    var pieStartDate=getAddDate(days);
+    //var pieStartDate="2021-03-01";
+    var pieEndDate=getTodayDate();
+    //var pieEndDate="2021-04-01";
+    //alert(pieStartDate+"-"+pieEndDate);
+    
 	$.post("initBJTJPieChartData",
+		{startDate:pieStartDate,endDate:pieEndDate},
 		function(data){
 			initPieLegendData(data.seriesList);
 		
@@ -255,7 +285,6 @@ function initPieOption(){
             left: 'center',
             data:pieLegendData,
             selected:pieLegendSelected
-	    	//selected:{'区域1':false,'区域2':true}
 	    },
 	    series: [
 	        {
@@ -277,15 +306,6 @@ function initPieOption(){
                 },
                 selectedMode: 'single',
                 data:pieSeriesDataList,
-                /*
-	            data: [
-	                {value: 1048, name: '搜索引擎'},
-	                {value: 735, name: '直接访问',bjlxList:[{"name":"aaa","count":1}]},
-	                {value: 580, name: '邮件营销'},
-	                {value: 484, name: '联盟广告'},
-	                {value: 300, name: '视频广告'}
-	            ],
-	            */
                 itemStyle: {
                     shadowBlur: 10,
                     shadowOffsetX: 0,
@@ -294,12 +314,14 @@ function initPieOption(){
 	        }
 	    ]
 	};
-
+	
+	//myChart.clear();
 	option && myChart.setOption(option);
 }
 
 function initPieLegendData(seriesList){
 	pieSeriesDataList=seriesList;
+	pieLegendData.length=0;
 	pieSeriesDataList.map((item,index)=>{
 		pieLegendData.push(item.name);
 		pieLegendSelected[item.name]=true;
@@ -330,38 +352,6 @@ function resetPieLegendData(showAll){
     }
 }
 
-/*
-resetPieLegendData=(showAll)=>{
-    let pieSeriesDataList=this.state.pieSeriesDataList;
-    let pieLegendSelected=this.state.pieLegendSelected;
-    pieSeriesDataList.map((item,index)=>{
-        if(showAll){
-            if(!pieLegendSelected[item.name]){
-                item.name=item.name.substring(0,item.name.length-1);
-                pieLegendSelected[item.name]=true;
-            }
-        }
-        else{
-            if(index>=4){
-                item.name+="#";
-                pieLegendSelected[item.name]=false;
-            }
-        }
-    });
-    this.setState({pieSeriesDataList:pieSeriesDataList});
-    this.setState({pieLegendSelected:pieLegendSelected});
-
-    if(showAll){
-        $(".pie_div .show_all_but_div").css("display","none");
-        $(".pie_div .hide_part_but_div").css("display","block");
-    }
-    else{
-        $(".pie_div .show_all_but_div").css("display","block");
-        $(".pie_div .hide_part_but_div").css("display","none");
-    }
-}
-*/
-
 function goPage(page){
 	switch (page) {
 	case "index":
@@ -369,11 +359,6 @@ function goPage(page){
 		break;
 	}
 }
-/*
-var date=new Date();
-date.setTime("1605060088742");
-alert(date);
-*/
 </script>
 <style type="text/css">
 body{
@@ -476,6 +461,10 @@ body{
     font-weight: bold;
     border-bottom: #fff solid 1px;
 }
+.bar_chart_div{
+	width:100%;
+	height: 300px;
+}
 
 .pie_search_type_div{
     width: 100%;
@@ -526,6 +515,10 @@ body{
 	font-weight: bold;
 	border-bottom: #fff solid 1px;
 }
+.pie_chart_div{
+	width:100%;
+	height: 300px;
+}
 .show_all_div{
     width: 100%;
     background-color: #fff;
@@ -560,16 +553,17 @@ body{
         <div class="month_but_div" id="month_but_div" onclick="initBarChartDiv('month');">月</div>
     </div>
 </div>
-<div id="bar_chart_div" style="width:100%;height: 300px;"></div>
+<div class="bar_chart_div" id="bar_chart_div"></div>
+
 <div class="pie_search_type_div" id="pie_search_type_div">
     <div class="but_div" id="but_div">
-        <div class="date_but_div" id="date_but_div">日</div>
-        <div class="week_but_div" id="week_but_div">周</div>
-        <div class="month_but_div" id="month_but_div">月</div>
-        <div class="three_month_but_div" id="three_month_but_div">三个月</div>
+        <div class="date_but_div" id="date_but_div" onclick="initPieChartDiv('date');">日</div>
+        <div class="week_but_div" id="week_but_div" onclick="initPieChartDiv('week');">周</div>
+        <div class="month_but_div" id="month_but_div" onclick="initPieChartDiv('month');">月</div>
+        <div class="three_month_but_div" id="three_month_but_div" onclick="initPieChartDiv('three_month');">三个月</div>
     </div>
 </div>
-<div id="pie_chart_div" style="width:100%;height: 300px;"></div>
+<div class="pie_chart_div" id="pie_chart_div"></div>
 <div class="show_all_div">
     <div class="but_div show_all_but_div" onclick="resetPieLegendData(true)">查看全部</div>
     <div class="but_div hide_part_but_div" onclick="resetPieLegendData(false)">隐藏部分</div>

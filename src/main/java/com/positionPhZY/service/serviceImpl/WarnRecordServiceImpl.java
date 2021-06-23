@@ -47,17 +47,17 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 	}
 
 	@Override
-	public List<WarnRecord> selectBarChartData(String startTime, String endTime, String flag) {
+	public List<WarnRecord> selectBarChartData(String startDate, String endDate, String flag) {
 		// TODO Auto-generated method stub
 		List<WarnRecord> list=null;
 		if("date".equals(flag)) {
-			list=warnRecordDao.selectBarChartDateData(startTime,endTime);
+			list=warnRecordDao.selectBarChartDateData(startDate,endDate);
 		}
 		else if("week".equals(flag)) {
-			list=warnRecordDao.selectBarChartWeekData(startTime,endTime);
+			list=warnRecordDao.selectBarChartWeekData(startDate,endDate);
 		}
 		else if("month".equals(flag)) {
-			list=warnRecordDao.selectBarChartMonthData(startTime,endTime);
+			list=warnRecordDao.selectBarChartMonthData(startDate,endDate);
 		}
 		return list;
 	}

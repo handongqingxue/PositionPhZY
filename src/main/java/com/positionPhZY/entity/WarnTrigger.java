@@ -2,6 +2,9 @@ package com.positionPhZY.entity;
 
 public class WarnTrigger {
 
+	public static final String CHAO_SU_NAME="超速报警";
+	public static final String AN_JIAN_NAME="按键报警";
+	
 	private Integer id;
 	public Integer getId() {
 		return id;

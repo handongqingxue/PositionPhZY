@@ -175,6 +175,12 @@ public class PhoneController {
 			legendDataMap.put("lsData", seriesLsDataList);
 			legendDataMap.put("data", seriesDataList);
 			legendDataMap.put("barGap",0);
+			Map<String, Object> itemStyleMap=new HashMap<String, Object>();
+			Map<String, Object> normalMap=new HashMap<String, Object>();
+			//normalMap.put("color", "#f00");
+			itemStyleMap.put("normal", normalMap);
+			legendDataMap.put("itemStyle", itemStyleMap);
+			//itemStyle:{normal:{color:this.state.barSeriesColorList[item]}}}
 			seriesList.add(legendDataMap);
 		}
 
@@ -197,6 +203,12 @@ public class PhoneController {
 						//System.out.println(name+",seriesDataList==="+seriesDataList.toString());
 					}
 				}
+				Map<String, Object> itemStyleMap=(Map<String, Object>)legendDataMap.get("itemStyle");
+				Map<String, Object> normalMap=(Map<String, Object>)itemStyleMap.get("normal");
+				if(WarnTrigger.CHAO_SU_NAME.equals(name))
+					normalMap.put("color", "#f00");
+				else if(WarnTrigger.AN_JIAN_NAME.equals(name))
+					normalMap.put("color", "#0f0");
 			}
 		}
 		//System.out.println("seriesList==="+seriesList.toString());

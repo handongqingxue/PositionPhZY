@@ -133,7 +133,7 @@
 	</select>
 	<select id="selectBarChartDateData" resultType="com.positionPhZY.entity.WarnRecord">
 		select *,count(*) warnCount from 
-		(select wt.name wtName,startTimeYMD,CONCAT(month(startTimeYMD),'-',day(startTimeYMD)) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
+		(select wt.name wtName,startTimeYMD,CONCAT(month(startTimeYMD),'-',day(startTimeYMD)) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startDate} and #{endDate})t
 		 GROUP BY t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
 	<select id="selectBarChartWeekData" resultType="com.positionPhZY.entity.WarnRecord">
@@ -158,14 +158,14 @@
 				end
 			end
 		end  xAxisDataLabel
-		 from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
+		 from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startDate} and #{endDate})t GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
 	<select id="selectBarChartMonthData" resultType="com.positionPhZY.entity.WarnRecord">
 		select *,count(*) warnCount from 
-		(select wt.name wtName,startTimeYMD,month(startTimeYMD) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
+		(select wt.name wtName,startTimeYMD,month(startTimeYMD) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startDate} and #{endDate})t
 		 GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
 	<select id="selectPieChartData" resultType="com.positionPhZY.entity.WarnRecord">
-		select wr.areaId,CONCAT('区域',wr.areaId) areaName,wt.`name` wtName from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and wr.areaId is not null
+		select wr.areaId,CONCAT('区域',wr.areaId) areaName,wt.`name` wtName from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and wr.areaId is not null and startTimeYMD BETWEEN #{startDate} and #{endDate}
 	</select>
 </mapper>

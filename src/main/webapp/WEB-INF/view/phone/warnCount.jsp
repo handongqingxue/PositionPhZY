@@ -18,6 +18,9 @@ var zhAlignWithLabel=false;
 var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
+var pieSeriesDataList;
+var pieLegendData=[];
+var pieLegendSelected={};
 $(function(){
 	/*
 	$.post("getWarnRecords",
@@ -216,77 +219,148 @@ function initBarChartDiv(flag){
 function initPieChartDiv(){
 	$.post("initBJTJPieChartData",
 		function(data){
-			var chartDom = document.getElementById('pie_chart_div');
-			var myChart = echarts.init(chartDom);
-			var option;
-	
-			option = {
-			    title: {
-			        text: '区域报警统计',
-			        left: 'center'
-			    },
-			    tooltip: {
-			        trigger: 'item',
-		            formatter:function (json) {
-		            	//console.log(JSON.stringify(json))//2043
-		                //console.log("json==="+JSON.stringify(json)+","+JSON.stringify(json["data"]["bjlxList"]))
-		                var html="";
-		                html+=json["data"]["name"]+":"+json["data"]["value"];
-		                var bjlxList=json["data"]["bjlxList"];
-		                bjlxList.map((item,index)=>{
-		                    html+="<br/>"+item.name+":"+item.count
-		                });
-		                return html;
-		            }
-			    },
-			    legend: {
-			    	bottom: 0,
-		            left: 'center',
-		            //data: this.state.zhPieLegendData,
-		            //selected:this.state.zhPieLegendSelected
-			    },
-			    series: [
-			        {
-			            type: 'pie',
-			            radius: '50%',
-		                center: ['50%', '50%'],
-		                label: {
-		                    position: 'inner',
-		                    formatter:
-		                        7<=4
-		                            ?
-		                            function(json){
-		                                return ""
-		                            }
-		                            :
-		                            function(json){
-		                                return json["data"]["name"]
-		                            }
-		                },
-		                selectedMode: 'single',
-		                data:data.seriesList,
-		                /*
-			            data: [
-			                {value: 1048, name: '搜索引擎'},
-			                {value: 735, name: '直接访问',bjlxList:[{"name":"aaa","count":1}]},
-			                {value: 580, name: '邮件营销'},
-			                {value: 484, name: '联盟广告'},
-			                {value: 300, name: '视频广告'}
-			            ],
-			            */
-		                itemStyle: {
-		                    shadowBlur: 10,
-		                    shadowOffsetX: 0,
-		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-		                }
-			        }
-			    ]
-			};
-	
-			option && myChart.setOption(option);
+			initPieLegendData(data.seriesList);
+		
+			initPieOption();
 		}
 	,"json");
 }
+
+function initPieOption(){
+	var chartDom = document.getElementById('pie_chart_div');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	option = {
+	    title: {
+	        text: '区域报警统计',
+	        left: 'center'
+	    },
+	    tooltip: {
+	        trigger: 'item',
+            formatter:function (json) {
+            	//console.log(JSON.stringify(json))//2043
+                //console.log("json==="+JSON.stringify(json)+","+JSON.stringify(json["data"]["bjlxList"]))
+                var html="";
+                html+=json["data"]["name"]+":"+json["data"]["value"];
+                var bjlxList=json["data"]["bjlxList"];
+                bjlxList.map((item,index)=>{
+                    html+="<br/>"+item.name+":"+item.count
+                });
+                return html;
+            }
+	    },
+	    legend: {
+	    	bottom: 0,
+            left: 'center',
+            data:pieLegendData,
+            selected:pieLegendSelected
+	    	//selected:{'区域1':false,'区域2':true}
+	    },
+	    series: [
+	        {
+	            type: 'pie',
+	            radius: '50%',
+                center: ['50%', '50%'],
+                label: {
+                    position: 'inner',
+                    formatter:
+                    	pieLegendData.length<=4
+                            ?
+                            function(json){
+                                return ""
+                            }
+                            :
+                            function(json){
+                                return json["data"]["name"]
+                            }
+                },
+                selectedMode: 'single',
+                data:pieSeriesDataList,
+                /*
+	            data: [
+	                {value: 1048, name: '搜索引擎'},
+	                {value: 735, name: '直接访问',bjlxList:[{"name":"aaa","count":1}]},
+	                {value: 580, name: '邮件营销'},
+	                {value: 484, name: '联盟广告'},
+	                {value: 300, name: '视频广告'}
+	            ],
+	            */
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+	        }
+	    ]
+	};
+
+	option && myChart.setOption(option);
+}
+
+function initPieLegendData(seriesList){
+	pieSeriesDataList=seriesList;
+	pieSeriesDataList.map((item,index)=>{
+		pieLegendData.push(item.name);
+		pieLegendSelected[item.name]=true;
+	});
+}
+
+function resetPieLegendData(showAll){
+	pieSeriesDataList.map((item,index)=>{
+        if(showAll){
+            pieLegendSelected[item.name]=true;
+        }
+        else{
+            if(index>=4){
+                pieLegendSelected[item.name]=false;
+            }
+        }
+    });
+	
+	initPieOption();
+	
+	if(showAll){
+        $(".show_all_div .show_all_but_div").css("display","none");
+        $(".show_all_div .hide_part_but_div").css("display","block");
+    }
+    else{
+        $(".show_all_div .show_all_but_div").css("display","block");
+        $(".show_all_div .hide_part_but_div").css("display","none");
+    }
+}
+
+/*
+resetPieLegendData=(showAll)=>{
+    let pieSeriesDataList=this.state.pieSeriesDataList;
+    let pieLegendSelected=this.state.pieLegendSelected;
+    pieSeriesDataList.map((item,index)=>{
+        if(showAll){
+            if(!pieLegendSelected[item.name]){
+                item.name=item.name.substring(0,item.name.length-1);
+                pieLegendSelected[item.name]=true;
+            }
+        }
+        else{
+            if(index>=4){
+                item.name+="#";
+                pieLegendSelected[item.name]=false;
+            }
+        }
+    });
+    this.setState({pieSeriesDataList:pieSeriesDataList});
+    this.setState({pieLegendSelected:pieLegendSelected});
+
+    if(showAll){
+        $(".pie_div .show_all_but_div").css("display","none");
+        $(".pie_div .hide_part_but_div").css("display","block");
+    }
+    else{
+        $(".pie_div .show_all_but_div").css("display","block");
+        $(".pie_div .hide_part_but_div").css("display","none");
+    }
+}
+*/
 
 function goPage(page){
 	switch (page) {
@@ -452,6 +526,22 @@ body{
 	font-weight: bold;
 	border-bottom: #fff solid 1px;
 }
+.show_all_div{
+    width: 100%;
+    background-color: #fff;
+}
+.show_all_div .but_div{
+	width: 80px;
+    height: 30px;
+    line-height: 30px;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    background-color: #4caf50;
+}
+.hide_part_but_div{
+    display: none;
+}
 </style>
 <title>报警统计</title>
 </head>
@@ -480,5 +570,9 @@ body{
     </div>
 </div>
 <div id="pie_chart_div" style="width:100%;height: 300px;"></div>
+<div class="show_all_div">
+    <div class="but_div show_all_but_div" onclick="resetPieLegendData(true)">查看全部</div>
+    <div class="but_div hide_part_but_div" onclick="resetPieLegendData(false)">隐藏部分</div>
+</div>
 </body>
 </html>

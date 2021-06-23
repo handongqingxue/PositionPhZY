@@ -230,17 +230,17 @@ public class PhoneController {
 		for (int i = 0; i < warnRecordList.size(); i++) {
 			WarnRecord warnRecord = warnRecordList.get(i);
 			String areaName = warnRecord.getAreaName();
-			System.out.println("areaName==="+areaName);
+			//System.out.println("areaName==="+areaName);
 			if(!checkNameExistInList(legendDataList,areaName))
 				legendDataList.add(areaName);
 			
 			String wtName = warnRecord.getWtName();
-			System.out.println("wtName==="+wtName);
+			//System.out.println("wtName==="+wtName);
 			if(!checkNameExistInList(bjlxList,wtName))
 				bjlxList.add(wtName);
 		}
-		System.out.println("legendDataList==="+legendDataList.toString());
-		System.out.println("bjlxList==="+bjlxList.toString());
+		//System.out.println("legendDataList==="+legendDataList.toString());
+		//System.out.println("bjlxList==="+bjlxList.toString());
 
 		List<Map<String, Object>> seriesList = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < legendDataList.size(); i++) {
@@ -257,25 +257,32 @@ public class PhoneController {
 			seriesMap.put("bjlxList", seriesBjlxList);
 			seriesList.add(seriesMap);
 		}
-		System.out.println("seriesList==="+seriesList.toString());
+		//System.out.println("seriesList==="+seriesList.toString());
 		
 		for (int i = 0; i < legendDataList.size(); i++) {
-			String areaName = legendDataList.get(i);
+			String legendData = legendDataList.get(i);
 			for (int j = 0; j < warnRecordList.size(); j++) {
 				WarnRecord warnRecord = warnRecordList.get(j);
-				if(areaName.equals(warnRecord.getAreaName())) {
-					System.out.println("i==="+i);
-					Map<String, Object> seriesMap = seriesList.get(i);
-					Integer value = Integer.valueOf(seriesMap.get("value").toString());
-					value++;
-					seriesMap.put("value", value);
-				}
+				String areaName = warnRecord.getAreaName();
+				String wtName = warnRecord.getWtName();
 				for (int k = 0; k < bjlxList.size(); k++) {
-					
+					if(legendData.equals(areaName)&&wtName.equals(bjlxList.get(k))) {
+						Map<String, Object> seriesMap = seriesList.get(i);
+						Integer value = Integer.valueOf(seriesMap.get("value").toString());
+						value++;
+						seriesMap.put("value", value);
+						
+						List<Map<String, Object>> seriesBjlxList=(List<Map<String, Object>>)seriesMap.get("bjlxList");
+						Map<String, Object> seriesBjlxMap = seriesBjlxList.get(k);
+						Integer count = Integer.valueOf(seriesBjlxMap.get("count").toString());
+						count++;
+						//System.out.println("areaName="+legendData+",value="+value+",wtName="+wtName+",count="+count);
+						seriesBjlxMap.put("count", count);
+					}
 				}
 			}
 		}
-		System.out.println("seriesList1==="+seriesList.toString());
+		//System.out.println("seriesList1==="+seriesList.toString());
 		
 		resultMap.put("seriesList", seriesList);
 		

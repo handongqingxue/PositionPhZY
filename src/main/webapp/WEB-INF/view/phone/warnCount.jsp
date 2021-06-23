@@ -19,11 +19,13 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
+	/*
 	$.post("getWarnRecords",
 		function(data){
 			alert(JSON.stringify(data));
 		}
 	,"json");
+	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv("week");
 	initPieChartDiv("date");
@@ -220,13 +222,13 @@ function initPieChartDiv(){
 	
 			option = {
 			    title: {
-			        text: '车间报警统计',
+			        text: '区域报警统计',
 			        left: 'center'
 			    },
 			    tooltip: {
 			        trigger: 'item',
 		            formatter:function (json) {
-		            	console.log(JSON.stringify(json))//2043
+		            	//console.log(JSON.stringify(json))//2043
 		                //console.log("json==="+JSON.stringify(json)+","+JSON.stringify(json["data"]["bjlxList"]))
 		                var html="";
 		                html+=json["data"]["name"]+":"+json["data"]["value"];
@@ -234,7 +236,7 @@ function initPieChartDiv(){
 		                bjlxList.map((item,index)=>{
 		                    html+="<br/>"+item.name+":"+item.count
 		                });
-		                return html
+		                return html;
 		            }
 			    },
 			    legend: {

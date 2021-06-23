@@ -149,14 +149,14 @@ public class PhoneController {
 		for (int i = 0; i < warnRecordList.size(); i++) {
 			WarnRecord warnRecord = warnRecordList.get(i);
 			String wtName = warnRecord.getWtName();
-			if(!checkWarnRecordWtNameExist(legendDataList,wtName))
+			if(!checkNameExistInList(legendDataList,wtName))
 				legendDataList.add(wtName);
 			String xAxisDataLabel=warnRecord.getxAxisDataLabel();
-			if(!checkXAxisDataLabel(xAxisDataLabelList,xAxisDataLabel))
+			if(!checkNameExistInList(xAxisDataLabelList,xAxisDataLabel))
 				xAxisDataLabelList.add(xAxisDataLabel);
 		}
-		System.out.println("legendDataList==="+legendDataList.toString());
-		System.out.println("xAxisDataLabelList==="+xAxisDataLabelList.size());
+		//System.out.println("legendDataList==="+legendDataList.toString());
+		//System.out.println("xAxisDataLabelList==="+xAxisDataLabelList.size());
 		List<Map<String, Object>> seriesList = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < legendDataList.size(); i++) {
 			Map<String, Object> legendDataMap=new HashMap<String, Object>();
@@ -190,16 +190,16 @@ public class PhoneController {
 				for (int k = 0; k < warnRecordList.size(); k++) {
 					WarnRecord warnRecord = warnRecordList.get(k);
 					if(name.equals(warnRecord.getWtName())&&key.equals(warnRecord.getxAxisDataLabel())) {
-						System.out.println("name="+name+",xAxisDataLabel="+key);
+						//System.out.println("name="+name+",xAxisDataLabel="+key);
 						warnCount+=warnRecord.getWarnCount();
 						//System.out.println("warnCount==="+warnCount);
 						seriesDataList.set(j,warnCount);
-						System.out.println(name+",seriesDataList==="+seriesDataList.toString());
+						//System.out.println(name+",seriesDataList==="+seriesDataList.toString());
 					}
 				}
 			}
 		}
-		System.out.println("seriesList==="+seriesList.toString());
+		//System.out.println("seriesList==="+seriesList.toString());
 		
 		resultMap.put("legendDataList", legendDataList);
 		resultMap.put("xAxisDataLabelList", xAxisDataLabelList);
@@ -208,26 +208,72 @@ public class PhoneController {
 		return resultMap;
 	}
 	
-	public boolean checkWarnRecordWtNameExist(List<String> legendDataList, String wtName) {
+	public boolean checkNameExistInList(List<String> legendDataList, String name) {
 		boolean exist = false;
 		for (String legendData : legendDataList) {
-			if(wtName.equals(legendData)) {
+			if(name.equals(legendData)) {
 				exist=true;
 				break;
 			}
 		}
 		return exist;
 	}
-	
-	public boolean checkXAxisDataLabel(List<String> xAxisDataLabelList, String xAxisData) {
-		boolean exist = false;
-		for (String xAxisDataLabel : xAxisDataLabelList) {
-			if(xAxisData.equals(xAxisDataLabel)) {
-				exist=true;
-				break;
+
+	@RequestMapping(value="/initBJTJPieChartData")
+	@ResponseBody
+	public Map<String, Object> initBJTJPieChartData(String startDate,String endDate,String flag) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();//seriesDataList
+		List<String> legendDataList=new ArrayList<String>();
+		List<String> bjlxList=new ArrayList<String>();
+		List<WarnRecord> warnRecordList=warnRecordService.selectPieChartData(startDate,endDate);
+		for (int i = 0; i < warnRecordList.size(); i++) {
+			WarnRecord warnRecord = warnRecordList.get(i);
+			String areaName = warnRecord.getAreaName();
+			System.out.println("areaName==="+areaName);
+			if(!checkNameExistInList(legendDataList,areaName))
+				legendDataList.add(areaName);
+			
+			String wtName = warnRecord.getWtName();
+			System.out.println("wtName==="+wtName);
+			if(!checkNameExistInList(bjlxList,wtName))
+				bjlxList.add(wtName);
+		}
+		System.out.println("legendDataList==="+legendDataList.toString());
+		System.out.println("bjlxList==="+bjlxList.toString());
+
+		List<Map<String, Object>> seriesList = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < legendDataList.size(); i++) {
+			Map<String, Object> seriesMap=new HashMap<>();
+			seriesMap.put("name", legendDataList.get(i));
+			seriesMap.put("value", 0);
+			List<Map<String, Object>> seriesBjlxList = new ArrayList<Map<String, Object>>();
+			for (int j = 0; j < bjlxList.size(); j++) {
+				Map<String, Object> seriesBjlxMap=new HashMap<>();
+				seriesBjlxMap.put("name", bjlxList.get(j));
+				seriesBjlxMap.put("count", 0);
+				seriesBjlxList.add(seriesBjlxMap);
+			}
+			seriesMap.put("bjlxList", seriesBjlxList);
+			seriesList.add(seriesMap);
+		}
+		System.out.println("seriesList==="+seriesList.toString());
+		
+		for (int i = 0; i < legendDataList.size(); i++) {
+			String areaName = legendDataList.get(i);
+			for (int j = 0; j < bjlxList.size(); j++) {
+				for (int k = 0; k < warnRecordList.size(); k++) {
+					WarnRecord warnRecord = warnRecordList.get(k);
+					if(areaName.equals(warnRecord.getAreaName())) {
+						System.out.println("areaWarnCount===");
+					}
+				}
 			}
 		}
-		return exist;
+		
+		resultMap.put("seriesList", seriesList);
+		
+		return resultMap;
 	}
 
 	@RequestMapping(value="/initSSDWCanvasData")
@@ -1850,7 +1896,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=2C245ABAF3F6B8D74AA8F2ECC6C782E3; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=DB18CED331C6E07EAA594367F1DD3F43; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//ÇëÇópost·½Ê½

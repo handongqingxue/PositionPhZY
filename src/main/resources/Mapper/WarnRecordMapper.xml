@@ -165,4 +165,7 @@
 		(select wt.name wtName,startTimeYMD,month(startTimeYMD) xAxisDataLabel from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and startTimeYMD BETWEEN #{startTime} and #{endTime})t
 		 GROUP BY t.wtName,t.xAxisDataLabel ORDER BY startTimeYMD
 	</select>
+	<select id="selectPieChartData" resultType="com.positionPhZY.entity.WarnRecord">
+		select wr.areaId,CONCAT('区域',wr.areaId) areaName,wt.`name` wtName from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and wr.areaId is not null
+	</select>
 </mapper>

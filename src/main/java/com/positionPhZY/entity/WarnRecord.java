@@ -22,6 +22,7 @@ public class WarnRecord {
 	private Integer id;
 	private Integer rootAreaId;
 	private String wtName;
+	private String areaName;
 	private String xAxisDataLabel;
 	private Integer warnCount;
 	public String getTagId() {
@@ -143,6 +144,12 @@ public class WarnRecord {
 	}
 	public void setWtName(String wtName) {
 		this.wtName = wtName;
+	}
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 	public String getxAxisDataLabel() {
 		return xAxisDataLabel;

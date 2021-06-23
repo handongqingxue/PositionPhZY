@@ -19,13 +19,11 @@ var alignWithLabel=false;
 var zhxzzh=10;//综合X轴字号
 var xzzh;
 $(function(){
-	/*
-	$.post("getLocationRecords",
+	$.post("getWarnRecords",
 		function(data){
-			alert(data.wrList.length);
+			alert(JSON.stringify(data));
 		}
 	,"json");
-	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv("week");
 	initPieChartDiv("date");
@@ -214,62 +212,78 @@ function initBarChartDiv(flag){
 }
 
 function initPieChartDiv(){
-	var chartDom = document.getElementById('pie_chart_div');
-	var myChart = echarts.init(chartDom);
-	var option;
-
-	option = {
-	    title: {
-	        text: '车间报警统计',
-	        left: 'center'
-	    },
-	    tooltip: {
-	        trigger: 'item'
-	    },
-	    legend: {
-	    	bottom: 0,
-            left: 'center',
-            //data: this.state.zhPieLegendData,
-            //selected:this.state.zhPieLegendSelected
-	    },
-	    series: [
-	        {
-	            type: 'pie',
-	            radius: '50%',
-                center: ['50%', '50%'],
-                label: {
-                    position: 'inner',
-                    /*
-                    formatter:
-                        this.state.bjqyList.length<=4
-                            ?
-                            function(json){
-                                return ""
-                            }
-                            :
-                            function(json){
-                                return json["data"]["name"]
-                            }
-                                */
-                },
-                selectedMode: 'single',
-	            data: [
-	                {value: 1048, name: '搜索引擎'},
-	                {value: 735, name: '直接访问'},
-	                {value: 580, name: '邮件营销'},
-	                {value: 484, name: '联盟广告'},
-	                {value: 300, name: '视频广告'}
-	            ],
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-	        }
-	    ]
-	};
-
-	option && myChart.setOption(option);
+	$.post("initBJTJPieChartData",
+		function(data){
+			var chartDom = document.getElementById('pie_chart_div');
+			var myChart = echarts.init(chartDom);
+			var option;
+	
+			option = {
+			    title: {
+			        text: '车间报警统计',
+			        left: 'center'
+			    },
+			    tooltip: {
+			        trigger: 'item',
+		            formatter:function (json) {
+		            	console.log(JSON.stringify(json))//2043
+		                //console.log("json==="+JSON.stringify(json)+","+JSON.stringify(json["data"]["bjlxList"]))
+		                var html="";
+		                html+=json["data"]["name"]+":"+json["data"]["value"];
+		                var bjlxList=json["data"]["bjlxList"];
+		                bjlxList.map((item,index)=>{
+		                    html+="<br/>"+item.name+":"+item.count
+		                });
+		                return html
+		            }
+			    },
+			    legend: {
+			    	bottom: 0,
+		            left: 'center',
+		            //data: this.state.zhPieLegendData,
+		            //selected:this.state.zhPieLegendSelected
+			    },
+			    series: [
+			        {
+			            type: 'pie',
+			            radius: '50%',
+		                center: ['50%', '50%'],
+		                label: {
+		                    position: 'inner',
+		                    formatter:
+		                        7<=4
+		                            ?
+		                            function(json){
+		                                return ""
+		                            }
+		                            :
+		                            function(json){
+		                                return json["data"]["name"]
+		                            }
+		                },
+		                selectedMode: 'single',
+		                data:data.seriesList,
+		                /*
+			            data: [
+			                {value: 1048, name: '搜索引擎'},
+			                {value: 735, name: '直接访问',bjlxList:[{"name":"aaa","count":1}]},
+			                {value: 580, name: '邮件营销'},
+			                {value: 484, name: '联盟广告'},
+			                {value: 300, name: '视频广告'}
+			            ],
+			            */
+		                itemStyle: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+			        }
+			    ]
+			};
+	
+			option && myChart.setOption(option);
+		}
+	,"json");
 }
 
 function goPage(page){

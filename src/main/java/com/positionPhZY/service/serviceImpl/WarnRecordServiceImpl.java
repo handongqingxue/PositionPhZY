@@ -1,6 +1,7 @@
 package com.positionPhZY.service.serviceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,12 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 			list=warnRecordDao.selectBarChartMonthData(startTime,endTime);
 		}
 		return list;
+	}
+
+	@Override
+	public List<WarnRecord> selectPieChartData(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		List<WarnRecord> warnRecordList=warnRecordDao.selectPieChartData(startDate,endDate);
+		return warnRecordList;
 	}
 }

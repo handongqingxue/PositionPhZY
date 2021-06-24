@@ -31,4 +31,10 @@ public class LocationServiceImpl implements LocationService {
 		// TODO Auto-generated method stub
 		return locationDao.selectSSDWCanvasData(floor);
 	}
+
+	@Override
+	public Location getEntityLocation(String entityName) {
+		// TODO Auto-generated method stub
+		return locationDao.getEntityLocation(entityName);
+	}
 }

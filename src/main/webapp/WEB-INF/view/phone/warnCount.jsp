@@ -22,7 +22,7 @@ var pieSeriesDataList;
 var pieLegendData=[];
 var pieLegendSelected={};
 $(function(){
-	$.post("summaryOnlineEntity",
+	$.post("getDutys",
 		function(data){
 			alert(JSON.stringify(data));
 		}

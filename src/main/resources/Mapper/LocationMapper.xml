@@ -164,4 +164,7 @@
 	<select id="selectSSDWCanvasData" resultType="com.positionPhZY.entity.Location">
 		select e.`name` entityName,x,y,floor,`out` from location l,entity e where l.uid=e.tagId and e.entityType='staff' and `out`=0 and l.floor=#{floor}
 	</select>
+	<select id="getEntityLocation" resultType="com.positionPhZY.entity.Location">
+		select e.`name` entityName,l.floor,l.x,l.y from location l,entity e where l.uid=e.tagId and `out`=0 and e.`name` like '%${entityName}%'
+	</select>
 </mapper>

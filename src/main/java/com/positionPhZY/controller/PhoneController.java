@@ -323,6 +323,23 @@ public class PhoneController {
 		}
 		return resultMap;
 	}
+
+	@RequestMapping(value="/getEntityLocation")
+	@ResponseBody
+	public Map<String, Object> getEntityLocation(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Location location=locationService.getEntityLocation(request.getParameter("entityName"));
+		if(location==null) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "找不到该人员");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("location", location);
+		}
+		return resultMap;
+	}
 	
 	@RequestMapping(value="/insertEntityData")
 	@ResponseBody
@@ -2017,7 +2034,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=40678CF192EBF47FA37F0B7C02324A34; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=92A92CB2D88C4A682FF3AA8FA2DE4793; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//请求post方式

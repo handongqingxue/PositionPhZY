@@ -155,6 +155,9 @@ function loadSSDWCanvas(flag){
 
 function goPage(page){
 	switch (page) {
+	case "ryss":
+		location.href=phonePath+"goStaffSearch";
+		break;
 	case "gjfx":
 		location.href=phonePath+"goLocRecAna";
 		break;
@@ -210,7 +213,7 @@ body{
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
 <div class="bottom_div">
 	<div class="item_div" onclick="goPage('ssdw')">实时定位</div>
-	<div class="item_div ryss_div">人员搜索</div>
+	<div class="item_div ryss_div" onclick="goPage('ryss')">人员搜索</div>
 	<div class="item_div gjfx_div" onclick="goPage('gjfx')">轨迹分析</div>
 	<div class="item_div bjtj_div" onclick="goPage('bjtj')">报警统计</div>
 </div>

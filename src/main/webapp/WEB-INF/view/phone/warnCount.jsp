@@ -22,13 +22,11 @@ var pieSeriesDataList;
 var pieLegendData=[];
 var pieLegendSelected={};
 $(function(){
-	/*
-	$.post("getWarnRecords",
+	$.post("summaryOnlineEntity",
 		function(data){
 			alert(JSON.stringify(data));
 		}
 	,"json");
-	*/
 	initJRBJTJSLDiv();
 	initBarChartDiv("date");
 	initPieChartDiv("date");

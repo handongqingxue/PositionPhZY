@@ -89,7 +89,52 @@
  			</if>
  		</trim>
  	</insert>
+	<update id="edit" parameterType="com.positionPhZY.entity.Entity">
+		update entity set
+		<trim suffixOverrides=",">
+			<if test="tagId!=null">
+				tagId=#{tagId},
+			</if>
+			<if test="entityType!=null">
+				entityType=#{entityType},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="departmentId!=null">
+				departmentId=#{departmentId},
+			</if>
+			<if test="photo!=null">
+				photo=#{photo},
+			</if>
+			<if test="pid!=null">
+				pid=#{pid},
+			</if>
+			<if test="userId!=null">
+				userId=#{userId},
+			</if>
+			<if test="post!=null">
+				post=#{post},
+			</if>
+			<if test="phone!=null">
+				phone=#{phone},
+			</if>
+ 			<if test="name!=null">
+ 				name=#{name},
+ 			</if>
+ 			<if test="dutyId!=null">
+ 				dutyId=#{dutyId},
+ 			</if>
+ 			<if test="age!=null">
+ 				age=#{age},
+ 			</if>
+		</trim>
+		where id=#{id}
+	</update>
  	<select id="querySelectData" resultType="com.positionPhZY.entity.Entity">
  		select tagId,name,pid from entity where entityType=#{entityType} and tagId is not null order by name
  	</select>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from entity where id=#{id}
+	</select>
 </mapper>

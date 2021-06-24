@@ -10,6 +10,10 @@ public interface EntityMapper {
 
 	int add(Entity entity);
 
+	int edit(Entity entity);
+
 	List<Entity> querySelectData(@Param("entityType")String entityType);
+
+	int getCountById(@Param("id")Integer id);
 
 }

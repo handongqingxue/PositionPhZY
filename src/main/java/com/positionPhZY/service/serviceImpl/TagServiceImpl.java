@@ -2,35 +2,38 @@ package com.positionPhZY.service.serviceImpl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.positionPhZY.dao.*;
 import com.positionPhZY.entity.*;
 import com.positionPhZY.service.*;
+import com.positionPhZY.util.date.DateUtil;
 
 @Service
-public class EntityServiceImpl implements EntityService {
+public class TagServiceImpl implements TagService {
 
 	@Autowired
-	private EntityMapper entityDao;
+	private TagMapper tagDao;
 
 	@Override
-	public int add(List<Entity> entityList) {
+	public int add(List<Tag> tagList) {
 		// TODO Auto-generated method stub
 		int count=0;
-		for (Entity entity : entityList) {
-			if(entityDao.getCountById(entity.getId())==0)
-				count+=entityDao.add(entity);
+		for (Tag tag : tagList) {
+			count=tagDao.getCountById(tag.getId());
+			if(count==0)
+				count=tagDao.add(tag);
 			else
-				count+=entityDao.edit(entity);
+				count=tagDao.edit(tag);
 		}
 		return count;
 	}
 
 	@Override
-	public List<Entity> querySelectData(String entityType) {
+	public List<Tag> select() {
 		// TODO Auto-generated method stub
-		return entityDao.querySelectData(entityType);
+		return tagDao.select();
 	}
 }

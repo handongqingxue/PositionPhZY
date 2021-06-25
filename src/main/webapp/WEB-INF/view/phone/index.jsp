@@ -142,8 +142,8 @@ function initSSDWCanvas(reSizeFlag){
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");
 				preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
-				var mainDiv=document.getElementById("main_div");
-				mainDiv.appendChild(ssdwCanvas);
+				var ssdwCanvasDiv=document.getElementById("ssdwCanvas_div");
+				ssdwCanvasDiv.appendChild(ssdwCanvas);
 			}
 		,"json");
 		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
@@ -252,7 +252,7 @@ body{
 	margin: 0;
 }
 .main_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
 }
 .main_div .tool_div{
 	width: 100%;
@@ -262,6 +262,24 @@ body{
 }
 .duty_sel{
 	height: 30px;margin-top:-30px;margin-left: 120px;display: none;
+}
+.show_label_but_div{
+	width: 100px;height: 30px;line-height: 30px;text-align: center;
+}
+.label_list_div{
+	width: 150px;margin-left: 120px;margin-top: -30px;position: absolute;
+}
+.label_list_div .item_div{
+	width: 100%;height: 30px;line-height: 30px;
+}
+.label_list_div .item_div .select_cb{
+	margin-top: 10px;
+}
+.label_list_div .item_div .name_span{
+	margin-left: 5px;
+}
+.ssdwCanvas_div{
+	width: 100%;height: 600px;overflow: auto;
 }
 .bottom_div{
 	width: 100%;height: 50px;line-height: 50px;background-color: #eee;bottom: 0;position: fixed;
@@ -284,22 +302,43 @@ body{
 <body>
 <div class="main_div" id="main_div">
 	<div class="tool_div">
-		<select id="floor_sel" onchange="initSSDWCanvas(0);">
-			<!-- 
-			<option value="">总图</option>
-			<option value="1">1层</option>
-			<option value="2">2层</option>
-			<option value="3">3层</option>
-			<option value="4">4层</option>
-			<option value="5">5层</option>
-			 -->
-		</select>
-		<div class="show_duty_but_div" id="show_duty_but_div" onclick="showDutySel();">></div>
-		<select class="duty_sel" id="duty_sel">
-		</select>
+		<div>
+			<select id="floor_sel" onchange="initSSDWCanvas(0);">
+				<!-- 
+				<option value="">总图</option>
+				<option value="1">1层</option>
+				<option value="2">2层</option>
+				<option value="3">3层</option>
+				<option value="4">4层</option>
+				<option value="5">5层</option>
+				 -->
+			</select>
+			<div class="show_duty_but_div" id="show_duty_but_div" onclick="showDutySel();">></div>
+			<select class="duty_sel" id="duty_sel">
+			</select>
+		</div>
+		<div>
+			<div class="show_label_but_div">显示标签</div>
+			<div class="label_list_div">
+				<div class="item_div">
+					<input class="select_cb" type="checkbox"/>
+					<span class="name_span">aaa</span>
+				</div>
+				<div class="item_div">
+					<input class="select_cb" type="checkbox"/>
+					<span class="name_span">aaa</span>
+				</div>
+				<div class="item_div">
+					<input class="select_cb" type="checkbox"/>
+					<span class="name_span">aaa</span>
+				</div>
+			</div>
+		</div>
 	</div>
-	<canvas id="ssdwCanvas">
-	</canvas>
+	<div class="ssdwCanvas_div" id="ssdwCanvas_div">
+		<canvas id="ssdwCanvas">
+		</canvas>
+	</div>
 </div>
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>

@@ -200,6 +200,19 @@ function loadSSDWCanvas(flag){
 	}
 }
 
+function showDutySel(){
+	var dutySel=$("#duty_sel");
+	var display=dutySel.css("display");
+	if(display=="none"){
+		$("#show_duty_but_div").text("<");
+		dutySel.css("display","block");
+	}
+	else{
+		$("#show_duty_but_div").text(">");
+		dutySel.css("display","none");
+	}
+}
+
 function goPage(page){
 	switch (page) {
 	case "ryss":
@@ -223,6 +236,12 @@ body{
 }
 .main_div .tool_div{
 	width: 100%;
+}
+.show_duty_but_div{
+	width: 30px;height: 30px;line-height: 30px;margin-top:-30px;margin-left:90px;text-align: center;
+}
+.duty_sel{
+	height: 30px;margin-top:-30px;margin-left: 120px;display: none;
 }
 .bottom_div{
 	width: 100%;height: 50px;line-height: 50px;background-color: #eee;bottom: 0;position: fixed;
@@ -254,6 +273,10 @@ body{
 			<option value="4">4层</option>
 			<option value="5">5层</option>
 			 -->
+		</select>
+		<div class="show_duty_but_div" id="show_duty_but_div" onclick="showDutySel();">></div>
+		<select class="duty_sel" id="duty_sel">
+			<option></option>
 		</select>
 	</div>
 	<canvas id="ssdwCanvas">

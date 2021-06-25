@@ -38,9 +38,9 @@ var selectedFloorValue="";
 $(function(){
 	jiSuanScale();
 	initSSDWCanvas(0);
-	setInterval(function(){
-		initFloorSel();
-	},"3000");
+	//setInterval(function(){
+		summaryOnlineData();
+	//},"3000");
 });
 
 function jiSuanScale(){
@@ -48,46 +48,66 @@ function jiSuanScale(){
 	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
 }
 
-function initFloorSel(){
-	$.post("summaryOnlineEntity",
+function summaryOnlineData(){
+	$.post("summaryOnlineData",
 		function(data){
-			var floorSel=$("#floor_sel");
-			floorSel.empty();
-			var result=data.result;
-			var name=result.name;
-			var summary=result.summary;
-			var online=summary.online;
-			floorSel.append("<option value=\"\">"+name+" ("+online.total+")</option>");
-			
-			var children=result.children;
-			for(var i=0;i<children.length;i++){
-				var child=children[i];
-				var optionValue;
-				var childName=child.name;
-				switch (childName) {
-				case "一层":
-					optionValue=1;
-					break;
-				case "二层":
-					optionValue=2;
-					break;
-				case "三层":
-					optionValue=3;
-					break;
-				case "四层":
-					optionValue=4;
-					break;
-				case "五层":
-					optionValue=5;
-					break;
-				}
-				floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
-			}
-			//console.log(JSON.stringify(children));
-			
+			var entityResult=data.entityResult;
+			initFloorSel(entityResult);
+			var dutyResult=data.dutyResult;
+			initDutySel(dutyResult);
 			initSSDWCanvas(0);
 		}
 	,"json");
+}
+
+function initFloorSel(result){
+	var floorSel=$("#floor_sel");
+	floorSel.empty();
+	var name=result.name;
+	var summary=result.summary;
+	var online=summary.online;
+	floorSel.append("<option value=\"\">"+name+" ("+online.total+")</option>");
+	
+	var children=result.children;
+	for(var i=0;i<children.length;i++){
+		var child=children[i];
+		var optionValue;
+		var childName=child.name;
+		switch (childName) {
+		case "一层":
+			optionValue=1;
+			break;
+		case "二层":
+			optionValue=2;
+			break;
+		case "三层":
+			optionValue=3;
+			break;
+		case "四层":
+			optionValue=4;
+			break;
+		case "五层":
+			optionValue=5;
+			break;
+		}
+		floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
+	}
+	//console.log(JSON.stringify(children));
+}
+
+function initDutySel(result){
+	var dutySel=$("#duty_sel");
+	dutySel.empty();
+	if(result.status=="ok"){
+		var dutyList=result.dutyList;
+		for(var i=0;i<dutyList.length;i++){
+			var duty=dutyList[i];
+			dutySel.append("<option>"+duty.name+" ("+duty.onLineCount+")</option>");
+		}
+	}
+	else{
+		dutySel.append("<option>暂无数据</option>");
+	}
 }
 
 function initSSDWCanvas(reSizeFlag){
@@ -276,7 +296,6 @@ body{
 		</select>
 		<div class="show_duty_but_div" id="show_duty_but_div" onclick="showDutySel();">></div>
 		<select class="duty_sel" id="duty_sel">
-			<option></option>
 		</select>
 	</div>
 	<canvas id="ssdwCanvas">

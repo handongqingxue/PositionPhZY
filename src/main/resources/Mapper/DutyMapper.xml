@@ -98,4 +98,7 @@
 	<select id="getCountById" resultType="java.lang.Integer">
 		select count(*) from duty where id=#{id}
 	</select>
+	<select id="summaryOnlineDuty" resultType="java.util.Map">
+		select d.name,count(*) onLineCount from location l,entity e,duty d where l.uid=e.tagId and e.dutyId=d.id and l.`out`=0 GROUP BY d.name
+	</select>
 </mapper>

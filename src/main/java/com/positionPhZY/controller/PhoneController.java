@@ -119,6 +119,21 @@ public class PhoneController {
 		return resultMap;
 	}
 
+	@RequestMapping(value="/summaryOnlineData")
+	@ResponseBody
+	public Map<String, Object> summaryOnlineData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		Map<String, Object> soerMap = summaryOnlineEntity(request);
+		resultMap.put("entityResult", soerMap.get("result"));
+		
+		Map<String, Object> sodrMap = summaryOnlineDuty();
+		resultMap.put("dutyResult", sodrMap);
+		
+		return resultMap;
+	}
+
 	@RequestMapping(value="/initTodayWarnCount")
 	@ResponseBody
 	public Map<String, Object> initTodayWarnCount(String todayDate, String nowTime) {
@@ -463,6 +478,22 @@ public class PhoneController {
 			resultMap.put("message", "初始化员工职务列表成功");
 		}
 		
+		return resultMap;
+	}
+
+	@RequestMapping(value="/summaryOnlineDuty")
+	@ResponseBody
+	public Map<String, Object> summaryOnlineDuty() {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<Map<String, Object>> dutyList = dutyService.summaryOnlineDuty();
+		if(dutyList.size()==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "暂无数据");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("dutyList", dutyList);
+		}
 		return resultMap;
 	}
 
@@ -1925,7 +1956,7 @@ public class PhoneController {
 	public Map<String, Object> summaryOnlineEntity(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
+		//try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "summaryOnlineEntity");
@@ -1933,8 +1964,7 @@ public class PhoneController {
 			paramJO.put("areaId", "1");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
-			/*
+			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
 			StringBuilder resultJOSB=new StringBuilder();
 			resultJOSB.append("{\"result\":{\"summary\":{\"online\":{\"total\":106,\"car\":3,\"staff\":103}},");
 				resultJOSB.append("\"children\":[");
@@ -1947,7 +1977,6 @@ public class PhoneController {
 				resultJOSB.append("\"name\":\"总图\",\"id\":1},");
 			resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
 			JSONObject resultJO = new JSONObject(resultJOSB.toString());
-			*/
 			//System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
@@ -1962,13 +1991,15 @@ public class PhoneController {
 			 		   "name":"总图","id":1},
 			  "id":1,"jsonrpc":"2.0"}
 			 * */
+			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
+		*/
 			return resultMap;
-		}
+		//}
 	}
 
 	/**

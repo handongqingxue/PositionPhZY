@@ -1,6 +1,7 @@
 package com.positionPhZY.service.serviceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,11 @@ public class DutyServiceImpl implements DutyService {
 				count=dutyDao.edit(duty);
 		}
 		return count;
+	}
+
+	@Override
+	public List<Map<String, Object>> summaryOnlineDuty() {
+		// TODO Auto-generated method stub
+		return dutyDao.summaryOnlineDuty();
 	}
 }

@@ -311,10 +311,10 @@ public class PhoneController {
 
 	@RequestMapping(value="/initSSDWCanvasData")
 	@ResponseBody
-	public Map<String, Object> initSSDWCanvasData(Integer floor) {
+	public Map<String, Object> initSSDWCanvasData(Integer floor, String floorArrStr) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		List<Location> locationList = locationService.selectSSDWCanvasData(floor);
+		List<Location> locationList = locationService.selectSSDWCanvasData(floor,floorArrStr.split(","));
 		if(locationList.size()==0) {
 			resultMap.put("status", "no");
 			resultMap.put("message", "暂无数据");
@@ -1902,7 +1902,7 @@ public class PhoneController {
 	public Map<String, Object> summaryOnlineEntity(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
+		//try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "summaryOnlineEntity");
@@ -1910,8 +1910,21 @@ public class PhoneController {
 			paramJO.put("areaId", "1");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
+			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
+			StringBuilder resultJOSB=new StringBuilder();
+			resultJOSB.append("{\"result\":{\"summary\":{\"online\":{\"total\":106,\"car\":3,\"staff\":103}},");
+				resultJOSB.append("\"children\":[");
+					resultJOSB.append("{\"summary\":{\"online\":{\"total\":1,\"car\":0,\"staff\":1}},\"name\":\"二层\",\"id\":3},");
+					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"三层\",\"id\":4},");
+					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"四层\",\"id\":5},");
+					resultJOSB.append("{\"summary\":{\"online\":{\"total\":105,\"car\":3,\"staff\":102}},\"name\":\"一层\",\"id\":2},");
+					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"五层\",\"id\":6}");
+				resultJOSB.append("],");
+				resultJOSB.append("\"name\":\"总图\",\"id\":1},");
+			resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
+			JSONObject resultJO = new JSONObject(resultJOSB.toString());
 			System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
+			resultMap=JSON.parseObject(resultJO.toString());
 			/*
 			 {"result":{"summary":{"online":{"total":106,"car":3,"staff":103}},
 			 		   "children":[
@@ -1924,13 +1937,15 @@ public class PhoneController {
 			 		   "name":"总图","id":1},
 			  "id":1,"jsonrpc":"2.0"}
 			 * */
+			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
+		*/
 			return resultMap;
-		}
+		//}
 	}
 
 	/**

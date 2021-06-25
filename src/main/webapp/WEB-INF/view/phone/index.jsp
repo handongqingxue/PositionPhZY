@@ -34,11 +34,12 @@ var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
+var selectedFloorValue="";
 $(function(){
 	jiSuanScale();
 	initSSDWCanvas(0);
 	setInterval(function(){
-		initSSDWCanvas(0);
+		initFloorSel();
 	},"3000");
 });
 
@@ -47,8 +48,49 @@ function jiSuanScale(){
 	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
 }
 
+function initFloorSel(){
+	$.post("summaryOnlineEntity",
+		function(data){
+			var floorSel=$("#floor_sel");
+			floorSel.empty();
+			var result=data.result;
+			var name=result.name;
+			var summary=result.summary;
+			var online=summary.online;
+			floorSel.append("<option value=\"\">"+name+" ("+online.total+")</option>");
+			
+			var children=result.children;
+			for(var i=0;i<children.length;i++){
+				var child=children[i];
+				var optionValue;
+				var childName=child.name;
+				switch (childName) {
+				case "一层":
+					optionValue=1;
+					break;
+				case "二层":
+					optionValue=2;
+					break;
+				case "三层":
+					optionValue=3;
+					break;
+				case "四层":
+					optionValue=4;
+					break;
+				case "五层":
+					optionValue=5;
+					break;
+				}
+				floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
+			}
+			//console.log(JSON.stringify(children));
+			
+			initSSDWCanvas(0);
+		}
+	,"json");
+}
+
 function initSSDWCanvas(reSizeFlag){
-	
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
 	ssdwCanvas = document.createElement("canvas");
@@ -61,9 +103,14 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvasImg.onload=function(){
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
 
+		var floorArrStr="";
+		$("#floor_sel option[value!='']").each(function(i){
+			floorArrStr+=","+$(this).attr("value");
+		});
 		var floor=$("#floor_sel").val();
+		selectedFloorValue=floor;
 		$.post("initSSDWCanvasData",
-			{floor:floor},
+			{floor:floor,floorArrStr:floorArrStr.substring(1)},
 			function(data){
 				if(data.status=="ok"){
 					var locationList=data.list;
@@ -198,12 +245,15 @@ body{
 <body>
 <div class="main_div" id="main_div">
 	<div class="tool_div">
-		<select id="floor_sel" onchange="initSSDWCanvas();">
+		<select id="floor_sel" onchange="initSSDWCanvas(0);">
+			<!-- 
+			<option value="">总图</option>
 			<option value="1">1层</option>
 			<option value="2">2层</option>
 			<option value="3">3层</option>
 			<option value="4">4层</option>
 			<option value="5">5层</option>
+			 -->
 		</select>
 	</div>
 	<canvas id="ssdwCanvas">

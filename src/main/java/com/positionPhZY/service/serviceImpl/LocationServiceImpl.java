@@ -1,5 +1,6 @@
 package com.positionPhZY.service.serviceImpl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,10 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public List<Location> selectSSDWCanvasData(Integer floor) {
+	public List<Location> selectSSDWCanvasData(Integer floor, String[] floorArr) {
 		// TODO Auto-generated method stub
-		return locationDao.selectSSDWCanvasData(floor);
+		List<String> floorList = Arrays.asList(floorArr);
+		return locationDao.selectSSDWCanvasData(floor,floorList);
 	}
 
 	@Override

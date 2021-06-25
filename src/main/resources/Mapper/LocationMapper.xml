@@ -162,7 +162,17 @@
 		select count(*) from location where uid=#{uid}
 	</select>
 	<select id="selectSSDWCanvasData" resultType="com.positionPhZY.entity.Location">
-		select e.`name` entityName,x,y,floor,`out` from location l,entity e where l.uid=e.tagId and e.entityType='staff' and `out`=0 and l.floor=#{floor}
+		select e.`name` entityName,x,y,floor,`out` from location l,entity e where l.uid=e.tagId and e.entityType='staff' and `out`=0
+		<choose>
+			<when test="floor!=null&amp;floor!=''">
+		 		and l.floor=#{floor}
+			</when>
+			<otherwise>
+				<foreach collection="floorList" item="floor" open=" and cast(l.floor as char) in (" separator="," close=")">
+				#{floor}
+				</foreach>
+			</otherwise>
+		</choose>
 	</select>
 	<select id="getEntityLocation" resultType="com.positionPhZY.entity.Location">
 		select e.`name` entityName,l.floor,l.x,l.y from location l,entity e where l.uid=e.tagId and `out`=0 and e.`name` like '%${entityName}%'

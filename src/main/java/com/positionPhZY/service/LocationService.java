@@ -8,7 +8,7 @@ public interface LocationService {
 
 	int add(Location location);
 
-	List<Location> selectSSDWCanvasData(Integer floor);
+	List<Location> selectSSDWCanvasData(Integer floor, String[] floorArr);
 
 	Location getEntityLocation(String entityName);
 

@@ -61,6 +61,8 @@ public class PhoneController {
 	private EntityService entityService;
 	@Autowired
 	private TagService tagService;
+	@Autowired
+	private DutyService dutyService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -441,6 +443,26 @@ public class PhoneController {
 		}
 		
 		//System.out.println("tagListMap==="+tagListMap.toString());
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertDutyData")
+	@ResponseBody
+	public Map<String, Object> insertDutyData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> drMap = getDutys(request);
+		List<Duty> dutyList = JSON.parseArray(drMap.get("result").toString(),Duty.class);
+		int count=dutyService.add(dutyList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化员工职务列表失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化员工职务列表成功");
+		}
+		
 		return resultMap;
 	}
 
@@ -1613,6 +1635,7 @@ public class PhoneController {
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDutys",request);
 			System.out.println("getDutys:resultJO==="+resultJO.toString());
+			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
 			/*
 			 {"result":[
 				 {"entityType":"staff","onlineIcon":"/sc20080092/duty/onlineIcon-1.png?t=1605840646476","name":"员工","offlineIcon":"/sc20080092/duty/offlineIcon-1.png?t=1605840646476","id":1,"cnEntityType":"人员","key":1},
@@ -1902,7 +1925,7 @@ public class PhoneController {
 	public Map<String, Object> summaryOnlineEntity(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		//try {
+		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "summaryOnlineEntity");
@@ -1910,7 +1933,8 @@ public class PhoneController {
 			paramJO.put("areaId", "1");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
-			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
+			/*
 			StringBuilder resultJOSB=new StringBuilder();
 			resultJOSB.append("{\"result\":{\"summary\":{\"online\":{\"total\":106,\"car\":3,\"staff\":103}},");
 				resultJOSB.append("\"children\":[");
@@ -1923,7 +1947,8 @@ public class PhoneController {
 				resultJOSB.append("\"name\":\"总图\",\"id\":1},");
 			resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
 			JSONObject resultJO = new JSONObject(resultJOSB.toString());
-			System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
+			*/
+			//System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
 			 {"result":{"summary":{"online":{"total":106,"car":3,"staff":103}},
@@ -1937,15 +1962,13 @@ public class PhoneController {
 			 		   "name":"总图","id":1},
 			  "id":1,"jsonrpc":"2.0"}
 			 * */
-			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
-		*/
 			return resultMap;
-		//}
+		}
 	}
 
 	/**
@@ -2095,7 +2118,7 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=F7AEF637C48C3CE0329528431734EF77; Path=/position; HttpOnly");
+			connection.setRequestProperty("Cookie", "JSESSIONID=F8F22CA1C89B616D0468D49B11085659; Path=/position; HttpOnly");
 			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
 		}
 		connection.setRequestMethod("POST");//请求post方式

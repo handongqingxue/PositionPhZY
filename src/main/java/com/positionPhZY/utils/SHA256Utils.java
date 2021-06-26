@@ -1,4 +1,4 @@
-package com.positionPhZY.util.sha256;
+package com.positionPhZY.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

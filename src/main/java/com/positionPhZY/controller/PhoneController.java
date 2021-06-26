@@ -36,8 +36,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.positionPhZY.entity.*;
 import com.positionPhZY.service.*;
-import com.positionPhZY.util.date.DateUtil;
-import com.positionPhZY.util.sha256.SHA256Utils;
+import com.positionPhZY.utils.*;
 
 @Controller
 @RequestMapping("/phone")
@@ -65,6 +64,8 @@ public class PhoneController {
 	private DutyService dutyService;
 	@Autowired
 	private DeviceTypeService deviceTypeService;
+	@Autowired
+	private EntityTypeService entityTypeService;
 
 	@RequestMapping(value="/goLogin")
 	public String goLogin() {
@@ -498,6 +499,26 @@ public class PhoneController {
 		else {
 			resultMap.put("status", "ok");
 			resultMap.put("message", "初始化定位设备类型表成功");
+		}
+		
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertEntityTypeData")
+	@ResponseBody
+	public Map<String, Object> insertEntityTypeData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> etrMap = getEntityTypes(request);
+		List<EntityType> entityTypeList = JSON.parseArray(etrMap.get("result").toString(),EntityType.class);
+		int count=entityTypeService.add(entityTypeList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化系统实体类型表失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化系统实体类型表成功");
 		}
 		
 		return resultMap;
@@ -944,12 +965,13 @@ public class PhoneController {
 	public Map<String, Object> getEntityTypes(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
+		//try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getEntityTypes");
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEntityTypes",request);
+			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEntityTypes",request);
+			JSONObject resultJO = APIResultUtil.getEntityTypes();
 			System.out.println("getEntityTypes:resultJO==="+resultJO.toString());
 			/*{"result":[
 				{"css":"","icon":"sub-menu-icon6","name":"人员","id":"staff",
@@ -1006,13 +1028,16 @@ public class PhoneController {
 				}
 			],"id":1,"jsonrpc":"2.0"}
 			*/
+			resultMap=JSON.parseObject(resultJO.toString());
+			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
+		*/
 			return resultMap;
-		}
+		//}
 	}
 
 	/**

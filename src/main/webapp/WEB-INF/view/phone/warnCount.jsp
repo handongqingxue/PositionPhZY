@@ -23,7 +23,7 @@ var pieLegendData=[];
 var pieLegendSelected={};
 $(function(){
 	/*
-	$.post("insertDeviceTypeData",
+	$.post("insertEntityTypeData",
 		function(data){
 			alert(JSON.stringify(data));
 		}

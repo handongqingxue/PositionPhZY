@@ -268,20 +268,6 @@ function showLabelListDiv(){
 		labelListDiv.css("display","none");
 	}
 }
-
-function goPage(page){
-	switch (page) {
-	case "ryss":
-		location.href=phonePath+"goStaffSearch";
-		break;
-	case "gjfx":
-		location.href=phonePath+"goLocRecAna";
-		break;
-	case "bjtj":
-		location.href=phonePath+"goWarnCount";
-		break;
-	}
-}
 </script>
 <style type="text/css">
 body{
@@ -317,21 +303,6 @@ body{
 .ssdwCanvas_div{
 	width: 100%;height: 600px;overflow: auto;
 }
-.bottom_div{
-	width: 100%;height: 50px;line-height: 50px;background-color: #eee;bottom: 0;position: fixed;
-}
-.bottom_div .item_div{
-	width: 25%;height: 50px;text-align: center;
-}
-.bottom_div .ryss_div{
-	margin-top: -50px;margin-left: 25%;
-}
-.bottom_div .gjfx_div{
-	margin-top: -50px;margin-left: 50%;
-}
-.bottom_div .bjtj_div{
-	margin-top: -50px;margin-left: 75%;
-}
 </style>
 <title>首页</title>
 </head>
@@ -366,11 +337,6 @@ body{
 </div>
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
-<div class="bottom_div">
-	<div class="item_div" onclick="goPage('ssdw')">实时定位</div>
-	<div class="item_div ryss_div" onclick="goPage('ryss')">人员搜索</div>
-	<div class="item_div gjfx_div" onclick="goPage('gjfx')">轨迹分析</div>
-	<div class="item_div bjtj_div" onclick="goPage('bjtj')">报警统计</div>
-</div>
+<%@include file="nav.jsp"%>
 </body>
 </html>

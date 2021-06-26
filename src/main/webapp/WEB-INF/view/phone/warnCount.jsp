@@ -41,6 +41,9 @@ function initJRBJTJSLDiv(){
 	$.post("initTodayWarnCount",
 		{todayDate:todayDate,nowTime:nowTime},
 		function(data){
+			var bodyWidth=$("body").css("width");
+			bodyWidth=bodyWidth.substring(0,bodyWidth.length-2);
+			var irml=bodyWidth/2;//右边项左边距
 			var twList=data.todayWarnList;
 			var countListDiv=$("#jrbjtjsl_div #count_list_div");
 			for(var i=0;i<twList.length;i++){
@@ -53,7 +56,7 @@ function initJRBJTJSLDiv(){
 					itemStr+="</div>";
 				}
 				else{
-					itemStr+="<div class=\"item_div\" style=\"margin-top:-30px;margin-left:180px;\">";
+					itemStr+="<div class=\"item_div\" style=\"margin-top:-30px;margin-left:"+irml+"px;\">";
 						itemStr+="<div class=\"text_span\">"+tw.wtName+"</div>";
 						itemStr+="<span class=\"count_span\">"+tw.warnCount+"</span>";
 					itemStr+="</div>";
@@ -364,26 +367,6 @@ function goPage(page){
 body{
 	margin: 0;
 }
-.top_div{
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    color:#fff;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    background-color:#154E6C;
-}
-.back_but_div{
-    width: 60px;
-    height: 40px;
-    line-height: 40px;
-    margin-top: -40px;
-    text-align: center;
-    color: #fff;
-}
-
-
 .jrbjtjsl_div{
 	width: 100%;
 	height: auto;
@@ -408,7 +391,6 @@ body{
     line-height: 30px;
 }
 .jrbjtjsl_div .count_list_div .item_div .text_span{
-    width: 130px;
     margin-left: 1px;
     text-align: left;
     color: #828282;
@@ -416,7 +398,7 @@ body{
 }
 .jrbjtjsl_div .count_list_div .item_div .count_span{
     width: 30px;
-    margin-left: 130px;
+    margin-left: 100px;
     text-align: right;
     color: #343434;
     position: absolute;
@@ -539,8 +521,6 @@ body{
 <title>报警统计</title>
 </head>
 <body>
-<div class="top_div">报警统计</div>
-<div class="back_but_div" onClick="goPage('index')">&lt;返回</div>
 <div class="jrbjtjsl_div" id="jrbjtjsl_div">
     <div class="jrbjsl_tit_div">今日报警</div>
     <div class="count_list_div" id="count_list_div">
@@ -568,5 +548,6 @@ body{
     <div class="but_div show_all_but_div" onclick="resetPieLegendData(true)">查看全部</div>
     <div class="but_div hide_part_but_div" onclick="resetPieLegendData(false)">隐藏部分</div>
 </div>
+<%@include file="nav.jsp"%>
 </body>
 </html>

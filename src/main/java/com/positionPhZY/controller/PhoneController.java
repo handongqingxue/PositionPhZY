@@ -39,7 +39,7 @@ import com.positionPhZY.service.*;
 import com.positionPhZY.utils.*;
 
 @Controller
-@RequestMapping("/phone")
+@RequestMapping(PhoneController.MODULE_NAME)
 public class PhoneController {
 	
 	//http://139.196.143.225:8080/PositionPhZY/phone/goLogin
@@ -49,6 +49,7 @@ public class PhoneController {
 	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
 	//private static final String SERVICE_URL="http://121.33.253.235:8081/position/service/embeded.smd";
 	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
+	public static final String MODULE_NAME="/phone";
 	
 	@Autowired
 	private WarnRecordService warnRecordService;
@@ -67,40 +68,10 @@ public class PhoneController {
 	@Autowired
 	private EntityTypeService entityTypeService;
 
-	@RequestMapping(value="/goLogin")
-	public String goLogin() {
-		
-		return "phone/login";
-	}
-
-	@RequestMapping(value="/goIndex")
-	public String goIndex() {
-		
-		return "phone/index";
-	}
-
-	@RequestMapping(value="/goStaffSearch")
-	public String goStaffSearch() {
-		
-		return "phone/staffSearch";
-	}
-
-	@RequestMapping(value="/goLocRecAna")
-	public String goLocRecAna() {
-		
-		return "phone/locRecAna";
-	}
-
-	@RequestMapping(value="/goWarnCount")
-	public String goWarnCount() {
-
-		return "phone/warnCount";
-	}
-
-	@RequestMapping(value="/goTest")
-	public String goTest() {
-
-		return "phone/test";
+	@RequestMapping(value="/goPage")
+	public String goPage(HttpServletRequest request) {
+		String page=request.getParameter("page");
+		return MODULE_NAME+"/"+page;
 	}
 
 	@RequestMapping(value="/initEntitySelect")
@@ -741,70 +712,8 @@ public class PhoneController {
 			bodyParamJO.put("method", "getDeviceTypes");
 			bodyParamJO.put("id", 1);
 			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDeviceTypes",request);
-			StringBuilder resultJOSB=new StringBuilder();
-			resultJOSB.append("{\"result\":[");
-				resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"汇聚网关\",\"id\":\"BTG\",");
-					/*
-					resultJOSB.append("\"fields\":[");
-						resultJOSB.append("{\"mode\":\"\",\"default\":3600000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"w\",\"name\":\"网关号\",\"id\":\"labelId\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
-							resultJOSB.append("\"list\":[");
-								resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
-								resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
-							resultJOSB.append("]");
-						resultJOSB.append("},");
-						resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
-					resultJOSB.append("],");
-					*/
-				resultJOSB.append("\"engineMask\":255},");
-				resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"定位器\",\"id\":\"BTI\",");
-					/*
-					resultJOSB.append("\"fields\":[");
-						resultJOSB.append("{\"mode\":\"e\",\"name\":\"电量\",\"expr\":\"(volt == null) ? \\\"\\\" : ((volt >= 2700) ? (volt / 1000 + \\\"V\\\") : (\\\"<span style= \\\\\\\"color:red;\\\\\\\">\\\" + (volt / 1000) + \\\"V(低压)<\\/span>\\\"))\",\"id\":\"volt\",\"type\":\"string\"},");
-						resultJOSB.append("{\"mode\":\"w\",\"name\":\"信标号\",\"id\":\"labelId\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"x轴\",\"id\":\"x\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"y轴\",\"id\":\"y\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"z轴\",\"id\":\"z\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"w\",\"default\":86400000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
-							resultJOSB.append("\"list\":[");
-								resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
-								resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
-							resultJOSB.append("]");
-						resultJOSB.append("},");
-						resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
-					resultJOSB.append("],");
-					*/
-				resultJOSB.append("\"engineMask\":2},");
-				resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"通讯中继\",\"id\":\"BTR\",");
-					/*
-					resultJOSB.append("\"fields\":[");
-						resultJOSB.append("{\"mode\":\"w\",\"default\":3600000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
-						resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
-							resultJOSB.append("\"list\":[");
-								resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
-								resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
-							resultJOSB.append("]");
-						resultJOSB.append("},");
-						resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
-					resultJOSB.append("],");
-					*/
-				resultJOSB.append("\"engineMask\":2},");
-				resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"闸机\",\"id\":\"GAT\",");
-					resultJOSB.append("\"fields\":[");
-						resultJOSB.append("{\"mode\":\"w\",\"name\":\"名称\",\"id\":\"name\",\"type\":\"string\"}");
-					resultJOSB.append("],");
-				resultJOSB.append("\"engineMask\":255},");
-				resultJOSB.append("{\"name\":\"指示牌\",\"id\":\"LAB\",\"engineMask\":255},");
-				resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"监控摄像头\",\"id\":\"SXT\",");
-					resultJOSB.append("\"fields\":[");
-						resultJOSB.append("{\"mode\":\"w\",\"name\":\"摄像头编号\",\"id\":\"labelId\",\"type\":\"double\"}");
-					resultJOSB.append("],");
-				resultJOSB.append("\"engineMask\":255}");
-			resultJOSB.append("],");
-			resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
-			JSONObject resultJO = new JSONObject(resultJOSB.toString());
+			
+			JSONObject resultJO = APIResultUtil.getDeviceTypes();
 			
 			System.out.println("getDeviceTypes:resultJO==="+resultJO.toString());
 			/*
@@ -2256,7 +2165,7 @@ public class PhoneController {
 		*/
 		//double d=(double)19/5;
 		//System.out.println(Math.ceil(d));
-		System.out.println(APIResultUtil.summaryOnlineEntity());
+		System.out.println(APIResultUtil.getDeviceTypes());
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control

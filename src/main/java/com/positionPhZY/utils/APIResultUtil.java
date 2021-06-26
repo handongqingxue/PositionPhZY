@@ -6,6 +6,78 @@ import org.json.JSONObject;
  * 这个类的方法返回的结果是固定的，当服务器瘫痪、接口不能访问时,临时调用这些方法
  * */
 public class APIResultUtil {
+	
+	/**
+	 * 2.2.1 获取定位设备类型表
+	 * @return
+	 */
+	public static JSONObject getDeviceTypes() {
+		StringBuilder resultJOSB=new StringBuilder();
+		resultJOSB.append("{\"result\":[");
+			resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"汇聚网关\",\"id\":\"BTG\",");
+				/*
+				resultJOSB.append("\"fields\":[");
+					resultJOSB.append("{\"mode\":\"\",\"default\":3600000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"w\",\"name\":\"网关号\",\"id\":\"labelId\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
+						resultJOSB.append("\"list\":[");
+							resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
+							resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
+						resultJOSB.append("]");
+					resultJOSB.append("},");
+					resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
+				resultJOSB.append("],");
+				*/
+			resultJOSB.append("\"engineMask\":255},");
+			resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"定位器\",\"id\":\"BTI\",");
+				/*
+				resultJOSB.append("\"fields\":[");
+					resultJOSB.append("{\"mode\":\"e\",\"name\":\"电量\",\"expr\":\"(volt == null) ? \\\"\\\" : ((volt >= 2700) ? (volt / 1000 + \\\"V\\\") : (\\\"<span style= \\\\\\\"color:red;\\\\\\\">\\\" + (volt / 1000) + \\\"V(低压)<\\/span>\\\"))\",\"id\":\"volt\",\"type\":\"string\"},");
+					resultJOSB.append("{\"mode\":\"w\",\"name\":\"信标号\",\"id\":\"labelId\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"x轴\",\"id\":\"x\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"y轴\",\"id\":\"y\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"\",\"default\":0,\"name\":\"z轴\",\"id\":\"z\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"w\",\"default\":86400000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
+						resultJOSB.append("\"list\":[");
+							resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
+							resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
+						resultJOSB.append("]");
+					resultJOSB.append("},");
+					resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
+				resultJOSB.append("],");
+				*/
+			resultJOSB.append("\"engineMask\":2},");
+			resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"通讯中继\",\"id\":\"BTR\",");
+				/*
+				resultJOSB.append("\"fields\":[");
+					resultJOSB.append("{\"mode\":\"w\",\"default\":3600000,\"name\":\"超时值\",\"id\":\"overtime\",\"type\":\"double\"},");
+					resultJOSB.append("{\"mode\":\"e\",\"name\":\"状态\",\"expr\":\"(time+overtime) > new Date()\",\"id\":\"online\",\"type\":\"bool\",");
+						resultJOSB.append("\"list\":[");
+							resultJOSB.append("{\"html\":\"在线\",\"value\":true},");
+							resultJOSB.append("{\"html\":\"离线\",\"value\":false}");
+						resultJOSB.append("]");
+					resultJOSB.append("},");
+					resultJOSB.append("{\"mode\":\"r\",\"name\":\"最近激活时间\",\"id\":\"time\",\"type\":\"datetime\"}");
+				resultJOSB.append("],");
+				*/
+			resultJOSB.append("\"engineMask\":2},");
+			resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"闸机\",\"id\":\"GAT\",");
+				resultJOSB.append("\"fields\":[");
+					resultJOSB.append("{\"mode\":\"w\",\"name\":\"名称\",\"id\":\"name\",\"type\":\"string\"}");
+				resultJOSB.append("],");
+			resultJOSB.append("\"engineMask\":255},");
+			resultJOSB.append("{\"name\":\"指示牌\",\"id\":\"LAB\",\"engineMask\":255},");
+			resultJOSB.append("{\"css\":\"\",\"icon\":\"sub-menu-icon6\",\"name\":\"监控摄像头\",\"id\":\"SXT\",");
+				resultJOSB.append("\"fields\":[");
+					resultJOSB.append("{\"mode\":\"w\",\"name\":\"摄像头编号\",\"id\":\"labelId\",\"type\":\"double\"}");
+				resultJOSB.append("],");
+			resultJOSB.append("\"engineMask\":255}");
+		resultJOSB.append("],");
+		resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
+		
+		return new JSONObject(resultJOSB.toString());
+	}
 
 	/**
 	 * 2.2.4 获取系统实体类型

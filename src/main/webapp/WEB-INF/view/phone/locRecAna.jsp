@@ -249,5 +249,6 @@ body{
 		</canvas>
 	</div>
 </div>
+<%@include file="nav.jsp"%>
 </body>
 </html>

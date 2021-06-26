@@ -65,8 +65,8 @@ function initRYSSCanvas(reSizeFlag){
 						}
 						var preRyssCanvas=document.getElementById("ryssCanvas");
 						preRyssCanvas.parentNode.removeChild(preRyssCanvas);
-						var mainDiv=document.getElementById("main_div");
-						mainDiv.appendChild(ryssCanvas);
+						var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
+						ryssCanvasDiv.appendChild(ryssCanvas);
 					}
 					else{
 						alert(data.message);
@@ -195,10 +195,13 @@ body{
 	margin: 0;
 }
 .main_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
 }
 .main_div .tool_div{
 	width: 100%;
+}
+.ryssCanvas_div{
+	width: 100%;height: 600px;overflow: auto;
 }
 </style>
 <title>人员搜索</title>
@@ -209,10 +212,13 @@ body{
 		名称:<input type="text" id="entityName_inp"/>
 		<input type="button" value="搜索" onclick="initRYSSCanvas(0);"/>
 	</div>
-	<canvas id="ryssCanvas">
-	</canvas>
+	<div class="ryssCanvas_div" id="ryssCanvas_div">
+		<canvas id="ryssCanvas">
+		</canvas>
+	</div>
 </div>
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
+<%@include file="nav.jsp"%>
 </body>
 </html>

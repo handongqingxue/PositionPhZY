@@ -28,11 +28,14 @@ function checkLogin(){
 }
 
 function login(){
+	var tenantId = $("#tenantId_inp").val();
+	var userId = $("#userId_inp").val();
+	var password = $("#password_inp").val();
 	$.post("login",
-		{tenantId:"ts00000006",userId:"test001",password:"test001"},
+		{tenantId:tenantId,userId:userId,password:password},
 		function(data){
 			//alert(data.role);
-			location.href=phonePath+"goIndex";
+			location.href=phonePath+"goPage?page=index";
 		}
 	,"json");
 	/*

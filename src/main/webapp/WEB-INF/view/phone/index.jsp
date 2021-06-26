@@ -233,6 +233,19 @@ function showDutySel(){
 	}
 }
 
+function showLabelListDiv(){
+	var labelListDiv=$("#label_list_div");
+	var display=labelListDiv.css("display");
+	if(display=="none"){
+		$("#show_label_but_div").text("隐藏标签");
+		labelListDiv.css("display","block");
+	}
+	else{
+		$("#show_label_but_div").text("显示标签");
+		labelListDiv.css("display","none");
+	}
+}
+
 function goPage(page){
 	switch (page) {
 	case "ryss":
@@ -267,7 +280,7 @@ body{
 	width: 100px;height: 30px;line-height: 30px;text-align: center;
 }
 .label_list_div{
-	width: 150px;margin-left: 120px;margin-top: -30px;position: absolute;
+	width: 150px;margin-left: 120px;margin-top: -30px;position: absolute;display: none;
 }
 .label_list_div .item_div{
 	width: 100%;height: 30px;line-height: 30px;
@@ -318,14 +331,14 @@ body{
 			</select>
 		</div>
 		<div>
-			<div class="show_label_but_div">显示标签</div>
-			<div class="label_list_div">
+			<div class="show_label_but_div" id="show_label_but_div" onclick="showLabelListDiv();">显示标签</div>
+			<div class="label_list_div" id="label_list_div">
 				<div class="item_div">
 					<input class="select_cb" type="checkbox"/>
 					<span class="name_span">aaa</span>
 				</div>
 				<div class="item_div">
-					<input class="select_cb" type="checkbox"/>
+					<input class="select_cb" type="checkbox" checked/>
 					<span class="name_span">aaa</span>
 				</div>
 				<div class="item_div">

@@ -35,8 +35,8 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public Location getEntityLocation(String entityName) {
+	public List<Location> selectEntityLocation(String entityName) {
 		// TODO Auto-generated method stub
-		return locationDao.getEntityLocation(entityName);
+		return locationDao.selectEntityLocation(entityName);
 	}
 }

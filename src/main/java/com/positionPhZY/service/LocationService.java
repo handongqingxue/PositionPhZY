@@ -10,6 +10,6 @@ public interface LocationService {
 
 	List<Location> selectSSDWCanvasData(Integer floor, String[] floorArr);
 
-	Location getEntityLocation(String entityName);
+	List<Location> selectEntityLocation(String entityName);
 
 }

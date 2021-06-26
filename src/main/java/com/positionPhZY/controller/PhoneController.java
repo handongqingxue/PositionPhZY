@@ -366,19 +366,19 @@ public class PhoneController {
 		return resultMap;
 	}
 
-	@RequestMapping(value="/getEntityLocation")
+	@RequestMapping(value="/selectEntityLocation")
 	@ResponseBody
-	public Map<String, Object> getEntityLocation(HttpServletRequest request) {
+	public Map<String, Object> selectEntityLocation(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Location location=locationService.getEntityLocation(request.getParameter("entityName"));
-		if(location==null) {
+		List<Location> locationList=locationService.selectEntityLocation(request.getParameter("entityName"));
+		if(locationList==null) {
 			resultMap.put("status", "no");
 			resultMap.put("message", "找不到该人员");
 		}
 		else {
 			resultMap.put("status", "ok");
-			resultMap.put("location", location);
+			resultMap.put("list", locationList);
 		}
 		return resultMap;
 	}
@@ -1546,8 +1546,8 @@ public class PhoneController {
 			paramJO.put("endTime", DateUtil.convertStringToLong(todayDate+" "+endTime));
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
-			//JSONObject resultJO = new JSONObject("{\"result\":[{\"altitude\":5.9,\"flag\":0,\"tagId\":\"BTT32003897\",\"latitude\":32.265480300316725,\"engineType\":null,\"speed\":6.899,\"recordId\":210610029309179429,\"voltUnit\":\"V\",\"labelId\":\"2160\",\"gateId\":\"7036\",\"routerId\":\"BTR13E2D61D\",\"routerMark\":273,\"jGateId\":\"7036\",\"id\":63727920,\"state\":0,\"floor\":1,\"routerFlowId\":120898,\"flowId\":603981950,\"direction\":6,\"longitude\":119.10916402631705,\"entityId\":24318,\"raiseTime2\":1624242048703,\"uploadTime\":1624242048707,\"userId\":\"3897\",\"beacons\":\"BTI24007038(3050),BTI24007037(3250),BTI24007036(4500)\",\"blockId\":null,\"intensity\":3150,\"areaId\":2,\"absolute\":true,\"volt\":3.7,\"raiseTime\":\"2021-06-21T10:20:48.703+0800\",\"x\":88.286,\"y\":327.385,\"gpsType\":\"wgs84\",\"z\":0,\"step\":3,\"rootAreaId\":1,\"engineId\":\"a1\"},{\"altitude\":5.9,\"flag\":0,\"tagId\":\"BTT32003897\",\"latitude\":32.26546306070541,\"engineType\":null,\"speed\":8.294,\"recordId\":210610029309179778,\"voltUnit\":\"V\",\"labelId\":null,\"gateId\":null,\"routerId\":\"BTR13E2D61D\",\"routerMark\":273,\"jGateId\":null,\"id\":63728051,\"state\":0,\"floor\":1,\"routerFlowId\":121008,\"flowId\":603981959,\"direction\":1,\"longitude\":119.10932164579933,\"entityId\":24318,\"raiseTime2\":1624242054335,\"uploadTime\":1624242060236,\"userId\":\"3897\",\"beacons\":\"BTI24007039(3450),BTI24006196(12750)\",\"blockId\":null,\"intensity\":6866,\"areaId\":2,\"absolute\":true,\"volt\":3.7,\"raiseTime\":\"2021-06-21T10:20:54.335+0800\",\"x\":103.137,\"y\":325.473,\"gpsType\":\"wgs84\",\"z\":0,\"step\":4,\"rootAreaId\":1,\"engineId\":\"a1\"},{\"altitude\":5.9,\"flag\":0,\"tagId\":\"BTT32003897\",\"latitude\":32.26546383313037,\"engineType\":null,\"speed\":5.871,\"recordId\":210610029309179515,\"voltUnit\":\"V\",\"labelId\":\"2160\",\"gateId\":\"7036\",\"routerId\":\"BTR0794E313\",\"routerMark\":274,\"jGateId\":\"7036\",\"id\":63727945,\"state\":0,\"floor\":1,\"routerFlowId\":147867,\"flowId\":604047488,\"direction\":6,\"longitude\":119.10917778514415,\"entityId\":24318,\"raiseTime2\":1624242054474,\"uploadTime\":1624242054480,\"userId\":\"3897\",\"beacons\":\"BTI24007038(3050),BTI24007037(3250),BTI24007036(4500)\",\"blockId\":null,\"intensity\":3600,\"areaId\":2,\"absolute\":true,\"volt\":3.7,\"raiseTime\":\"2021-06-21T10:20:54.474+0800\",\"x\":89.582,\"y\":325.559,\"gpsType\":\"wgs84\",\"z\":0,\"step\":1,\"rootAreaId\":1,\"engineId\":\"a1\"}],\"id\":1,\"jsonrpc\":\"2.0\"}");
+			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
+			JSONObject resultJO = APIResultUtil.getLocationRecords();
 			System.out.println("getLocationRecords:resultJO==="+resultJO.toString());
 			/*
 			 {"result":[

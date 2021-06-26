@@ -16,6 +16,6 @@ public interface LocationMapper {
 
 	List<Location> selectSSDWCanvasData(@Param("floor")Integer floor, @Param("floorList")List<String> floorList);
 
-	Location getEntityLocation(@Param("entityName")String entityName);
+	List<Location> selectEntityLocation(@Param("entityName")String entityName);
 
 }

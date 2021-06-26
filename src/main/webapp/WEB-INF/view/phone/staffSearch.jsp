@@ -54,12 +54,15 @@ function initRYSSCanvas(reSizeFlag){
 		ryssCanvasImg.onload=function(){
 			ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
 			var entityName=$("#entityName_inp").val();
-			$.post("getEntityLocation",
+			$.post("selectEntityLocation",
 				{entityName:entityName},
 				function(data){
 					if(data.status=="ok"){
-						var location=data.location;
-						setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+						var locationList=data.list;
+						for(var i=0;i<locationList.length;i++){
+							var location=locationList[i];
+							setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+						}
 						var preRyssCanvas=document.getElementById("ryssCanvas");
 						preRyssCanvas.parentNode.removeChild(preRyssCanvas);
 						var mainDiv=document.getElementById("main_div");

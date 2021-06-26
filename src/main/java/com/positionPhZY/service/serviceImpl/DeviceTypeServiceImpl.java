@@ -27,4 +27,10 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 		}
 		return count;
 	}
+
+	@Override
+	public List<DeviceType> select() {
+		// TODO Auto-generated method stub
+		return deviceTypeDao.select();
+	}
 }

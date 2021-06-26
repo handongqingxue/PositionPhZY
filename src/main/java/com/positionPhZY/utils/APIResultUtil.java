@@ -2,8 +2,15 @@ package com.positionPhZY.utils;
 
 import org.json.JSONObject;
 
+/**
+ * 这个类的方法返回的结果是固定的，当服务器瘫痪、接口不能访问时,临时调用这些方法
+ * */
 public class APIResultUtil {
 
+	/**
+	 * 2.2.4 获取系统实体类型
+	 * @return
+	 */
 	public static JSONObject getEntityTypes() {
 		StringBuilder resultJOSB=new StringBuilder();
 		resultJOSB.append("{\"result\":[");
@@ -60,6 +67,26 @@ public class APIResultUtil {
 				resultJOSB.append("]");
 			resultJOSB.append("}");
 		resultJOSB.append("],\"id\":1,\"jsonrpc\":\"2.0\"}");
+		
+		return new JSONObject(resultJOSB.toString());
+	}
+	
+	/**
+	 * 2.8.2 实时在线人数及区域统计
+	 * @return
+	 */
+	public static JSONObject summaryOnlineEntity() {
+		StringBuilder resultJOSB=new StringBuilder();
+		resultJOSB.append("{\"result\":{\"summary\":{\"online\":{\"total\":106,\"car\":3,\"staff\":103}},");
+			resultJOSB.append("\"children\":[");
+				resultJOSB.append("{\"summary\":{\"online\":{\"total\":1,\"car\":0,\"staff\":1}},\"name\":\"二层\",\"id\":3},");
+				resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"三层\",\"id\":4},");
+				resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"四层\",\"id\":5},");
+				resultJOSB.append("{\"summary\":{\"online\":{\"total\":105,\"car\":3,\"staff\":102}},\"name\":\"一层\",\"id\":2},");
+				resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"五层\",\"id\":6}");
+			resultJOSB.append("],");
+			resultJOSB.append("\"name\":\"总图\",\"id\":1},");
+		resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
 		
 		return new JSONObject(resultJOSB.toString());
 	}

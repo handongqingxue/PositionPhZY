@@ -65,6 +65,9 @@
 		</trim>
 		where id=#{id}
 	</update>
+	<select id="select" resultType="com.positionPhZY.entity.DeviceType">
+		select * from device_type
+	</select>
 	<select id="getCountById" resultType="java.lang.Integer">
 		select count(*) from device_type where id=#{id}
 	</select>

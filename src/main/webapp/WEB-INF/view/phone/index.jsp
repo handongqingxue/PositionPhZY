@@ -36,8 +36,9 @@ var fontSize=50;
 var fontMarginLeft=45;
 var selectedFloorValue="";
 $(function(){
+	initLabelListDiv();
 	jiSuanScale();
-	initSSDWCanvas(0);
+	//initSSDWCanvas(0);
 	//setInterval(function(){
 		summaryOnlineData();
 	//},"3000");
@@ -110,6 +111,26 @@ function initDutySel(result){
 	}
 }
 
+function initLabelListDiv(){
+	$.post("initSSDWLabelData",
+		function(data){
+			var labelListDiv=$("#label_list_div");
+			labelListDiv.empty();
+			if(data.status=="ok"){
+				var list=data.list;
+				for (var i = 0; i < list.length; i++) {
+					var item=list[i];
+					var itemStr="<div class=\"item_div\">";
+							itemStr+="<input class=\"select_cb\" id=\"select_cb"+item.id+"\" type=\"checkbox\" "+(item.labelChecked?"checked":"")+" onclick=\"initSSDWCanvas(0);\"/>";
+							itemStr+="<span class=\"name_span\">"+item.name+"</span>";
+						itemStr+="</div>";
+					labelListDiv.append(itemStr);
+				}
+			}
+		}
+	,"json");
+}
+
 function initSSDWCanvas(reSizeFlag){
 	var ssdwCanvasImg = new Image();
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
@@ -129,6 +150,7 @@ function initSSDWCanvas(reSizeFlag){
 		});
 		var floor=$("#floor_sel").val();
 		selectedFloorValue=floor;
+		
 		$.post("initSSDWCanvasData",
 			{floor:floor,floorArrStr:floorArrStr.substring(1)},
 			function(data){
@@ -136,8 +158,9 @@ function initSSDWCanvas(reSizeFlag){
 					var locationList=data.list;
 					for(var i=0;i<locationList.length;i++){
 						var location=locationList[i];
-						//console.log(location.x+location.y+location.entityName+","+","+","+location.floor);
-						setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
+						//console.log(location.uid+","+location.x+location.y+location.entityType+","+location.entityName+","+","+","+location.floor);
+						if($("#label_list_div #select_cb"+location.entityType).prop("checked"))
+							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
 					}
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");
@@ -333,18 +356,6 @@ body{
 		<div>
 			<div class="show_label_but_div" id="show_label_but_div" onclick="showLabelListDiv();">显示标签</div>
 			<div class="label_list_div" id="label_list_div">
-				<div class="item_div">
-					<input class="select_cb" type="checkbox"/>
-					<span class="name_span">aaa</span>
-				</div>
-				<div class="item_div">
-					<input class="select_cb" type="checkbox" checked/>
-					<span class="name_span">aaa</span>
-				</div>
-				<div class="item_div">
-					<input class="select_cb" type="checkbox"/>
-					<span class="name_span">aaa</span>
-				</div>
 			</div>
 		</div>
 	</div>

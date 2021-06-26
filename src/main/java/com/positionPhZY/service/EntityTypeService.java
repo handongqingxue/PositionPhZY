@@ -8,4 +8,6 @@ public interface EntityTypeService {
 
 	int add(List<EntityType> entityTypeList);
 
+	List<EntityType> select();
+
 }

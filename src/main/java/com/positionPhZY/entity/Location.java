@@ -99,6 +99,12 @@ public class Location {
 	public void setAltitude(Float altitude) {
 		this.altitude = altitude;
 	}
+	public String getEntityType() {
+		return entityType;
+	}
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
+	}
 	public String getEntityName() {
 		return entityName;
 	}
@@ -120,6 +126,7 @@ public class Location {
 	private Float longitude;
 	private Float latitude;
 	private Float altitude;
+	private String entityType;
 	private String entityName;
 	
 }

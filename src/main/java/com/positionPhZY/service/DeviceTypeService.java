@@ -8,4 +8,6 @@ public interface DeviceTypeService {
 
 	int add(List<DeviceType> deviceTypeList);
 
+	List<DeviceType> select();
+
 }

@@ -329,6 +329,26 @@ public class PhoneController {
 		return resultMap;
 	}
 
+	@RequestMapping(value="/initSSDWLabelData")
+	@ResponseBody
+	public Map<String, Object> initSSDWLabelData() {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<DeviceType> deviceTypeList = deviceTypeService.select();
+		List<EntityType> entityTypeList = entityTypeService.select();
+		net.sf.json.JSONArray labelJA = net.sf.json.JSONArray.fromObject(deviceTypeList);
+		labelJA.addAll(net.sf.json.JSONArray.fromObject(entityTypeList));
+		if(deviceTypeList.size()==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "暂无数据");
+		}
+		else{
+			resultMap.put("status", "ok");
+			resultMap.put("list", labelJA);
+		}
+		return resultMap;
+	}
+
 	@RequestMapping(value="/initSSDWCanvasData")
 	@ResponseBody
 	public Map<String, Object> initSSDWCanvasData(Integer floor, String floorArrStr) {
@@ -2080,18 +2100,7 @@ public class PhoneController {
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
-			StringBuilder resultJOSB=new StringBuilder();
-			resultJOSB.append("{\"result\":{\"summary\":{\"online\":{\"total\":106,\"car\":3,\"staff\":103}},");
-				resultJOSB.append("\"children\":[");
-					resultJOSB.append("{\"summary\":{\"online\":{\"total\":1,\"car\":0,\"staff\":1}},\"name\":\"二层\",\"id\":3},");
-					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"三层\",\"id\":4},");
-					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"四层\",\"id\":5},");
-					resultJOSB.append("{\"summary\":{\"online\":{\"total\":105,\"car\":3,\"staff\":102}},\"name\":\"一层\",\"id\":2},");
-					resultJOSB.append("{\"summary\":{\"online\":{\"total\":0,\"car\":0,\"staff\":0}},\"name\":\"五层\",\"id\":6}");
-				resultJOSB.append("],");
-				resultJOSB.append("\"name\":\"总图\",\"id\":1},");
-			resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
-			JSONObject resultJO = new JSONObject(resultJOSB.toString());
+			JSONObject resultJO = APIResultUtil.summaryOnlineEntity();
 			//System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
@@ -2245,8 +2254,9 @@ public class PhoneController {
 			e.printStackTrace();
 		}
 		*/
-		double d=(double)19/5;
-		System.out.println(Math.ceil(d));
+		//double d=(double)19/5;
+		//System.out.println(Math.ceil(d));
+		System.out.println(APIResultUtil.summaryOnlineEntity());
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control

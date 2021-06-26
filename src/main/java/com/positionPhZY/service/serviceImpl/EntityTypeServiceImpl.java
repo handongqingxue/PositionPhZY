@@ -27,4 +27,10 @@ public class EntityTypeServiceImpl implements EntityTypeService {
 		}
 		return count;
 	}
+
+	@Override
+	public List<EntityType> select() {
+		// TODO Auto-generated method stub
+		return entityTypeDao.select();
+	}
 }

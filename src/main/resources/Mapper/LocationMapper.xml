@@ -162,7 +162,7 @@
 		select count(*) from location where uid=#{uid}
 	</select>
 	<select id="selectSSDWCanvasData" resultType="com.positionPhZY.entity.Location">
-		select e.`name` entityName,x,y,floor,`out` from location l,entity e where l.uid=e.tagId and e.entityType='staff' and `out`=0
+		select e.entityType,e.`name` entityName,x,y,floor,`out` from location l,entity e where l.uid=e.tagId and `out`=0
 		<choose>
 			<when test="floor!=null&amp;floor!=''">
 		 		and l.floor=#{floor}

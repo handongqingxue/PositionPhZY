@@ -7,17 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -53,10 +49,9 @@ public class PhoneController {
 	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
 	private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
 	public static final String MODULE_NAME="/phone";
-	public int requestFrom=HWY_SERVICE;
-	//public int requestFrom=ZY_SERVICE;
-	public static final Integer HWY_SERVICE=1;
-	public static final Integer ZY_SERVICE=2;
+	public static final String LOCAL_Server_NAME="localhost";
+	public static final String HWY_SERVER_NAME="124.70.38.226";
+	public static final String TEST_USER_Id="test001";
 	
 	@Autowired
 	private WarnRecordService warnRecordService;
@@ -74,6 +69,8 @@ public class PhoneController {
 	private DeviceTypeService deviceTypeService;
 	@Autowired
 	private EntityTypeService entityTypeService;
+	@Autowired
+	private LoginUserService loginUserService;
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -566,21 +563,28 @@ public class PhoneController {
 	public Map<String, Object> getCode(String tenantId, String userId,HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("jsonrpc", "2.0");
-			JSONObject paramJO=new JSONObject();
-			//paramJO.put("tenantId", "ts00000006");
-			paramJO.put("tenantId", tenantId);
-			//paramJO.put("userId", "test001");
-			paramJO.put("userId", userId);
-			bodyParamJO.put("params", paramJO);
-			bodyParamJO.put("method", "getCode");
-			bodyParamJO.put("id", 1);
 			JSONObject resultJO = null;
-			if(requestFrom==HWY_SERVICE)
+			if(LOCAL_Server_NAME.equals(request.getServerName())) {
+				JSONObject paramJO=new JSONObject();
+				//paramJO.put("tenantId", "ts00000006");
+				paramJO.put("tenantId", tenantId);
+				//paramJO.put("userId", "test001");
+				paramJO.put("userId", userId);
 				resultJO = getRespJson("getCode", paramJO);
-			else
+			}
+			else {
+				JSONObject bodyParamJO=new JSONObject();
+				bodyParamJO.put("jsonrpc", "2.0");
+				JSONObject paramJO=new JSONObject();
+				//paramJO.put("tenantId", "ts00000006");
+				paramJO.put("tenantId", tenantId);
+				//paramJO.put("userId", "test001");
+				paramJO.put("userId", userId);
+				bodyParamJO.put("params", paramJO);
+				bodyParamJO.put("method", "getCode");
+				bodyParamJO.put("id", 1);
 				resultJO = postBody(PUBLIC_URL,bodyParamJO,"getCode",request);
+			}
 			String result=resultJO.get("result").toString();
 			System.out.println("==="+result);
 			resultMap.put("result", result);
@@ -627,20 +631,33 @@ public class PhoneController {
 	public Map<String, Object> login(String tenantId, String userId, String password,HttpServletRequest request){
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("jsonrpc", "2.0");
-			JSONObject paramJO=new JSONObject();
-			//paramJO.put("tenantId", "ts00000006");
-			paramJO.put("tenantId", tenantId);
-			//paramJO.put("userId", "test001");
-			paramJO.put("userId", userId);
-			//paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
-			String vsCode = getCode(tenantId,userId,request).get("result").toString();
-			paramJO.put("key", SHA256Utils.getSHA256(tenantId+userId+password+vsCode));
-			bodyParamJO.put("params", paramJO);
-			bodyParamJO.put("method", "login");
-			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(PUBLIC_URL,bodyParamJO,"login",request);
+			JSONObject resultJO = null;
+			if(LOCAL_Server_NAME.equals(request.getServerName())) {
+				JSONObject paramJO=new JSONObject();
+				//paramJO.put("tenantId", "ts00000006");
+				paramJO.put("tenantId", tenantId);
+				//paramJO.put("userId", "test001");
+				paramJO.put("userId", userId);
+				//paramJO.put("password", "test001");
+				paramJO.put("password", password);
+				resultJO = getRespJson("login", paramJO);
+			}
+			else {
+				JSONObject bodyParamJO=new JSONObject();
+				bodyParamJO.put("jsonrpc", "2.0");
+				JSONObject paramJO=new JSONObject();
+				//paramJO.put("tenantId", "ts00000006");
+				paramJO.put("tenantId", tenantId);
+				//paramJO.put("userId", "test001");
+				paramJO.put("userId", userId);
+				//paramJO.put("key", "415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda");
+				String vsCode = getCode(tenantId,userId,request).get("result").toString();
+				paramJO.put("key", SHA256Utils.getSHA256(tenantId+userId+password+vsCode));
+				bodyParamJO.put("params", paramJO);
+				bodyParamJO.put("method", "login");
+				bodyParamJO.put("id", 1);
+				resultJO = postBody(PUBLIC_URL,bodyParamJO,"login",request);
+			}
 			//bodyParamStr==={"method":"login","id":1,"jsonrpc":"2.0","params":{"tenantId":"ts00000006","userId":"test001","key":"415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda"}}
 			//result==={"result":{"role":1,"staffId":null},"id":1,"jsonrpc":"2.0"}
 			//result==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":"ts00000006: code miss"}}
@@ -669,11 +686,18 @@ public class PhoneController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			JSONObject resultJO = null;
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getUsers");
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getUsers",request);
+			
+			if(LOCAL_Server_NAME.equals(request.getServerName())) {
+				resultJO = getRespJson("getUsers", null);
+			}
+			else {
+				resultJO = postBody(SERVICE_URL,bodyParamJO,"getUsers",request);
+			}
 			/*
 			 {"result":[
 				 {"role":1,"userId":"admin"},
@@ -698,6 +722,7 @@ public class PhoneController {
 			 ],"id":1,"jsonrpc":"2.0"}
 			 * */
 			System.out.println("getUsers:resultJO==="+resultJO.toString());
+			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2194,8 +2219,21 @@ public class PhoneController {
 		HttpSession session = request.getSession();
 		if(serverURL.contains("service")) {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
-			connection.setRequestProperty("Cookie", "JSESSIONID=F8F22CA1C89B616D0468D49B11085659; Path=/position; HttpOnly");
-			//connection.setRequestProperty("Cookie", session.getAttribute("Cookie").toString());
+			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
+			String cookie = null;
+			//if(LOCAL_Server_NAME.equals(request.getServerName())) {
+				cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
+				/*
+			}
+			else {
+				Object cookieObj = session.getAttribute("Cookie");
+				System.out.println("cookieObj==="+cookieObj+",sessionid==="+session.getId());
+				if(cookieObj!=null)
+					cookie = cookieObj.toString();
+			}
+			*/
+			if(!StringUtils.isEmpty(cookie))
+				connection.setRequestProperty("Cookie", cookie);
 		}
 		connection.setRequestMethod("POST");//请求post方式
 		connection.setDoInput(true); 
@@ -2224,13 +2262,22 @@ public class PhoneController {
 		if(serverURL.contains("public")&&"login".equals(method)) {
 			if(!checkCookieInSession(session)) {
 				getCookieFromHeader(connection,session);
+				System.out.println("sessionid==="+session.getId());
 			}
 		}
 		
 		connection.disconnect();
 		String result = sbf.toString();
 		System.out.println("result==="+result);
-		JSONObject resultJO = new JSONObject(result);
+		JSONObject resultJO = null;
+		if(result.contains("DOCTYPE")) {
+			resultJO = new JSONObject();
+			resultJO.put("status", "no");
+			resultJO.put("message", "登录信息已过期，是否重新登录？");
+		}
+		else {
+			resultJO = new JSONObject(result);
+		}
 		return resultJO;
 	}
 	
@@ -2263,15 +2310,17 @@ public class PhoneController {
 		httppost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		//添加参数
 		List<NameValuePair> params=new ArrayList<NameValuePair>();
-		Iterator<String> paramJOIter = paramJO.keys();
-		int index=0;
-		while (paramJOIter.hasNext()) {
-			String key = paramJOIter.next();
-			String value = paramJO.get(key).toString();
-			System.out.println("key==="+key);
-			System.out.println("value==="+value);
-			params.add(index, new BasicNameValuePair(key, value));
-			index++;
+		if(paramJO!=null) {
+			Iterator<String> paramJOIter = paramJO.keys();
+			int index=0;
+			while (paramJOIter.hasNext()) {
+				String key = paramJOIter.next();
+				String value = paramJO.get(key).toString();
+				//System.out.println("key==="+key);
+				//System.out.println("value==="+value);
+				params.add(index, new BasicNameValuePair(key, value));
+				index++;
+			}
 		}
 		if(params!=null)
 			httppost.setEntity(new UrlEncodedFormEntity(params,HTTP.UTF_8));

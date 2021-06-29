@@ -22,7 +22,7 @@ var pieSeriesDataList;
 var pieLegendData=[];
 var pieLegendSelected={};
 $(function(){
-	$.post("getCode",
+	$.post("getUsers",
 		{tenantId:"ts00000006",userId:"test001"},
 		function(data){
 			alert(JSON.stringify(data));

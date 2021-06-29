@@ -2221,17 +2221,12 @@ public class PhoneController {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
 			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
 			String cookie = null;
-			//if(LOCAL_Server_NAME.equals(request.getServerName())) {
+			Object cookieObj = session.getAttribute("Cookie");
+			if(cookieObj!=null)
+				cookie = cookieObj.toString();
+			else
 				cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
-				/*
-			}
-			else {
-				Object cookieObj = session.getAttribute("Cookie");
-				System.out.println("cookieObj==="+cookieObj+",sessionid==="+session.getId());
-				if(cookieObj!=null)
-					cookie = cookieObj.toString();
-			}
-			*/
+				
 			if(!StringUtils.isEmpty(cookie))
 				connection.setRequestProperty("Cookie", cookie);
 		}

@@ -2036,16 +2036,22 @@ public class PhoneController {
 	public Map<String, Object> summaryOnlineEntity(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		//try {
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("jsonrpc", "2.0");
-			bodyParamJO.put("method", "summaryOnlineEntity");
-			JSONObject paramJO=new JSONObject();
-			paramJO.put("areaId", "1");
-			bodyParamJO.put("params", paramJO);
-			bodyParamJO.put("id", 1);
-			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
-			JSONObject resultJO = APIResultUtil.summaryOnlineEntity();
+		try {
+			JSONObject resultJO = null;
+			if(LOCAL_Server_NAME.equals(request.getServerName())) {
+				resultJO = getRespJson("getCode", null);
+			}
+			else {
+				JSONObject bodyParamJO=new JSONObject();
+				bodyParamJO.put("jsonrpc", "2.0");
+				bodyParamJO.put("method", "summaryOnlineEntity");
+				JSONObject paramJO=new JSONObject();
+				paramJO.put("areaId", "1");
+				bodyParamJO.put("params", paramJO);
+				bodyParamJO.put("id", 1);
+				resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
+			}
+			//JSONObject resultJO = APIResultUtil.summaryOnlineEntity();
 			//System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
@@ -2060,15 +2066,13 @@ public class PhoneController {
 			 		   "name":"змЭМ","id":1},
 			  "id":1,"jsonrpc":"2.0"}
 			 * */
-			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
-		*/
 			return resultMap;
-		//}
+		}
 	}
 
 	/**

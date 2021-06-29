@@ -10,6 +10,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
@@ -49,7 +51,12 @@ public class PhoneController {
 	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
 	//private static final String SERVICE_URL="http://121.33.253.235:8081/position/service/embeded.smd";
 	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
+	private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
 	public static final String MODULE_NAME="/phone";
+	public int requestFrom=HWY_SERVICE;
+	//public int requestFrom=ZY_SERVICE;
+	public static final Integer HWY_SERVICE=1;
+	public static final Integer ZY_SERVICE=2;
 	
 	@Autowired
 	private WarnRecordService warnRecordService;
@@ -547,29 +554,6 @@ public class PhoneController {
 		return resultMap;
 	}
 
-	/*
-	@RequestMapping(value="/login")
-	@ResponseBody
-	public Map<String, Object> login(String staffsNo, String password, String companyID, boolean remPwd, HttpSession session) {
-		Map<String, Object> resultMap = null;
-		String url=path+"/login";
-		List<NameValuePair> params=new ArrayList<NameValuePair>();
-		params.add(0, new BasicNameValuePair("userName", "15969878881"));
-		params.add(1, new BasicNameValuePair("password", "E10ADC3949BA59ABBE56E057F20F883E"));
-		params.add(2, new BasicNameValuePair("from", ""));
-			
-		try {
-			resultMap=getRespJson(url, params);
-			JSONObject resultJO = new JSONObject(resultMap.get("result").toString());
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return resultMap;
-	}
-	*/
-
 	/**
 	 * 2.1.1 获取验证码
 	 * @param tenantId
@@ -592,7 +576,11 @@ public class PhoneController {
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("method", "getCode");
 			bodyParamJO.put("id", 1);
-			JSONObject resultJO = postBody(PUBLIC_URL,bodyParamJO,"getCode",request);
+			JSONObject resultJO = null;
+			if(requestFrom==HWY_SERVICE)
+				resultJO = getRespJson("getCode", paramJO);
+			else
+				resultJO = postBody(PUBLIC_URL,bodyParamJO,"getCode",request);
 			String result=resultJO.get("result").toString();
 			System.out.println("==="+result);
 			resultMap.put("result", result);
@@ -686,6 +674,29 @@ public class PhoneController {
 			bodyParamJO.put("method", "getUsers");
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getUsers",request);
+			/*
+			 {"result":[
+				 {"role":1,"userId":"admin"},
+				 {"role":4,"userId":"sg001"},
+				 {"role":1,"userId":"yzyd"},
+				 {"role":1,"userId":"wangjie"},
+				 {"role":1,"userId":"qy"},
+				 {"role":1,"userId":"luzq"},
+				 {"role":1,"userId":"jzp"},
+				 {"role":1,"userId":"yjj"},
+				 {"role":2,"userId":"ydd"},
+				 {"role":2,"userId":"yyc"},
+				 {"role":1,"userId":"rxw"},
+				 {"role":2,"userId":"test"},
+				 {"role":2,"userId":"dll"},
+				 {"role":2,"userId":"lzh"},
+				 {"role":28277,"userId":"visitor"},
+				 {"role":28277,"userId":"jx01"},
+				 {"role":1,"userId":"test001"},
+				 {"role":1,"userId":"csq"},
+				 {"role":1,"userId":"test7475"}
+			 ],"id":1,"jsonrpc":"2.0"}
+			 * */
 			System.out.println("getUsers:resultJO==="+resultJO.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -2243,25 +2254,35 @@ public class PhoneController {
 		return "";
 	}
 	
-	public Map<String, Object> getRespJson(String url,List<NameValuePair> params) throws Exception {
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
+	//post请求后端收不到参数的解决方案：https://blog.csdn.net/xu_lo/article/details/90041606
+	public JSONObject getRespJson(String method,JSONObject paramJO) throws Exception {
 		// TODO Auto-generated method stub
 		//POST的URL
 		//建立HttpPost对象
-		HttpPost httppost=new HttpPost(url);
-		httppost.setHeader("Content-Type", "application/json-rpc;charset=UTF-8");
+		HttpPost httppost=new HttpPost(HWY_URL+method);
+		httppost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		//添加参数
+		List<NameValuePair> params=new ArrayList<NameValuePair>();
+		Iterator<String> paramJOIter = paramJO.keys();
+		int index=0;
+		while (paramJOIter.hasNext()) {
+			String key = paramJOIter.next();
+			String value = paramJO.get(key).toString();
+			System.out.println("key==="+key);
+			System.out.println("value==="+value);
+			params.add(index, new BasicNameValuePair(key, value));
+			index++;
+		}
 		if(params!=null)
 			httppost.setEntity(new UrlEncodedFormEntity(params,HTTP.UTF_8));
 		//设置编码
 		HttpResponse response=new DefaultHttpClient().execute(httppost);
 		//发送Post,并返回一个HttpResponse对象
+		JSONObject resultJO = null;
 		if(response.getStatusLine().getStatusCode()==200){//如果状态码为200,就是正常返回
-		String result=EntityUtils.toString(response.getEntity());
-		//得到返回的字符串,打印输出
-	//	System.out.println(result);
-		jsonMap.put("result", result);
+			String result=EntityUtils.toString(response.getEntity());
+			resultJO = new JSONObject(result);
 		}
-		return jsonMap;
+		return resultJO;
 	}
 }

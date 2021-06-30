@@ -26,13 +26,15 @@ var gjfxCanvasWidth=gjfxCanvasMaxWidth;
 var gjfxCanvasHeight=gjfxCanvasMaxHeight;
 var widthScale;
 var heightScale;
-var arcR=20;
+var arcR=10;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
+var locRecListIndex=0;
+var paintInterval;
 $(function(){
 	initEntitySelect();
 	initTodayDateCalendar();
@@ -69,49 +71,95 @@ function checkYsb(){
 function initGJFXCanvas(reSizeFlag){
 	if(checkStaff()){
 		if(checkYsb()){
-			var gjfxCanvasImg = new Image();
-			gjfxCanvasImg.src=path+"resource/image/003.jpg";
-			gjfxCanvas = document.createElement("canvas");
-			gjfxCanvas.id="gjfxCanvas";
-			gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
-			gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
-			gjfxCanvas.width=gjfxCanvasWidth;
-			gjfxCanvas.height=gjfxCanvasHeight;
-			gjfxCanvasContext = gjfxCanvas.getContext("2d");
-			gjfxCanvasImg.onload=function(){
-				gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-				
-				var tagId=$("#staff_sel").val();
-				var staffName=$("#staff_sel option:selected").text().split("(")[0];
-				var todayDate=$("#td_cal").val();
-				var sth=$("#sth_sel").val();
-				var stm=$("#stm_sel").val();
-				var sts=$("#sts_sel").val();
-				var startTime=sth+":"+stm+":"+sts+":000";
-				var eth=$("#eth_sel").val();
-				var etm=$("#etm_sel").val();
-				var ets=$("#ets_sel").val();
-				var endTime=eth+":"+etm+":"+ets+":000";
-				var ysb=$("#ysb_inp").val();
-				$.post("getLocationRecords",
-					{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
-					function(data){
-						var list=data.locRecList;
-						for(var i=0;i<list.length;i++){
-							var lr=list[i];
-							setPointLocation(gjfxCanvasContext,lr.x,lr.y);
-							if(i==list.length-1)
-								setEntityLocation(gjfxCanvasContext,lr.x,lr.y,staffName,lr.floor);
+			var tagId=$("#staff_sel").val();
+			var staffName=$("#staff_sel option:selected").text().split("(")[0];
+			var todayDate=$("#td_cal").val();
+			var sth=$("#sth_sel").val();
+			var stm=$("#stm_sel").val();
+			var sts=$("#sts_sel").val();
+			var startTime=sth+":"+stm+":"+sts+":000";
+			var eth=$("#eth_sel").val();
+			var etm=$("#etm_sel").val();
+			var ets=$("#ets_sel").val();
+			var endTime=eth+":"+etm+":"+ets+":000";
+			var ysb=$("#ysb_inp").val();
+			$.post("getLocationRecords",
+				{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
+				function(data){
+					var list=data.locRecList;
+					console.log("length==="+list.length);
+					if(reSizeFlag==1){
+						var gjfxCanvasImg = new Image();
+						gjfxCanvasImg.src=path+"resource/image/003.jpg";
+						gjfxCanvas = document.createElement("canvas");
+						gjfxCanvas.id="gjfxCanvas";
+						gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+						gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+						gjfxCanvas.width=gjfxCanvasWidth;
+						gjfxCanvas.height=gjfxCanvasHeight;
+						gjfxCanvasContext = gjfxCanvas.getContext("2d");
+						gjfxCanvasImg.onload=function(){
+							gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+							for(var i=0;i<list.length;i++){
+								if(i>=1){
+									var lr1=list[i-1];
+									var lr2=list[i];
+									setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+									if(i==list.length-1)
+										setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+								}
+							}
+							var preGjfxCanvas=document.getElementById("gjfxCanvas");
+							preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+							var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+							gjfxCanvasDiv.appendChild(gjfxCanvas);
+							loadGJFXCanvas(0);
 						}
-						var preGjfxCanvas=document.getElementById("gjfxCanvas");
-						preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
-						var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
-						gjfxCanvasDiv.appendChild(gjfxCanvas);
 					}
-				,"json");
-				if(reSizeFlag==1)
-					loadGJFXCanvas(0);
-			}
+					else{
+						paintInterval=setInterval(function(){
+							var gjfxCanvasImg = new Image();
+							gjfxCanvasImg.src=path+"resource/image/003.jpg";
+							gjfxCanvas = document.createElement("canvas");
+							gjfxCanvas.id="gjfxCanvas";
+							gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+							gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+							gjfxCanvas.width=gjfxCanvasWidth;
+							gjfxCanvas.height=gjfxCanvasHeight;
+							gjfxCanvasContext = gjfxCanvas.getContext("2d");
+							gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
+							gjfxCanvasImg.onload=function(){
+								gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+								for(var i=0;i<=locRecListIndex;i++){
+									if(i>=1){
+										var lr1=list[i-1];
+										var lr2=list[i];
+										setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+										//if(i==list.length-1){
+										if(i==locRecListIndex){
+											setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+										}
+									}
+								}
+								var preGjfxCanvas=document.getElementById("gjfxCanvas");
+								preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+								var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+								gjfxCanvasDiv.appendChild(gjfxCanvas);
+								if(locRecListIndex==list.length-1){
+									//console.log(222);
+									locRecListIndex=0;
+									clearInterval(paintInterval);
+								}
+								else{
+									//console.log(111);
+									locRecListIndex++;
+								}
+							}
+						
+						},"1000");
+					}
+				}	
+			,"json");
 		}
 	}
 }
@@ -208,12 +256,23 @@ function initTodayDateCalendar(){
 	$("#td_cal").val(todayDate);
 }
 
-function setPointLocation(context,x,y){
+function setPointLocation(context,x1,y1,x2,y2){
+	/*
 	context.beginPath();
 	context.strokeStyle = 'red';//点填充
 	context.fillStyle='red';
 	context.lineWidth=arcR*1.5;
 	context.arc(x/widthScale,gjfxCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
+	context.stroke();
+	*/
+
+	console.log(x1+","+y1+","+x2+","+y2);
+	context.strokeStyle = 'red';//点填充
+	context.fillStyle='red';
+	context.lineWidth=arcR*1.5;
+	context.beginPath();
+	context.moveTo(x1/widthScale, gjfxCanvasHeight-y1/heightScale);//起始位置
+	context.lineTo(x2/widthScale, gjfxCanvasHeight-y2/heightScale);//停止位置
 	context.stroke();
 }
 

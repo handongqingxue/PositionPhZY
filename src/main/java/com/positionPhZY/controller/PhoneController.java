@@ -750,14 +750,14 @@ public class PhoneController {
 	public Map<String, Object> getDeviceTypes(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		//try {
+		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getDeviceTypes");
 			bodyParamJO.put("id", 1);
-			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDeviceTypes",request);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getDeviceTypes",request);
 			
-			JSONObject resultJO = APIResultUtil.getDeviceTypes();
+			//JSONObject resultJO = APIResultUtil.getDeviceTypes();
 			
 			System.out.println("getDeviceTypes:resultJO==="+resultJO.toString());
 			/*
@@ -819,15 +819,13 @@ public class PhoneController {
 			 	"id":1,"jsonrpc":"2.0"}
 			 * */
 			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
-			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
-		*/
 			return resultMap;
-		//}
+		}
 	}
 	
 	/**
@@ -938,13 +936,13 @@ public class PhoneController {
 	public Map<String, Object> getEntityTypes(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		//try {
+		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getEntityTypes");
 			bodyParamJO.put("id", 1);
-			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEntityTypes",request);
-			JSONObject resultJO = APIResultUtil.getEntityTypes();
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getEntityTypes",request);
+			//JSONObject resultJO = APIResultUtil.getEntityTypes();
 			System.out.println("getEntityTypes:resultJO==="+resultJO.toString());
 			/*{"result":[
 				{"css":"","icon":"sub-menu-icon6","name":"»À‘±","id":"staff",
@@ -1002,15 +1000,13 @@ public class PhoneController {
 			],"id":1,"jsonrpc":"2.0"}
 			*/
 			resultMap=JSON.parseObject(resultJO.toString());
-			/*
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
-		*/
 			return resultMap;
-		//}
+		}
 	}
 
 	/**

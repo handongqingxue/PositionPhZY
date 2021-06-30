@@ -66,7 +66,7 @@ function checkYsb(){
 		return true;
 }
 
-function initGJFXCanvas(){
+function initGJFXCanvas(reSizeFlag){
 	if(checkStaff()){
 		if(checkYsb()){
 			var gjfxCanvasImg = new Image();
@@ -109,9 +109,44 @@ function initGJFXCanvas(){
 						gjfxCanvasDiv.appendChild(gjfxCanvas);
 					}
 				,"json");
+				if(reSizeFlag==1)
+					loadGJFXCanvas(0);
 			}
 		}
 	}
+}
+
+function changeCanvasSize(flag){
+	loadGJFXCanvas(flag);
+    var mcw=gjfxCanvasStyleWidth;
+	var mch=gjfxCanvasStyleHeight;
+	if(flag==1)
+		gjfxCanvasStyleWidth+=30;
+	else
+		gjfxCanvasStyleWidth-=30;
+	
+	if(gjfxCanvasStyleWidth<gjfxCanvasMinWidth){
+		gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
+	}
+	else if(gjfxCanvasStyleWidth>gjfxCanvasMaxWidth){
+		gjfxCanvasStyleWidth=gjfxCanvasMaxWidth;
+	}
+
+	if(gjfxCanvasStyleHeight<gjfxCanvasMinHeight){
+		gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
+	}
+	else if(gjfxCanvasStyleHeight>gjfxCanvasMaxHeight){
+		gjfxCanvasStyleHeight=gjfxCanvasMaxHeight;
+	}
+	gjfxCanvasStyleHeight=gjfxCanvasStyleWidth*gjfxCanvasHeight/gjfxCanvasWidth;
+	arcR=arcR*mcw/gjfxCanvasStyleWidth;
+	rectWidth=rectWidth*mcw/gjfxCanvasStyleWidth;
+	rectHeight=rectHeight*mch/gjfxCanvasStyleHeight;
+	arSpace=arSpace*mch/gjfxCanvasStyleHeight;
+	atSpace=atSpace*mch/gjfxCanvasStyleHeight;
+	fontSize=fontSize*mch/gjfxCanvasStyleHeight;
+	fontMarginLeft=fontMarginLeft*mcw/gjfxCanvasStyleWidth;
+	initGJFXCanvas(1);
 }
 
 function initEntitySelect(){
@@ -194,6 +229,21 @@ function setEntityLocation(context,x,y,name,floor){
 	context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,gjfxCanvasHeight-y/heightScale-atSpace);
 	context.stroke();
 }
+
+function loadGJFXCanvas(flag){
+	var smallBut=$("#small_but");
+	var bigBut=$("#big_but");
+	if(flag==1){
+		smallBut.attr("disabled",true);
+		bigBut.attr("disabled",true);
+	}
+	else{
+		setTimeout(function(){
+			smallBut.attr("disabled",false);
+			bigBut.attr("disabled",false);
+		},"1000");
+	}
+}
 </script>
 <style type="text/css">
 body{
@@ -241,7 +291,7 @@ body{
 		</div>
 		<div style="margin-top: 5px;">
 			压缩比<input type="number" id="ysb_inp" size="10" value="200"/>
-			<input type="button" value="查询" onclick="initGJFXCanvas();"/>
+			<input type="button" value="查询" onclick="initGJFXCanvas(0);"/>
 		</div>
 	</div>
 	<div class="gjfxCanvas_div" id="gjfxCanvas_div">
@@ -249,6 +299,8 @@ body{
 		</canvas>
 	</div>
 </div>
+<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
+<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
 <%@include file="nav.jsp"%>
 </body>
 </html>

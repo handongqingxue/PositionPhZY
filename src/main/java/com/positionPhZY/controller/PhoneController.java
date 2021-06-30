@@ -43,12 +43,14 @@ public class PhoneController {
 	//http://139.196.143.225:8080/PositionPhZY/phone/goLogin
 	//https://www.liankexing.com/question/825
 	
-	//private static final String PUBLIC_URL="http://121.33.253.235:8081/position/public/embeded.smd";
-	private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
-	//private static final String SERVICE_URL="http://121.33.253.235:8081/position/service/embeded.smd";
-	private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
+	//这些接口不允许跨域访问，一律用127.0.0.1在本地搭建接口服务访问本地接口
+	private static final String PUBLIC_URL="http://127.0.0.1:8081/position/public/embeded.smd";
+	//private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
+	private static final String SERVICE_URL="http://127.0.0.1:8081/position/service/embeded.smd";
+	//private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
 	private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
 	public static final String MODULE_NAME="/phone";
+	//以下这些常量是在本地接口服务不可用时，根据ip判断是本地还是远程华为云服务，若是本地，间接请求华为云服务那边的接口服务
 	public static final String LOCAL_Server_NAME="localhost";
 	public static final String HWY_SERVER_NAME="124.70.38.226";
 	public static final String TEST_USER_Id="test001";
@@ -564,6 +566,7 @@ public class PhoneController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
+			/*
 			if(LOCAL_Server_NAME.equals(request.getServerName())) {
 				JSONObject paramJO=new JSONObject();
 				//paramJO.put("tenantId", "ts00000006");
@@ -573,6 +576,7 @@ public class PhoneController {
 				resultJO = getRespJson("getCode", paramJO);
 			}
 			else {
+			*/
 				JSONObject bodyParamJO=new JSONObject();
 				bodyParamJO.put("jsonrpc", "2.0");
 				JSONObject paramJO=new JSONObject();
@@ -584,7 +588,7 @@ public class PhoneController {
 				bodyParamJO.put("method", "getCode");
 				bodyParamJO.put("id", 1);
 				resultJO = postBody(PUBLIC_URL,bodyParamJO,"getCode",request);
-			}
+			//}
 			String result=resultJO.get("result").toString();
 			System.out.println("==="+result);
 			resultMap.put("result", result);
@@ -632,6 +636,7 @@ public class PhoneController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
+			/*
 			if(LOCAL_Server_NAME.equals(request.getServerName())) {
 				JSONObject paramJO=new JSONObject();
 				//paramJO.put("tenantId", "ts00000006");
@@ -643,6 +648,7 @@ public class PhoneController {
 				resultJO = getRespJson("login", paramJO);
 			}
 			else {
+			*/
 				JSONObject bodyParamJO=new JSONObject();
 				bodyParamJO.put("jsonrpc", "2.0");
 				JSONObject paramJO=new JSONObject();
@@ -657,7 +663,7 @@ public class PhoneController {
 				bodyParamJO.put("method", "login");
 				bodyParamJO.put("id", 1);
 				resultJO = postBody(PUBLIC_URL,bodyParamJO,"login",request);
-			}
+			//}
 			//bodyParamStr==={"method":"login","id":1,"jsonrpc":"2.0","params":{"tenantId":"ts00000006","userId":"test001","key":"415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda"}}
 			//result==={"result":{"role":1,"staffId":null},"id":1,"jsonrpc":"2.0"}
 			//result==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":"ts00000006: code miss"}}
@@ -692,12 +698,14 @@ public class PhoneController {
 			bodyParamJO.put("method", "getUsers");
 			bodyParamJO.put("id", 1);
 			
+			/*
 			if(LOCAL_Server_NAME.equals(request.getServerName())) {
 				resultJO = getRespJson("getUsers", null);
 			}
 			else {
+			*/
 				resultJO = postBody(SERVICE_URL,bodyParamJO,"getUsers",request);
-			}
+			//}
 			/*
 			 {"result":[
 				 {"role":1,"userId":"admin"},
@@ -2038,10 +2046,12 @@ public class PhoneController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
+			/*
 			if(LOCAL_Server_NAME.equals(request.getServerName())) {
-				resultJO = getRespJson("getCode", null);
+				resultJO = getRespJson("summaryOnlineEntity", null);
 			}
 			else {
+			*/
 				JSONObject bodyParamJO=new JSONObject();
 				bodyParamJO.put("jsonrpc", "2.0");
 				bodyParamJO.put("method", "summaryOnlineEntity");
@@ -2050,7 +2060,7 @@ public class PhoneController {
 				bodyParamJO.put("params", paramJO);
 				bodyParamJO.put("id", 1);
 				resultJO = postBody(SERVICE_URL,bodyParamJO,"summaryOnlineEntity",request);
-			}
+			//}
 			//JSONObject resultJO = APIResultUtil.summaryOnlineEntity();
 			//System.out.println("summaryOnlineEntity:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
@@ -2226,6 +2236,7 @@ public class PhoneController {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
 			String cookie = null;
 			Object cookieObj = session.getAttribute("Cookie");
+			System.out.println("cookieObj==="+cookieObj);
 			if(cookieObj!=null)
 				cookie = cookieObj.toString();
 			else

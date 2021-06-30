@@ -35,6 +35,7 @@ var fontSize=50;
 var fontMarginLeft=45;
 var locRecListIndex=0;
 var paintInterval;
+var locRecList;
 $(function(){
 	initEntitySelect();
 	initTodayDateCalendar();
@@ -68,11 +69,10 @@ function checkYsb(){
 		return true;
 }
 
-function initGJFXCanvas(reSizeFlag){
+function getLocationRecords(){
 	if(checkStaff()){
 		if(checkYsb()){
 			var tagId=$("#staff_sel").val();
-			var staffName=$("#staff_sel option:selected").text().split("(")[0];
 			var todayDate=$("#td_cal").val();
 			var sth=$("#sth_sel").val();
 			var stm=$("#stm_sel").val();
@@ -86,81 +86,86 @@ function initGJFXCanvas(reSizeFlag){
 			$.post("getLocationRecords",
 				{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
 				function(data){
-					var list=data.locRecList;
-					console.log("length==="+list.length);
-					if(reSizeFlag==1){
-						var gjfxCanvasImg = new Image();
-						gjfxCanvasImg.src=path+"resource/image/003.jpg";
-						gjfxCanvas = document.createElement("canvas");
-						gjfxCanvas.id="gjfxCanvas";
-						gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
-						gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
-						gjfxCanvas.width=gjfxCanvasWidth;
-						gjfxCanvas.height=gjfxCanvasHeight;
-						gjfxCanvasContext = gjfxCanvas.getContext("2d");
-						gjfxCanvasImg.onload=function(){
-							gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-							for(var i=0;i<list.length;i++){
-								if(i>=1){
-									var lr1=list[i-1];
-									var lr2=list[i];
-									setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
-									if(i==list.length-1)
-										setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
-								}
-							}
-							var preGjfxCanvas=document.getElementById("gjfxCanvas");
-							preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
-							var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
-							gjfxCanvasDiv.appendChild(gjfxCanvas);
-							loadGJFXCanvas(0);
-						}
-					}
-					else{
-						paintInterval=setInterval(function(){
-							var gjfxCanvasImg = new Image();
-							gjfxCanvasImg.src=path+"resource/image/003.jpg";
-							gjfxCanvas = document.createElement("canvas");
-							gjfxCanvas.id="gjfxCanvas";
-							gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
-							gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
-							gjfxCanvas.width=gjfxCanvasWidth;
-							gjfxCanvas.height=gjfxCanvasHeight;
-							gjfxCanvasContext = gjfxCanvas.getContext("2d");
-							gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
-							gjfxCanvasImg.onload=function(){
-								gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-								for(var i=0;i<=locRecListIndex;i++){
-									if(i>=1){
-										var lr1=list[i-1];
-										var lr2=list[i];
-										setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
-										//if(i==list.length-1){
-										if(i==locRecListIndex){
-											setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
-										}
-									}
-								}
-								var preGjfxCanvas=document.getElementById("gjfxCanvas");
-								preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
-								var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
-								gjfxCanvasDiv.appendChild(gjfxCanvas);
-								if(locRecListIndex==list.length-1){
-									//console.log(222);
-									locRecListIndex=0;
-									clearInterval(paintInterval);
-								}
-								else{
-									//console.log(111);
-									locRecListIndex++;
-								}
-							}
-						
-						},"1000");
-					}
+					locRecList=data.locRecList;
+					console.log("length==="+locRecList.length);
+					initGJFXCanvas(0);
 				}	
 			,"json");
 		}
+	}
+}
+	
+function initGJFXCanvas(reSizeFlag){
+	var staffName=$("#staff_sel option:selected").text().split("(")[0];
+	if(reSizeFlag==1){
+		var gjfxCanvasImg = new Image();
+		gjfxCanvasImg.src=path+"resource/image/003.jpg";
+		gjfxCanvas = document.createElement("canvas");
+		gjfxCanvas.id="gjfxCanvas";
+		gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+		gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+		gjfxCanvas.width=gjfxCanvasWidth;
+		gjfxCanvas.height=gjfxCanvasHeight;
+		gjfxCanvasContext = gjfxCanvas.getContext("2d");
+		gjfxCanvasImg.onload=function(){
+			gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+			for(var i=0;i<locRecList.length;i++){
+				if(i>=1){
+					var lr1=locRecList[i-1];
+					var lr2=locRecList[i];
+					setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+					if(i==locRecList.length-1)
+						setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+				}
+			}
+			var preGjfxCanvas=document.getElementById("gjfxCanvas");
+			preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+			var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+			gjfxCanvasDiv.appendChild(gjfxCanvas);
+			loadGJFXCanvas(0);
+		}
+	}
+	else{
+		paintInterval=setInterval(function(){
+			var gjfxCanvasImg = new Image();
+			gjfxCanvasImg.src=path+"resource/image/003.jpg";
+			gjfxCanvas = document.createElement("canvas");
+			gjfxCanvas.id="gjfxCanvas";
+			gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+			gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+			gjfxCanvas.width=gjfxCanvasWidth;
+			gjfxCanvas.height=gjfxCanvasHeight;
+			gjfxCanvasContext = gjfxCanvas.getContext("2d");
+			gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
+			gjfxCanvasImg.onload=function(){
+				gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+				for(var i=0;i<=locRecListIndex;i++){
+					if(i>=1){
+						var lr1=locRecList[i-1];
+						var lr2=locRecList[i];
+						setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+						//if(i==locRecList.length-1){
+						if(i==locRecListIndex){
+							setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+						}
+					}
+				}
+				var preGjfxCanvas=document.getElementById("gjfxCanvas");
+				preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+				var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+				gjfxCanvasDiv.appendChild(gjfxCanvas);
+				if(locRecListIndex==locRecList.length-1){
+					//console.log(222);
+					locRecListIndex=0;
+					clearInterval(paintInterval);
+				}
+				else{
+					//console.log(111);
+					locRecListIndex++;
+				}
+			}
+		
+		},"1000");
 	}
 }
 
@@ -350,7 +355,7 @@ body{
 		</div>
 		<div style="margin-top: 5px;">
 			压缩比<input type="number" id="ysb_inp" size="10" value="200"/>
-			<input type="button" value="查询" onclick="initGJFXCanvas(0);"/>
+			<input type="button" value="查询" onclick="getLocationRecords();"/>
 		</div>
 	</div>
 	<div class="gjfxCanvas_div" id="gjfxCanvas_div">

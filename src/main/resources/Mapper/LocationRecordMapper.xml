@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.positionPhZY.dao.LocationRecordMapper">
+ 	<insert id="add" parameterType="com.positionPhZY.entity.LocationRecord">
+ 		insert into location_record
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="altitude!=null">
+ 				altitude,
+ 			</if>
+ 			<if test="flag!=null">
+ 				flag,
+ 			</if>
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="latitude!=null">
+ 				latitude,
+ 			</if>
+ 			<if test="engineType!=null">
+ 				engineType,
+ 			</if>
+ 			<if test="speed!=null">
+ 				speed,
+ 			</if>
+ 			<if test="recordId!=null">
+ 				recordId,
+ 			</if>
+ 			<if test="voltUnit!=null">
+ 				voltUnit,
+ 			</if>
+ 			<if test="labelId!=null">
+ 				labelId,
+ 			</if>
+ 			<if test="gateId!=null">
+ 				gateId,
+ 			</if>
+ 			<if test="routerId!=null">
+ 				routerId,
+ 			</if>
+ 			<if test="routerMark!=null">
+ 				routerMark,
+ 			</if>
+ 			<if test="jGateId!=null">
+ 				jGateId,
+ 			</if>
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="state!=null">
+ 				state,
+ 			</if>
+ 			<if test="floor!=null">
+ 				floor,
+ 			</if>
+ 			<if test="routerFlowId!=null">
+ 				routerFlowId,
+ 			</if>
+ 			<if test="flowId!=null">
+ 				flowId,
+ 			</if>
+ 			<if test="direction!=null">
+ 				direction,
+ 			</if>
+ 			<if test="longitude!=null">
+ 				longitude,
+ 			</if>
+ 			<if test="entityId!=null">
+ 				entityId,
+ 			</if>
+ 			<if test="raiseTime2!=null">
+ 				raiseTime2,
+ 			</if>
+ 			<if test="uploadTime!=null">
+ 				uploadTime,
+ 			</if>
+ 			<if test="userId!=null">
+ 				userId,
+ 			</if>
+ 			<if test="beacons!=null">
+ 				beacons,
+ 			</if>
+ 			<if test="blockId!=null">
+ 				blockId,
+ 			</if>
+ 			<if test="intensity!=null">
+ 				intensity,
+ 			</if>
+ 			<if test="areaId!=null">
+ 				areaId,
+ 			</if>
+ 			<if test="absolute!=null">
+ 				absolute,
+ 			</if>
+ 			<if test="volt!=null">
+ 				volt,
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				raiseTime,
+ 			</if>
+ 			<if test="x!=null">
+ 				x,
+ 			</if>
+ 			<if test="y!=null">
+ 				y,
+ 			</if>
+ 			<if test="gpsType!=null">
+ 				gpsType,
+ 			</if>
+ 			<if test="z!=null">
+ 				z,
+ 			</if>
+ 			<if test="step!=null">
+ 				step,
+ 			</if>
+ 			<if test="rootAreaId!=null">
+ 				rootAreaId,
+ 			</if>
+ 			<if test="engineId!=null">
+ 				engineId,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="altitude!=null">
+ 				#{altitude},
+ 			</if>
+ 			<if test="flag!=null">
+ 				#{flag},
+ 			</if>
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="latitude!=null">
+ 				#{latitude},
+ 			</if>
+ 			<if test="engineType!=null">
+ 				#{engineType},
+ 			</if>
+ 			<if test="speed!=null">
+ 				#{speed},
+ 			</if>
+ 			<if test="recordId!=null">
+ 				#{recordId},
+ 			</if>
+ 			<if test="voltUnit!=null">
+ 				#{voltUnit},
+ 			</if>
+ 			<if test="labelId!=null">
+ 				#{labelId},
+ 			</if>
+ 			<if test="gateId!=null">
+ 				#{gateId},
+ 			</if>
+ 			<if test="routerId!=null">
+ 				#{routerId},
+ 			</if>
+ 			<if test="routerMark!=null">
+ 				#{routerMark},
+ 			</if>
+ 			<if test="jGateId!=null">
+ 				#{jGateId},
+ 			</if>
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="state!=null">
+ 				#{state},
+ 			</if>
+ 			<if test="floor!=null">
+ 				#{floor},
+ 			</if>
+ 			<if test="routerFlowId!=null">
+ 				#{routerFlowId},
+ 			</if>
+ 			<if test="flowId!=null">
+ 				#{flowId},
+ 			</if>
+ 			<if test="direction!=null">
+ 				#{direction},
+ 			</if>
+ 			<if test="longitude!=null">
+ 				#{longitude},
+ 			</if>
+ 			<if test="entityId!=null">
+ 				#{entityId},
+ 			</if>
+ 			<if test="raiseTime2!=null">
+ 				#{raiseTime2},
+ 			</if>
+ 			<if test="uploadTime!=null">
+ 				#{uploadTime},
+ 			</if>
+ 			<if test="userId!=null">
+ 				#{userId},
+ 			</if>
+ 			<if test="beacons!=null">
+ 				#{beacons},
+ 			</if>
+ 			<if test="blockId!=null">
+ 				#{blockId},
+ 			</if>
+ 			<if test="intensity!=null">
+ 				#{intensity},
+ 			</if>
+ 			<if test="areaId!=null">
+ 				#{areaId},
+ 			</if>
+ 			<if test="absolute!=null">
+ 				#{absolute},
+ 			</if>
+ 			<if test="volt!=null">
+ 				#{volt},
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				#{raiseTime},
+ 			</if>
+ 			<if test="x!=null">
+ 				#{x},
+ 			</if>
+ 			<if test="y!=null">
+ 				#{y},
+ 			</if>
+ 			<if test="gpsType!=null">
+ 				#{gpsType},
+ 			</if>
+ 			<if test="z!=null">
+ 				#{z},
+ 			</if>
+ 			<if test="step!=null">
+ 				#{step},
+ 			</if>
+ 			<if test="rootAreaId!=null">
+ 				#{rootAreaId},
+ 			</if>
+ 			<if test="engineId!=null">
+ 				#{engineId},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from location_record where id=#{id}
+	</select>
+	<select id="select" resultType="com.positionPhZY.entity.LocationRecord">
+		select * from location_record where uploadTime BETWEEN #{startTimeLong} and #{endTimeLong} ORDER BY uploadTime
+	</select>
+</mapper>

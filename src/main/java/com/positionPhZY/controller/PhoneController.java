@@ -73,6 +73,8 @@ public class PhoneController {
 	private EntityTypeService entityTypeService;
 	@Autowired
 	private LoginUserService loginUserService;
+	@Autowired
+	private LocationRecordService locationRecordService;
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -1491,8 +1493,10 @@ public class PhoneController {
 			*/
 			paramJO.put("tagId", tagId);
 			paramJO.put("areaId", "1");
-			paramJO.put("startTime", DateUtil.convertStringToLong(todayDate+" "+startTime));
-			paramJO.put("endTime", DateUtil.convertStringToLong(todayDate+" "+endTime));
+			Long startTimeLong = DateUtil.convertStringToLong(todayDate+" "+startTime);
+			Long endTimeLong = DateUtil.convertStringToLong(todayDate+" "+endTime);
+			paramJO.put("startTime", startTimeLong);
+			paramJO.put("endTime", endTimeLong);
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
@@ -1520,30 +1524,34 @@ public class PhoneController {
 			 {"altitude":5.9,"flag":0,"tagId":"BTT32003897","latitude":32.26546306070541,"engineType":null,"speed":8.294,"recordId":210610029309179778,"voltUnit":"V","labelId":null,"gateId":null,"routerId":"BTR13E2D61D","routerMark":273,"jGateId":null,"id":63728051,"state":0,"floor":1,"routerFlowId":121008,"flowId":603981959,"direction":1,"longitude":119.10932164579933,"entityId":24318,"raiseTime2":1624242054335,"uploadTime":1624242060236,"userId":"3897","beacons":"BTI24007039(3450),BTI24006196(12750)","blockId":null,"intensity":6866,"areaId":2,"absolute":true,"volt":3.7,"raiseTime":"2021-06-21T10:20:54.335+0800","x":103.137,"y":325.473,"gpsType":"wgs84","z":0,"step":4,"rootAreaId":1,"engineId":"a1"},
 			 {"altitude":5.9,"flag":0,"tagId":"BTT32003897","latitude":32.26546383313037,"engineType":null,"speed":5.871,"recordId":210610029309179515,"voltUnit":"V","labelId":"2160","gateId":"7036","routerId":"BTR0794E313","routerMark":274,"jGateId":"7036","id":63727945,"state":0,"floor":1,"routerFlowId":147867,"flowId":604047488,"direction":6,"longitude":119.10917778514415,"entityId":24318,"raiseTime2":1624242054474,"uploadTime":1624242054480,"userId":"3897","beacons":"BTI24007038(3050),BTI24007037(3250),BTI24007036(4500)","blockId":null,"intensity":3600,"areaId":2,"absolute":true,"volt":3.7,"raiseTime":"2021-06-21T10:20:54.474+0800","x":89.582,"y":325.559,"gpsType":"wgs84","z":0,"step":1,"rootAreaId":1,"engineId":"a1"}],"id":1,"jsonrpc":"2.0"}
 			 */
-			org.json.JSONArray resultLocRecJA = new org.json.JSONArray(resultJO.get("result").toString());
-			int rlrJALength = resultLocRecJA.length();
+
+			List<LocationRecord> locationRecordList = JSON.parseArray(resultJO.get("result").toString(),LocationRecord.class);
+			locationRecordService.add(locationRecordList);
+			locationRecordList=locationRecordService.select(Long.valueOf("1624241823588"),Long.valueOf("1624242060236"));
+			int lrListSize = locationRecordList.size();
 			//System.out.println("rlrJALength==="+rlrJALength);
 			//System.out.println("ysb==="+ysb);
-			double space = (double)rlrJALength/ysb;
+			double space = (double)lrListSize/ysb;
 			//System.out.println("space==="+space);
 			double cursor=0;
-			org.json.JSONArray locRecJA = new org.json.JSONArray();
-			for(int i=0;i<rlrJALength;i++) {
-				if(i==rlrJALength-1) {
+			List<LocationRecord> locRecList = new ArrayList<>();
+			for(int i=0;i<lrListSize;i++) {
+				if(i==lrListSize-1) {
 					//System.out.println("cursor1==="+cursor+",i==="+i);
-					JSONObject resultLocRecJO = (org.json.JSONObject)resultLocRecJA.get(i);
+					LocationRecord locationRecord = locationRecordList.get(i);
 					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
-					locRecJA.put(resultLocRecJO);
+					locRecList.add(locationRecord);
 				}
 				else if(i>=cursor) {
 					//System.out.println("cursor2==="+cursor+",i==="+i);
-					JSONObject resultLocRecJO = (org.json.JSONObject)resultLocRecJA.get(i);
+					LocationRecord locationRecord = locationRecordList.get(i);
 					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
-					locRecJA.put(resultLocRecJO);
+					locRecList.add(locationRecord);
 					cursor+=space;
 				}
 			}
-			resultMap.put("locRecList", JSON.parseArray(locRecJA.toString()));
+			System.out.println("==="+locRecList.size());
+			resultMap.put("locRecList", locRecList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

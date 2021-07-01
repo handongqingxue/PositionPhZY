@@ -96,7 +96,6 @@ function getLocationRecords(){
 }
 	
 function initGJFXCanvas(reSizeFlag){
-	console.log(111111111);
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
 	if(reSizeFlag==1){
 		var gjfxCanvasImg = new Image();
@@ -272,7 +271,7 @@ function setPointLocation(context,x1,y1,x2,y2){
 	context.stroke();
 	*/
 
-	console.log(x1+","+y1+","+x2+","+y2);
+	//console.log(x1+","+y1+","+x2+","+y2);
 	context.strokeStyle = 'red';//点填充
 	context.fillStyle='red';
 	context.lineWidth=arcR*1.5;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.positionPhZY.entity.LocationRecord;
+import com.positionPhZY.entity.*;
 
 /**
  * 这个类的方法返回的结果是固定的，当服务器瘫痪、接口不能访问时,临时调用这些方法

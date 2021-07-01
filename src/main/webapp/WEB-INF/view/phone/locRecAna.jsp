@@ -96,6 +96,7 @@ function getLocationRecords(){
 }
 	
 function initGJFXCanvas(reSizeFlag){
+	console.log(111111111);
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
 	if(reSizeFlag==1){
 		var gjfxCanvasImg = new Image();
@@ -160,12 +161,12 @@ function initGJFXCanvas(reSizeFlag){
 					clearInterval(paintInterval);
 				}
 				else{
-					//console.log(111);
+					//console.log("locRecListIndex==="+locRecListIndex);
 					locRecListIndex++;
 				}
 			}
 		
-		},"1000");
+		},"100");
 	}
 }
 

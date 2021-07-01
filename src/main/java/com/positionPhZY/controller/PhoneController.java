@@ -1539,13 +1539,13 @@ public class PhoneController {
 				if(i==lrListSize-1) {
 					//System.out.println("cursor1==="+cursor+",i==="+i);
 					LocationRecord locationRecord = locationRecordList.get(i);
-					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
+					//APIResultUtil.addMoreLocationRecord(locationRecord,locRecList);
 					locRecList.add(locationRecord);
 				}
 				else if(i>=cursor) {
 					//System.out.println("cursor2==="+cursor+",i==="+i);
 					LocationRecord locationRecord = locationRecordList.get(i);
-					//System.out.println(DateUtil.convertLongToString(resultLocRecJO.getLong("uploadTime"))+","+resultLocRecJO.getDouble("x")+","+resultLocRecJO.getDouble("y"));
+					//APIResultUtil.addMoreLocationRecord(locationRecord,locRecList);
 					locRecList.add(locationRecord);
 					cursor+=space;
 				}

@@ -1,6 +1,10 @@
 package com.positionPhZY.utils;
 
+import java.util.List;
+
 import org.json.JSONObject;
+
+import com.positionPhZY.entity.LocationRecord;
 
 /**
  * 这个类的方法返回的结果是固定的，当服务器瘫痪、接口不能访问时,临时调用这些方法
@@ -192,5 +196,54 @@ public class APIResultUtil {
 		resultJOSB.append("\"id\":1,\"jsonrpc\":\"2.0\"}");
 		
 		return new JSONObject(resultJOSB.toString());
+	}
+
+	public static void addMoreLocationRecord(LocationRecord nextLR,
+			List<LocationRecord> locRecList) {
+		// TODO Auto-generated method stub
+		if(locRecList.size()>0) {
+			LocationRecord preLR = locRecList.get(locRecList.size()-1);
+			Float preX = preLR.getX();
+			Float preY = preLR.getY();
+			Long preUploadTime = preLR.getUploadTime();
+			
+			Float nextX = nextLR.getX();
+			Float nextY = nextLR.getY();
+			Long nextUploadTime = nextLR.getUploadTime();
+			//System.out.println("+++"+(nextUploadTime-preUploadTime));
+			float zbcX=0;
+			float zbcY=0;
+			float zbSpaceX=0;
+			float zbSpaceY=0;
+			int lrCount=3;
+			if(nextX>preX) {
+				zbcX=nextX-preX;
+				zbSpaceX=zbcX/lrCount;
+			}
+			
+			if(nextY>preY) {
+				zbcY=nextY-preY;
+				zbSpaceY=zbcY/lrCount;
+			}
+			
+			if(zbSpaceX>0||zbSpaceY>0) {
+				for (int i = 0; i < lrCount; i++) {
+					LocationRecord lr = locRecList.get(locRecList.size()-1);
+					System.out.println(zbSpaceX+"==="+lr.getX()+"==="+(lr.getX()+zbSpaceX));
+					if(nextX>preX)
+						lr.setX(lr.getX()+zbSpaceX);
+					else if(nextX<preX)
+						lr.setX(lr.getX()-zbSpaceX);
+					
+					if(nextY>preY)
+						lr.setY(lr.getY()+zbSpaceY);
+					else if(nextY<preY)
+						lr.setY(lr.getY()-zbSpaceY);
+					locRecList.add(lr);
+				}
+				//System.out.println(zbSpaceX+","+zbSpaceY);
+			}
+			System.out.println("x1="+preX+",y2="+preY+",uploadTime2="+preUploadTime+",x2="+nextX+",y2="+nextY+",uploadTime2="+nextUploadTime);
+		}
 	}
 }

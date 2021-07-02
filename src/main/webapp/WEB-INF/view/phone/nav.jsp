@@ -53,7 +53,7 @@ function goPage(page){
 </head>
 <body>
 <div class="bottom_space_div"></div>
-<div class="bottom_div">
+<div class="bottom_div" id="bottom_div">
 	<div class="item_div ${param.page eq 'index'?'selected':''}" onclick="goPage('ssdw')">实时定位</div>
 	<div class="item_div ryss_div ${param.page eq 'staffSearch'?'selected':''}" onclick="goPage('ryss')">人员搜索</div>
 	<div class="item_div gjfx_div ${param.page eq 'locRecAna'?'selected':''}" onclick="goPage('gjfx')">轨迹分析</div>

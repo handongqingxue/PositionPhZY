@@ -1550,7 +1550,6 @@ public class PhoneController {
 					cursor+=space;
 				}
 			}
-			System.out.println("==="+locRecList.size());
 			resultMap.put("locRecList", locRecList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

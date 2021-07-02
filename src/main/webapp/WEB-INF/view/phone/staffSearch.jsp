@@ -33,49 +33,74 @@ var fontSize=50;
 var fontMarginLeft=45;
 $(function(){
 	jiSuanScale();
+	initRYSSCanvas(0,1);
+	checkPCOrPhone();
 });
+
+function checkPCOrPhone(){
+	//https://blog.csdn.net/p445098355/article/details/104272962
+    var system ={};  
+	var p = navigator.platform;       
+	system.win = p.indexOf("Win") == 0;  
+	system.mac = p.indexOf("Mac") == 0;  
+	system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);     
+	if(system.win||system.mac||system.xll){//如果是电脑
+		$("#ccs_but_div").css("display","block");
+	}
+	else{//如果是手机
+		$("#ccs_but_div").css("display","none");
+	}
+}
 
 function jiSuanScale(){
 	widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
 	heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
+	var windowHeight=$(window).height();
+	var topDivHeight=$("#top_div").css("height");
+	topDivHeight=topDivHeight.substring(0,topDivHeight.length-2);
+	var bottomDivHeight=$("#bottom_div").css("height");
+	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
+	$("#ryssCanvas_div").css("height",windowHeight-topDivHeight-bottomDivHeight+"px");
 }
 
-function initRYSSCanvas(reSizeFlag){
-	if(checkEntityName()){
-		var ryssCanvasImg = new Image();
-		ryssCanvasImg.src=path+"resource/image/003.jpg";
-		ryssCanvas = document.createElement("canvas");
-		ryssCanvas.id="ryssCanvas";
-		ryssCanvas.style.width=ryssCanvasStyleWidth+"px";
-		ryssCanvas.style.height=ryssCanvasStyleHeight+"px";
-		ryssCanvas.width=ryssCanvasWidth;
-		ryssCanvas.height=ryssCanvasHeight;
-		ryssCanvasContext = ryssCanvas.getContext("2d");
-		ryssCanvasImg.onload=function(){
-			ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
-			var entityName=$("#entityName_inp").val();
-			$.post("selectEntityLocation",
-				{entityName:entityName},
-				function(data){
-					if(data.status=="ok"){
-						var locationList=data.list;
-						for(var i=0;i<locationList.length;i++){
-							var location=locationList[i];
-							setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+function initRYSSCanvas(reloadFlag,reSizeFlag){
+	var ryssCanvasImg = new Image();
+	ryssCanvasImg.src=path+"resource/image/003.jpg";
+	ryssCanvas = document.createElement("canvas");
+	ryssCanvas.id="ryssCanvas";
+	ryssCanvas.style.width=ryssCanvasStyleWidth+"px";
+	ryssCanvas.style.height=ryssCanvasStyleHeight+"px";
+	ryssCanvas.width=ryssCanvasWidth;
+	ryssCanvas.height=ryssCanvasHeight;
+	ryssCanvasContext = ryssCanvas.getContext("2d");
+	ryssCanvasImg.onload=function(){
+		ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
+		if(reloadFlag==1){
+			if(checkEntityName()){
+				var entityName=$("#entityName_inp").val();
+				$.post("selectEntityLocation",
+					{entityName:entityName},
+					function(data){
+						if(data.status=="ok"){
+							var locationList=data.list;
+							for(var i=0;i<locationList.length;i++){
+								var location=locationList[i];
+								setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+							}
 						}
-						var preRyssCanvas=document.getElementById("ryssCanvas");
-						preRyssCanvas.parentNode.removeChild(preRyssCanvas);
-						var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
-						ryssCanvasDiv.appendChild(ryssCanvas);
+						else{
+							alert(data.message);
+						}
 					}
-					else{
-						alert(data.message);
-					}
-				}
-			,"json");
-			if(reSizeFlag==1)
-				loadRYSSCanvas(0);
+				,"json");
+			}
 		}
+		var preRyssCanvas=document.getElementById("ryssCanvas");
+		preRyssCanvas.parentNode.removeChild(preRyssCanvas);//ryssCanvas_div
+		var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
+		ryssCanvasDiv.appendChild(ryssCanvas);
+		if(reSizeFlag==1)
+			loadRYSSCanvas(0);
 	}
 }
 
@@ -152,7 +177,7 @@ function changeCanvasSize(flag){
 	atSpace=atSpace*mch/ryssCanvasStyleHeight;
 	fontSize=fontSize*mch/ryssCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ryssCanvasStyleWidth;
-	initRYSSCanvas(1);
+	initRYSSCanvas(1,1);
 }
 
 function setEntityLocation(context,x,y,name,floor){
@@ -194,31 +219,62 @@ function loadRYSSCanvas(flag){
 body{
 	margin: 0;
 }
-.main_div{
+.top_div{
 	width: 100%;
+	height: 40px;
+	background-color: #eee;
 }
-.main_div .tool_div{
-	width: 100%;
+.tool_div{
+	width: 275px;
+	margin:0 auto;
+}
+.tool_div .name_span{
+	margin-top:8px;
+	margin-left: 10px;
+	font-size:15px;
+	position: absolute;
+}
+.tool_div .entityName_inp{
+	width: 130px;
+	height: 20px;
+	margin-top:7px;
+	margin-left:60px;
+}
+.tool_div .search_but_div{
+	width: 50px;
+	height: 30px;
+	line-height: 30px;
+	margin-top:-28px;
+	margin-left:210px; 
+	color:#fff;
+	font-size:15px;
+	text-align:center;
+	background-color: #00f;
+	border-radius:5px;
 }
 .ryssCanvas_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
+	overflow: auto;
 }
 </style>
 <title>人员搜索</title>
 </head>
 <body>
-<div class="main_div" id="main_div">
+<div class="top_div" id="top_div">
 	<div class="tool_div">
-		名称:<input type="text" id="entityName_inp"/>
-		<input type="button" value="搜索" onclick="initRYSSCanvas(0);"/>
-	</div>
-	<div class="ryssCanvas_div" id="ryssCanvas_div">
-		<canvas id="ryssCanvas">
-		</canvas>
+		<span class="name_span">姓名:</span>
+		<input type="text" class="entityName_inp" id="entityName_inp"/>
+		<div class="search_but_div" onclick="initRYSSCanvas(1,0);">搜索</div>
 	</div>
 </div>
-<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
-<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
+<div class="ryssCanvas_div" id="ryssCanvas_div">
+	<canvas id="ryssCanvas">
+	</canvas>
+</div>
+<div id="ccs_but_div">
+	<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
+	<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
+</div>
 <%@include file="nav.jsp"%>
 </body>
 </html>

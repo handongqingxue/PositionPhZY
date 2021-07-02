@@ -18,8 +18,8 @@ var ryssCanvasMinWidth=720.52;
 var ryssCanvasMinHeight=670.49;
 var ryssCanvasMaxWidth=2841;
 var ryssCanvasMaxHeight=2643;
-var ryssCanvasStyleWidth=ryssCanvasMinWidth;
-var ryssCanvasStyleHeight=ryssCanvasMinHeight;
+var ryssCanvasStyleWidth=ryssCanvasMinWidth;//画布缩放时对应的宽度，默认是画布最小宽度，之后每次缩放都会变化
+var ryssCanvasStyleHeight=ryssCanvasMinHeight;//画布缩放时对应的长度，默认是画布最小长度，之后每次缩放都会变化
 var ryssCanvasWidth=ryssCanvasMaxWidth;
 var ryssCanvasHeight=ryssCanvasMaxHeight;
 var widthScale;
@@ -31,30 +31,19 @@ var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
+var locationList;
 $(function(){
 	jiSuanScale();
+	initRYSSCanvasDivHeight();
 	initRYSSCanvas(0,1);
-	checkPCOrPhone();
 });
-
-function checkPCOrPhone(){
-	//https://blog.csdn.net/p445098355/article/details/104272962
-    var system ={};  
-	var p = navigator.platform;       
-	system.win = p.indexOf("Win") == 0;  
-	system.mac = p.indexOf("Mac") == 0;  
-	system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);     
-	if(system.win||system.mac||system.xll){//如果是电脑
-		$("#ccs_but_div").css("display","block");
-	}
-	else{//如果是手机
-		$("#ccs_but_div").css("display","none");
-	}
-}
 
 function jiSuanScale(){
 	widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
 	heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
+}
+
+function initRYSSCanvasDivHeight(){
 	var windowHeight=$(window).height();
 	var topDivHeight=$("#top_div").css("height");
 	topDivHeight=topDivHeight.substring(0,topDivHeight.length-2);
@@ -82,7 +71,7 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 					{entityName:entityName},
 					function(data){
 						if(data.status=="ok"){
-							var locationList=data.list;
+							locationList=data.list;
 							for(var i=0;i<locationList.length;i++){
 								var location=locationList[i];
 								setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
@@ -95,6 +84,14 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 				,"json");
 			}
 		}
+		else{
+			if(locationList!=undefined){//判断集合是否存在，第一次访问页面是不存在的，搜索之后才存在
+				for(var i=0;i<locationList.length;i++){
+					var location=locationList[i];
+					setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+				}
+			}
+		}
 		var preRyssCanvas=document.getElementById("ryssCanvas");
 		preRyssCanvas.parentNode.removeChild(preRyssCanvas);//ryssCanvas_div
 		var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
@@ -102,39 +99,6 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 		if(reSizeFlag==1)
 			loadRYSSCanvas(0);
 	}
-}
-
-function changeCanvasSize(flag){
-	loadSSDWCanvas(flag);
-    var mcw=ssdwCanvasStyleWidth;
-	var mch=ssdwCanvasStyleHeight;
-	if(flag==1)
-		ssdwCanvasStyleWidth+=30;
-	else
-		ssdwCanvasStyleWidth-=30;
-	
-	if(ssdwCanvasStyleWidth<ssdwCanvasMinWidth){
-		ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
-	}
-	else if(ssdwCanvasStyleWidth>ssdwCanvasMaxWidth){
-		ssdwCanvasStyleWidth=ssdwCanvasMaxWidth;
-	}
-
-	if(ssdwCanvasStyleHeight<ssdwCanvasMinHeight){
-		ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
-	}
-	else if(ssdwCanvasStyleHeight>ssdwCanvasMaxHeight){
-		ssdwCanvasStyleHeight=ssdwCanvasMaxHeight;
-	}
-	ssdwCanvasStyleHeight=ssdwCanvasStyleWidth*ssdwCanvasHeight/ssdwCanvasWidth;
-	arcR=arcR*mcw/ssdwCanvasStyleWidth;
-	rectWidth=rectWidth*mcw/ssdwCanvasStyleWidth;
-	rectHeight=rectHeight*mch/ssdwCanvasStyleHeight;
-	arSpace=arSpace*mch/ssdwCanvasStyleHeight;
-	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
-	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
-	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
-	initSSDWCanvas(1);
 }
 
 function checkEntityName(){
@@ -147,14 +111,21 @@ function checkEntityName(){
 		return true;
 }
 
-function changeCanvasSize(flag){
-	loadRYSSCanvas(flag);
+//缩放画布,bigFlag在autoFlag为false手动缩放，通过缩放比控制时不传
+function changeCanvasSize(bigFlag,autoFlag){
+	loadRYSSCanvas(1);
     var mcw=ryssCanvasStyleWidth;
 	var mch=ryssCanvasStyleHeight;
-	if(flag==1)
-		ryssCanvasStyleWidth+=30;
-	else
-		ryssCanvasStyleWidth-=30;
+	if(autoFlag==1){
+		if(bigFlag==1)
+			ryssCanvasStyleWidth+=30;
+		else
+			ryssCanvasStyleWidth-=30;
+	}
+	else{
+		var scale=$("#scale_inp").val();
+		ryssCanvasStyleWidth=ryssCanvasMinWidth+ryssCanvasMinWidth*(scale-100)/100;
+	}
 	
 	if(ryssCanvasStyleWidth<ryssCanvasMinWidth){
 		ryssCanvasStyleWidth=ryssCanvasMinWidth;
@@ -162,6 +133,7 @@ function changeCanvasSize(flag){
 	else if(ryssCanvasStyleWidth>ryssCanvasMaxWidth){
 		ryssCanvasStyleWidth=ryssCanvasMaxWidth;
 	}
+	$("#scale_inp").val((ryssCanvasStyleWidth/ryssCanvasMinWidth).toFixed(2)*100);
 
 	if(ryssCanvasStyleHeight<ryssCanvasMinHeight){
 		ryssCanvasStyleHeight=ryssCanvasMinHeight;
@@ -177,7 +149,8 @@ function changeCanvasSize(flag){
 	atSpace=atSpace*mch/ryssCanvasStyleHeight;
 	fontSize=fontSize*mch/ryssCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ryssCanvasStyleWidth;
-	initRYSSCanvas(1,1);
+	
+	initRYSSCanvas(0,1);
 }
 
 function setEntityLocation(context,x,y,name,floor){
@@ -201,16 +174,16 @@ function setEntityLocation(context,x,y,name,floor){
 }
 
 function loadRYSSCanvas(flag){
-	var smallBut=$("#small_but");
-	var bigBut=$("#big_but");
+	var smallButDiv=$("#small_but_div");
+	var bigButDiv=$("#big_but_div");
 	if(flag==1){
-		smallBut.attr("disabled",true);
-		bigBut.attr("disabled",true);
+		smallButDiv.removeAttr("onclick");
+		bigButDiv.removeAttr("onclick");
 	}
 	else{
 		setTimeout(function(){
-			smallBut.attr("disabled",false);
-			bigBut.attr("disabled",false);
+			smallButDiv.attr("onclick","changeCanvasSize(0,1)");
+			bigButDiv.attr("onclick","changeCanvasSize(1,1)");
 		},"1000");
 	}
 }
@@ -225,32 +198,59 @@ body{
 	background-color: #eee;
 }
 .tool_div{
-	width: 275px;
+	width: 313px;
 	margin:0 auto;
 }
 .tool_div .name_span{
 	margin-top:8px;
-	margin-left: 10px;
 	font-size:15px;
 	position: absolute;
 }
 .tool_div .entityName_inp{
-	width: 130px;
+	width: 90px;
 	height: 20px;
 	margin-top:7px;
-	margin-left:60px;
+	margin-left:40px;
 }
 .tool_div .search_but_div{
 	width: 50px;
 	height: 30px;
 	line-height: 30px;
 	margin-top:-28px;
-	margin-left:210px; 
+	margin-left:147px; 
 	color:#fff;
 	font-size:15px;
 	text-align:center;
 	background-color: #00f;
 	border-radius:5px;
+}
+.scale_set_div{
+	margin-top:-25px;
+	float: right;
+}
+.scale_set_div .but_div{
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	color:#fff;
+	text-align:center; 
+	background-color: #00f;
+	border-radius:5px;
+}
+.scale_set_div .big_but_div{
+	margin-top:-20px;
+	margin-left: 85px;
+}
+.scale_set_div .scale_inp{
+	width:30px;
+	margin-top: -28px;
+	margin-left:25px;
+	text-align: center;
+}
+.scale_set_div .scale_fuhao_span{
+	margin-top: -22px;
+	margin-left:5px;
+	position: absolute;
 }
 .ryssCanvas_div{
 	width: 100%;
@@ -265,15 +265,17 @@ body{
 		<span class="name_span">姓名:</span>
 		<input type="text" class="entityName_inp" id="entityName_inp"/>
 		<div class="search_but_div" onclick="initRYSSCanvas(1,0);">搜索</div>
+		<div class="scale_set_div">
+			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(0,1);">-</div>
+			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,0)"/>
+			<span class="scale_fuhao_span">%</span>
+			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(1,1);">+</div>
+		</div>
 	</div>
 </div>
 <div class="ryssCanvas_div" id="ryssCanvas_div">
 	<canvas id="ryssCanvas">
 	</canvas>
-</div>
-<div id="ccs_but_div">
-	<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
-	<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
 </div>
 <%@include file="nav.jsp"%>
 </body>

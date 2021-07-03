@@ -36,6 +36,7 @@ var fontSize=50;
 var fontMarginLeft=45;
 var selectedFloorValue="";
 $(function(){
+	showSSTJDiv(false);
 	initLabelListDiv();
 	jiSuanScale();
 	//initSSDWCanvas(0);
@@ -47,6 +48,19 @@ $(function(){
 function jiSuanScale(){
 	widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
 	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
+}
+
+function showSSTJDiv(flag){
+	var xssstjButImg=$("#xssstj_but_img");
+	var sstjDiv=$("#sstj_div");
+	if(flag){
+		xssstjButImg.css("display","none");
+		sstjDiv.css("display","block");
+	}
+	else{
+		xssstjButImg.css("display","block");
+		sstjDiv.css("display","none");
+	}
 }
 
 function summaryOnlineData(){
@@ -242,62 +256,51 @@ function loadSSDWCanvas(flag){
 		},"1000");
 	}
 }
-
-function showDutySel(){
-	var dutySel=$("#duty_sel");
-	var display=dutySel.css("display");
-	if(display=="none"){
-		$("#show_duty_but_div").text("<");
-		dutySel.css("display","block");
-	}
-	else{
-		$("#show_duty_but_div").text(">");
-		dutySel.css("display","none");
-	}
-}
-
-function showLabelListDiv(){
-	var labelListDiv=$("#label_list_div");
-	var display=labelListDiv.css("display");
-	if(display=="none"){
-		$("#show_label_but_div").text("隐藏标签");
-		labelListDiv.css("display","block");
-	}
-	else{
-		$("#show_label_but_div").text("显示标签");
-		labelListDiv.css("display","none");
-	}
-}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
 }
-.main_div{
+.xssstj_but_img{
+	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
+}
+.sstj_div{
 	width: 100%;
+	padding:1px;
+	background-color: #F6F6F6;
+	position: fixed;
 }
-.main_div .tool_div{
-	width: 100%;
+.sstj_div .row_close_div{
+	width: 100%;height: 24px;
 }
-.show_duty_but_div{
-	width: 30px;height: 30px;line-height: 30px;margin-top:-30px;margin-left:90px;text-align: center;
+.sstj_div .row_dtrs_div,.sstj_div .row_duty_div{
+	width: 100%;height: 40px;line-height: 40px;
 }
-.duty_sel{
-	height: 30px;margin-top:-30px;margin-left: 120px;display: none;
+.sstj_div .row_label_div{
+	width: 100%;margin: 10px 0 10px;
 }
-.show_label_but_div{
-	width: 100px;height: 30px;line-height: 30px;text-align: center;
+.sstj_div .close_but_div{
+	margin-top: 3px;
+	margin-right: 20px;
+	color: #636468;
+	float: right;
 }
-.label_list_div{
-	width: 150px;margin-left: 120px;margin-top: -30px;position: absolute;display: none;
+.sstj_div .dtrs_span,.sstj_div .duty_span,.sstj_div .label_span{
+	margin-left: 15px;color: #636468;font-size: 15px;
 }
-.label_list_div .item_div{
-	width: 100%;height: 30px;line-height: 30px;
+.sstj_div .floor_sel,.sstj_div .duty_sel{
+	width: 150px;height: 25px;line-height: 25px;margin-left:25px;color: #636468;
 }
-.label_list_div .item_div .select_cb{
+.sstj_div .label_list_div{
+	width: 150px;height: 270px;margin-top: -25px;margin-left: 104px;border: #999 solid 1px;border-radius:5px;overflow: auto; 
+}
+.sstj_div .label_list_div .item_div{
+	width: 100%;height: 30px;line-height: 30px;color: #636468;
+}
+.sstj_div .label_list_div .item_div .select_cb{
 	margin-top: 10px;
 }
-.label_list_div .item_div .name_span{
+.sstj_div .label_list_div .item_div .name_span{
 	margin-left: 5px;
 }
 .ssdwCanvas_div{
@@ -307,33 +310,30 @@ body{
 <title>首页</title>
 </head>
 <body>
-<div class="main_div" id="main_div">
-	<div class="tool_div">
-		<div>
-			<select id="floor_sel" onchange="initSSDWCanvas(0);">
-				<!-- 
-				<option value="">总图</option>
-				<option value="1">1层</option>
-				<option value="2">2层</option>
-				<option value="3">3层</option>
-				<option value="4">4层</option>
-				<option value="5">5层</option>
-				 -->
-			</select>
-			<div class="show_duty_but_div" id="show_duty_but_div" onclick="showDutySel();">></div>
-			<select class="duty_sel" id="duty_sel">
-			</select>
-		</div>
-		<div>
-			<div class="show_label_but_div" id="show_label_but_div" onclick="showLabelListDiv();">显示标签</div>
-			<div class="label_list_div" id="label_list_div">
-			</div>
+<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
+<div class="sstj_div" id="sstj_div">
+	<div class="row_close_div">
+		<div class="close_but_div" onclick="showSSTJDiv(false);">X</div>
+	</div>
+	<div class="row_dtrs_div">
+		<span class="dtrs_span">地图人数</span>
+		<select class="floor_sel" id="floor_sel" onchange="initSSDWCanvas(0);">
+		</select>
+	</div>
+	<div class="row_duty_div">
+		<span class="duty_span">实体人数</span>
+		<select class="duty_sel" id="duty_sel">
+		</select>
+	</div>
+	<div class="row_label_div">
+		<span class="label_span">标签</span>
+		<div class="label_list_div" id="label_list_div">
 		</div>
 	</div>
-	<div class="ssdwCanvas_div" id="ssdwCanvas_div">
-		<canvas id="ssdwCanvas">
-		</canvas>
-	</div>
+</div>
+<div class="ssdwCanvas_div" id="ssdwCanvas_div">
+	<canvas id="ssdwCanvas">
+	</canvas>
 </div>
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>

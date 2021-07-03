@@ -55,27 +55,22 @@ function jiSuanScale(){
 
 function initGJFXCanvasDivHeight(){
 	var windowHeight=$(window).height();
-	var topDivHeight=$("#top_div").css("height");
-	topDivHeight=topDivHeight.substring(0,topDivHeight.length-2);
 	var bottomDivHeight=$("#bottom_div").css("height");
 	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
-	$("#gjfxCanvas_div").css("height",windowHeight-topDivHeight-bottomDivHeight+"px");
+	$("#gjfxCanvas_div").css("height",windowHeight-bottomDivHeight+"px");
 }
 
 function showSSTJDiv(){
 	var sstjDiv=$("#sstj_div");
 	var display=sstjDiv.css("display");
-	var xssstj;
 	if(display=="none"){
-		xssstj="隐藏";
+		$("#xssstj_but_img").css("display","none");
 		sstjDiv.css("display","block");
 	}
 	else{
-		xssstj="显示";
+		$("#xssstj_but_img").css("display","block");
 		sstjDiv.css("display","none");
 	}
-	var xssstjButDiv=$("#xssstj_but_div");
-	xssstjButDiv.text(xssstj+"搜索条件");
 }
 
 function checkStaff(){
@@ -224,19 +219,18 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 	}
 }
 
-function changeCanvasSize(bigFlag,autoFlag){
+function changeCanvasSize(bigFlag,resetFlag){
 	loadGJFXCanvas(true);
     var mcw=gjfxCanvasStyleWidth;
 	var mch=gjfxCanvasStyleHeight;
-	if(autoFlag){
-		if(bigFlag)
-			gjfxCanvasStyleWidth+=30;
-		else
-			gjfxCanvasStyleWidth-=30;
+	if(resetFlag){
+		gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
 	}
 	else{
-		var scale=$("#scale_inp").val();
-		gjfxCanvasStyleWidth=gjfxCanvasMinWidth+gjfxCanvasMinWidth*(scale-100)/100;
+		if(bigFlag)
+			gjfxCanvasStyleWidth+=gjfxCanvasMinWidth*0.2;
+		else
+			gjfxCanvasStyleWidth-=gjfxCanvasMinWidth*0.2;
 	}
 	
 	if(gjfxCanvasStyleWidth<gjfxCanvasMinWidth){
@@ -245,7 +239,6 @@ function changeCanvasSize(bigFlag,autoFlag){
 	else if(gjfxCanvasStyleWidth>gjfxCanvasMaxWidth){
 		gjfxCanvasStyleWidth=gjfxCanvasMaxWidth;
 	}
-	$("#scale_inp").val((gjfxCanvasStyleWidth/gjfxCanvasMinWidth).toFixed(2)*100);
 
 	if(gjfxCanvasStyleHeight<gjfxCanvasMinHeight){
 		gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
@@ -365,8 +358,8 @@ function loadGJFXCanvas(flag){
 	}
 	else{
 		reSizeTimeout=setTimeout(function(){
-			smallButDiv.attr("onclick","changeCanvasSize(false,true)");
-			bigButDiv.attr("onclick","changeCanvasSize(true,true)");
+			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
+			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
 			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
@@ -376,67 +369,49 @@ function loadGJFXCanvas(flag){
 body{
 	margin: 0;
 }
-.top_div{
-	width: 100%;
-	height: 40px;
-	background-color: #eee;
-}
-.tool_div{
-	width: 250px;
-	height: 40px;
-	margin: 0 auto;
-	padding: 1px;
-}
-.xssstj_but_div{
-	width: 120px;
-	height:30px;
-	line-height:30px;
-	margin-top:5px;
-	color: #fff;
-	font-size:15px;
-	text-align: center;
-	background-color: #00f;
-	border-radius:5px;
+.xssstj_but_img{
+	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
 }
 .scale_set_div{
-	margin-top:-25px;
-	float: right;
+	width:30px;
+	height:100px;
+	right:10px;
+	bottom:60px;
+	position: fixed;
 }
 .scale_set_div .but_div{
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	color:#fff;
+	width: 30px;
+	height: 30px;
+	line-height: 27px;
+	color:#999;
+	font-size:25px;
 	text-align:center; 
-	background-color: #00f;
-	border-radius:5px;
+	background-color: #F6F6F6;
+}
+.scale_set_div .reset_but_div{
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 16px;
 }
 .scale_set_div .big_but_div{
-	margin-top:-20px;
-	margin-left: 85px;
+	margin-top:3px;
 }
-.scale_set_div .scale_inp{
-	width:30px;
-	margin-top: -28px;
-	margin-left:25px;
-	text-align: center;
-}
-.scale_set_div .scale_fuhao_span{
-	margin-top: -22px;
-	margin-left:5px;
-	position: absolute;
+.scale_set_div .small_but_div{
+	border-top: #999 solid 1px;
 }
 .sstj_div{
 	width: 100%;
-	margin-top: 3px;
 	padding:1px;
-	background-color: #eee;
+	background-color: #F6F6F6;
 	position: fixed;
-	border-radius:5px;
 	display: block;
 }
+.sstj_div .row_close_div{
+	width: 100%;height: 24px;
+}
 .sstj_div .row_ry_div{
-	width: 100%;height: 40px;line-height: 40px;margin-top: 5px;
+	width: 100%;height: 40px;line-height: 40px;
 }
 .sstj_div .row_sj_div{
 	width: 100%;height: 30px;line-height: 30px;
@@ -444,11 +419,20 @@ body{
 .sstj_div .row_ysb_div{
 	width: 100%;height: 42px;line-height: 42px;margin-bottom: 10px;
 }
+.sstj_div .close_but_div{
+	margin-top: 3px;
+	margin-right: 20px;
+	color: #636468;
+	float: right;
+}
 .sstj_div .ry_span,.sstj_div .sj_span,.sstj_div .ysb_span{
-	margin-left: 15px;font-size: 15px;
+	margin-left: 15px;color: #636468;font-size: 15px;
 }
 .sstj_div .staff_sel{
-	width: 254px;height: 26px;	
+	width: 257px;height: 25px;line-height: 25px;margin-left:25px;color: #636468;
+}
+.sstj_div .td_cal{
+	width: 90px;margin-left: 25px;color: #636468;border-color: #95B8E7;
 }
 .sstj_div .stp_div{
 	margin-top: -30px;margin-left: 183px;
@@ -456,8 +440,17 @@ body{
 .sstj_div .etp_div{
 	margin-top: 5px;margin-left: 183px;
 }
+.sstj_div .stp_div select,.sstj_div .etp_div select{
+	height: 25px;
+	line-height: 25px;
+	color: #636468;
+}
 .sstj_div .ysb_inp{
 	width: 85px;
+	height: 23px;
+	line-height: 23px;
+	margin-left: 10px;
+	color: #636468;
 }
 .sstj_div .search_but_div{
 	width: 50px;
@@ -468,7 +461,7 @@ body{
 	color:#fff;
 	font-size:15px;
 	text-align:center;
-	background-color: #00f;
+	background-color: #1777FF;
 	border-radius:5px;
 }
 .gjfxCanvas_div{
@@ -479,26 +472,26 @@ body{
 <title>轨迹分析</title>
 </head>
 <body>
-<div class="top_div" id="top_div">
-	<div class="tool_div">
-		<div class="xssstj_but_div" id="xssstj_but_div" onclick="showSSTJDiv();"></div>
-		<div class="scale_set_div">
-			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(false,true);">-</div>
-			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,false)"/>
-			<span class="scale_fuhao_span">%</span>
-			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,true);">+</div>
-		</div>
+<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv();">
+<div class="scale_set_div">
+	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
+		<img alt="" src="<%=basePath %>resource/image/006.png" style="margin-top: 5px;">
 	</div>
+	<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,false);">+</div>
+	<div class="but_div small_but_div" id="small_but_div" onclick="changeCanvasSize(false,false);">-</div>
 </div>
 <div class="sstj_div" id="sstj_div">
+	<div class="row_close_div">
+		<div class="close_but_div" onclick="showSSTJDiv();">X</div>
+	</div>
 	<div class="row_ry_div">
-		<span class="ry_span">人&nbsp;&nbsp;&nbsp;员：</span>
+		<span class="ry_span">人员</span>
 		<select class="staff_sel" id="staff_sel">
 		</select>
 	</div>
 	<div class="row_sj_div">
-		<span class="sj_span">时&nbsp;&nbsp;&nbsp;间：</span>
-		<input  type="text" class="Wdate" id="td_cal" style="width: 90px;" onclick="WdatePicker()" readonly="readonly"/>
+		<span class="sj_span">时间</span>
+		<input  type="text" class="Wdate td_cal" id="td_cal" onclick="WdatePicker()" readonly="readonly"/>
 		<div class="stp_div">
 			<select id="sth_sel">
 			</select>:
@@ -519,8 +512,8 @@ body{
 		</div>
 	</div>
 	<div class="row_ysb_div">
-		<span class="ysb_span">压缩比：</span>
-		<input class="ysb_inp" id="ysb_inp" type="number" value="200"/>
+		<span class="ysb_span">压缩比</span>
+		<input class="ysb_inp" id="ysb_inp" type="text" value="200" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
 		<div class="search_but_div" onclick="getLocationRecords();">查询</div>
 	</div>
 </div>

@@ -34,10 +34,10 @@ function goPage(page){
 	width: 100%;height: 50px;line-height: 50px;bottom: 0;position: fixed;
 }
 .bottom_div .item_div{
-	width: 25%;height: 50px;text-align: center;background-color: #eee;
+	width: 25%;height: 50px;text-align: center;color:#636468;background-color: #F6F6F6;
 }
 .bottom_div .selected{
-	color: #fff;background-color: #00f;
+	color: #1777FF;font-weight: bold;
 }
 .bottom_div .ryss_div{
 	margin-top: -50px;margin-left: 25%;

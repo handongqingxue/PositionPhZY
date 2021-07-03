@@ -34,6 +34,7 @@ var fontMarginLeft=45;
 var reSizeTimeout;
 var locationList;
 $(function(){
+	showSSTJDiv(false);
 	jiSuanScale();
 	initRYSSCanvasDivHeight();
 	initRYSSCanvas(false,true);
@@ -46,11 +47,22 @@ function jiSuanScale(){
 
 function initRYSSCanvasDivHeight(){
 	var windowHeight=$(window).height();
-	var topDivHeight=$("#top_div").css("height");
-	topDivHeight=topDivHeight.substring(0,topDivHeight.length-2);
 	var bottomDivHeight=$("#bottom_div").css("height");
 	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
-	$("#ryssCanvas_div").css("height",windowHeight-topDivHeight-bottomDivHeight+"px");
+	$("#ryssCanvas_div").css("height",windowHeight-bottomDivHeight+"px");
+}
+
+function showSSTJDiv(flag){
+	var xssstjButImg=$("#xssstj_but_img");
+	var sstjDiv=$("#sstj_div");
+	if(flag){
+		xssstjButImg.css("display","none");
+		sstjDiv.css("display","block");
+	}
+	else{
+		xssstjButImg.css("display","block");
+		sstjDiv.css("display","none");
+	}
 }
 
 function initRYSSCanvas(reloadFlag,reSizeFlag){
@@ -71,6 +83,7 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 				$.post("selectEntityLocation",
 					{entityName:entityName},
 					function(data){
+						showSSTJDiv(false);
 						if(data.status=="ok"){
 							locationList=data.list;
 							for(var i=0;i<locationList.length;i++){
@@ -112,20 +125,18 @@ function checkEntityName(){
 		return true;
 }
 
-//缩放画布,bigFlag在autoFlag为false手动缩放，通过缩放比控制时不传
-function changeCanvasSize(bigFlag,autoFlag){
+function changeCanvasSize(bigFlag,resetFlag){
 	loadRYSSCanvas(true);
     var mcw=ryssCanvasStyleWidth;
 	var mch=ryssCanvasStyleHeight;
-	if(autoFlag){
-		if(bigFlag)
-			ryssCanvasStyleWidth+=30;
-		else
-			ryssCanvasStyleWidth-=30;
+	if(resetFlag){
+		ryssCanvasStyleWidth=ryssCanvasMinWidth;
 	}
 	else{
-		var scale=$("#scale_inp").val();
-		ryssCanvasStyleWidth=ryssCanvasMinWidth+ryssCanvasMinWidth*(scale-100)/100;
+		if(bigFlag)
+			ryssCanvasStyleWidth+=ryssCanvasMinWidth*0.2;
+		else
+			ryssCanvasStyleWidth-=ryssCanvasMinWidth*0.2;
 	}
 	
 	if(ryssCanvasStyleWidth<ryssCanvasMinWidth){
@@ -134,7 +145,6 @@ function changeCanvasSize(bigFlag,autoFlag){
 	else if(ryssCanvasStyleWidth>ryssCanvasMaxWidth){
 		ryssCanvasStyleWidth=ryssCanvasMaxWidth;
 	}
-	$("#scale_inp").val((ryssCanvasStyleWidth/ryssCanvasMinWidth).toFixed(2)*100);
 
 	if(ryssCanvasStyleHeight<ryssCanvasMinHeight){
 		ryssCanvasStyleHeight=ryssCanvasMinHeight;
@@ -183,8 +193,8 @@ function loadRYSSCanvas(flag){
 	}
 	else{
 		reSizeTimeout=setTimeout(function(){
-			smallButDiv.attr("onclick","changeCanvasSize(false,true)");
-			bigButDiv.attr("onclick","changeCanvasSize(true,true)");
+			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
+			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
 			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
@@ -194,66 +204,80 @@ function loadRYSSCanvas(flag){
 body{
 	margin: 0;
 }
-.top_div{
+.xssstj_but_img{
+	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
+}
+
+.scale_set_div{
+	width:30px;
+	height:100px;
+	right:10px;
+	bottom:60px;
+	position: fixed;
+}
+.scale_set_div .but_div{
+	width: 30px;
+	height: 30px;
+	line-height: 27px;
+	color:#999;
+	font-size:25px;
+	text-align:center; 
+	background-color: #F6F6F6;
+}
+.scale_set_div .reset_but_div{
+	line-height: 30px;
+}
+.scale_set_div .reset_but_div img{
+	margin-top: 9px;
+}
+.scale_set_div .big_but_div{
+	margin-top:3px;
+}
+.scale_set_div .small_but_div{
+	border-top: #999 solid 1px;
+}
+
+.sstj_div{
 	width: 100%;
-	height: 40px;
-	background-color: #eee;
+	padding:1px;
+	background-color: #F6F6F6;
+	position: fixed;
 }
-.tool_div{
-	width: 313px;
-	margin:0 auto;
+.sstj_div .row_close_div{
+	width: 100%;height: 24px;
 }
-.tool_div .name_span{
-	margin-top:8px;
-	font-size:15px;
-	position: absolute;
+.sstj_div .row_name_div{
+	width: 100%;height: 40px;line-height: 40px;margin-bottom: 10px;
 }
-.tool_div .entityName_inp{
-	width: 90px;
-	height: 20px;
-	margin-top:7px;
-	margin-left:40px;
+.sstj_div .close_but_div{
+	margin-top: 3px;
+	margin-right: 20px;
+	color: #636468;
+	float: right;
 }
-.tool_div .search_but_div{
+.sstj_div .name_span{
+	margin-left: 15px;color: #636468;font-size: 15px;
+}
+.sstj_div .entityName_inp{
+	width: 130px;
+	height: 23px;
+	line-height: 23px;
+	margin-left: 10px;
+	color: #636468;
+}
+.sstj_div .search_but_div{
 	width: 50px;
 	height: 30px;
 	line-height: 30px;
-	margin-top:-28px;
-	margin-left:147px; 
+	margin-top:-34px;
+	margin-left:213px; 
 	color:#fff;
 	font-size:15px;
 	text-align:center;
-	background-color: #00f;
+	background-color: #1777FF;
 	border-radius:5px;
 }
-.scale_set_div{
-	margin-top:-25px;
-	float: right;
-}
-.scale_set_div .but_div{
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	color:#fff;
-	text-align:center; 
-	background-color: #00f;
-	border-radius:5px;
-}
-.scale_set_div .big_but_div{
-	margin-top:-20px;
-	margin-left: 85px;
-}
-.scale_set_div .scale_inp{
-	width:30px;
-	margin-top: -28px;
-	margin-left:25px;
-	text-align: center;
-}
-.scale_set_div .scale_fuhao_span{
-	margin-top: -22px;
-	margin-left:5px;
-	position: absolute;
-}
+
 .ryssCanvas_div{
 	width: 100%;
 	overflow: auto;
@@ -262,17 +286,22 @@ body{
 <title>人员搜索</title>
 </head>
 <body>
-<div class="top_div" id="top_div">
-	<div class="tool_div">
-		<span class="name_span">姓名:</span>
+<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
+<div class="scale_set_div">
+	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
+		<img alt="" src="<%=basePath %>resource/image/006.png">
+	</div>
+	<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,false);">+</div>
+	<div class="but_div small_but_div" id="small_but_div" onclick="changeCanvasSize(false,false);">-</div>
+</div>
+<div class="sstj_div" id="sstj_div">
+	<div class="row_close_div">
+		<div class="close_but_div" onclick="showSSTJDiv(false);">X</div>
+	</div>
+	<div class="row_name_div">
+		<span class="name_span">姓名</span>
 		<input type="text" class="entityName_inp" id="entityName_inp"/>
 		<div class="search_but_div" onclick="initRYSSCanvas(true,false);">搜索</div>
-		<div class="scale_set_div">
-			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(false,true);">-</div>
-			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,false)"/>
-			<span class="scale_fuhao_span">%</span>
-			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,true);">+</div>
-		</div>
 	</div>
 </div>
 <div class="ryssCanvas_div" id="ryssCanvas_div">

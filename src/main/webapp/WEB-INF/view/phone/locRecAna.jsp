@@ -44,11 +44,22 @@ $(function(){
 	initStartTimePickerDiv();
 	initEndTimePickerDiv();
 	jiSuanScale();
+	initGJFXCanvasDivHeight();
+	initGJFXCanvas(false,false);
 });
 
 function jiSuanScale(){
 	widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
 	heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+}
+
+function initGJFXCanvasDivHeight(){
+	var windowHeight=$(window).height();
+	var topDivHeight=$("#top_div").css("height");
+	topDivHeight=topDivHeight.substring(0,topDivHeight.length-2);
+	var bottomDivHeight=$("#bottom_div").css("height");
+	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
+	$("#gjfxCanvas_div").css("height",windowHeight-topDivHeight-bottomDivHeight+"px");
 }
 
 function showSSTJDiv(){
@@ -107,16 +118,16 @@ function getLocationRecords(){
 					showSSTJDiv();
 					locRecList=data.locRecList;
 					console.log("length==="+locRecList.length);
-					initGJFXCanvas(0);
+					initGJFXCanvas(true,false);
 				}	
 			,"json");
 		}
 	}
 }
 	
-function initGJFXCanvas(reSizeFlag){
+function initGJFXCanvas(reloadFlag,reSizeFlag){
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
-	if(reSizeFlag==1){
+	if(reSizeFlag){
 		var gjfxCanvasImg = new Image();
 		gjfxCanvasImg.src=path+"resource/image/003.jpg";
 		gjfxCanvas = document.createElement("canvas");
@@ -128,24 +139,68 @@ function initGJFXCanvas(reSizeFlag){
 		gjfxCanvasContext = gjfxCanvas.getContext("2d");
 		gjfxCanvasImg.onload=function(){
 			gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-			for(var i=0;i<locRecList.length;i++){
-				if(i>=1){
-					var lr1=locRecList[i-1];
-					var lr2=locRecList[i];
-					setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
-					if(i==locRecList.length-1)
-						setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+			if(locRecList!=undefined){//判断集合是否存在，第一次访问页面是不存在的，搜索之后才存在
+				for(var i=0;i<locRecList.length;i++){
+					if(i>=1){
+						var lr1=locRecList[i-1];
+						var lr2=locRecList[i];
+						setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+						if(i==locRecList.length-1)
+							setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+					}
 				}
 			}
 			var preGjfxCanvas=document.getElementById("gjfxCanvas");
 			preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
 			var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
 			gjfxCanvasDiv.appendChild(gjfxCanvas);
-			loadGJFXCanvas(0);
+			loadGJFXCanvas(false);
 		}
 	}
 	else{
-		paintInterval=setInterval(function(){
+		if(reloadFlag){
+			paintInterval=setInterval(function(){
+				var gjfxCanvasImg = new Image();
+				gjfxCanvasImg.src=path+"resource/image/003.jpg";
+				gjfxCanvas = document.createElement("canvas");
+				gjfxCanvas.id="gjfxCanvas";
+				gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
+				gjfxCanvas.style.height=gjfxCanvasStyleHeight+"px";
+				gjfxCanvas.width=gjfxCanvasWidth;
+				gjfxCanvas.height=gjfxCanvasHeight;
+				gjfxCanvasContext = gjfxCanvas.getContext("2d");
+				gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
+				gjfxCanvasImg.onload=function(){
+					gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
+					for(var i=0;i<=locRecListIndex;i++){
+						if(i>=1){
+							var lr1=locRecList[i-1];
+							var lr2=locRecList[i];
+							setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
+							//if(i==locRecList.length-1){
+							if(i==locRecListIndex){
+								setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
+							}
+						}
+					}
+					var preGjfxCanvas=document.getElementById("gjfxCanvas");
+					preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
+					var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
+					gjfxCanvasDiv.appendChild(gjfxCanvas);
+					if(locRecListIndex==locRecList.length-1){
+						//console.log(222);
+						locRecListIndex=0;
+						clearInterval(paintInterval);
+					}
+					else{
+						//console.log("locRecListIndex==="+locRecListIndex);
+						locRecListIndex++;
+					}
+				}
+			
+			},"100");
+		}
+		else{
 			var gjfxCanvasImg = new Image();
 			gjfxCanvasImg.src=path+"resource/image/003.jpg";
 			gjfxCanvas = document.createElement("canvas");
@@ -155,47 +210,31 @@ function initGJFXCanvas(reSizeFlag){
 			gjfxCanvas.width=gjfxCanvasWidth;
 			gjfxCanvas.height=gjfxCanvasHeight;
 			gjfxCanvasContext = gjfxCanvas.getContext("2d");
-			gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
 			gjfxCanvasImg.onload=function(){
 				gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
-				for(var i=0;i<=locRecListIndex;i++){
-					if(i>=1){
-						var lr1=locRecList[i-1];
-						var lr2=locRecList[i];
-						setPointLocation(gjfxCanvasContext,lr1.x,lr1.y,lr2.x,lr2.y);
-						//if(i==locRecList.length-1){
-						if(i==locRecListIndex){
-							setEntityLocation(gjfxCanvasContext,lr2.x,lr2.y,staffName,lr2.floor);
-						}
-					}
-				}
 				var preGjfxCanvas=document.getElementById("gjfxCanvas");
 				preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
 				var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
 				gjfxCanvasDiv.appendChild(gjfxCanvas);
-				if(locRecListIndex==locRecList.length-1){
-					//console.log(222);
-					locRecListIndex=0;
-					clearInterval(paintInterval);
-				}
-				else{
-					//console.log("locRecListIndex==="+locRecListIndex);
-					locRecListIndex++;
-				}
 			}
-		
-		},"100");
+		}
 	}
 }
 
-function changeCanvasSize(flag){
-	loadGJFXCanvas(flag);
+function changeCanvasSize(bigFlag,autoFlag){
+	loadGJFXCanvas(true);
     var mcw=gjfxCanvasStyleWidth;
 	var mch=gjfxCanvasStyleHeight;
-	if(flag==1)
-		gjfxCanvasStyleWidth+=30;
-	else
-		gjfxCanvasStyleWidth-=30;
+	if(autoFlag){
+		if(bigFlag)
+			gjfxCanvasStyleWidth+=30;
+		else
+			gjfxCanvasStyleWidth-=30;
+	}
+	else{
+		var scale=$("#scale_inp").val();
+		gjfxCanvasStyleWidth=gjfxCanvasMinWidth+gjfxCanvasMinWidth*(scale-100)/100;
+	}
 	
 	if(gjfxCanvasStyleWidth<gjfxCanvasMinWidth){
 		gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
@@ -203,6 +242,7 @@ function changeCanvasSize(flag){
 	else if(gjfxCanvasStyleWidth>gjfxCanvasMaxWidth){
 		gjfxCanvasStyleWidth=gjfxCanvasMaxWidth;
 	}
+	$("#scale_inp").val((gjfxCanvasStyleWidth/gjfxCanvasMinWidth).toFixed(2)*100);
 
 	if(gjfxCanvasStyleHeight<gjfxCanvasMinHeight){
 		gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
@@ -218,7 +258,7 @@ function changeCanvasSize(flag){
 	atSpace=atSpace*mch/gjfxCanvasStyleHeight;
 	fontSize=fontSize*mch/gjfxCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/gjfxCanvasStyleWidth;
-	initGJFXCanvas(1);
+	initGJFXCanvas(null,true);
 }
 
 function initEntitySelect(){
@@ -314,16 +354,16 @@ function setEntityLocation(context,x,y,name,floor){
 }
 
 function loadGJFXCanvas(flag){
-	var smallBut=$("#small_but");
-	var bigBut=$("#big_but");
-	if(flag==1){
-		smallBut.attr("disabled",true);
-		bigBut.attr("disabled",true);
+	var smallButDiv=$("#small_but_div");
+	var bigButDiv=$("#big_but_div");
+	if(flag){
+		smallButDiv.removeAttr("onclick");
+		bigButDiv.removeAttr("onclick");
 	}
 	else{
 		reSizeTimeout=setTimeout(function(){
-			smallBut.attr("disabled",false);
-			bigBut.attr("disabled",false);
+			smallButDiv.attr("onclick","changeCanvasSize(false,true)");
+			bigButDiv.attr("onclick","changeCanvasSize(true,true)");
 			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
@@ -429,7 +469,8 @@ body{
 	border-radius:5px;
 }
 .gjfxCanvas_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
+	overflow: auto;
 }
 </style>
 <title>轨迹分析</title>
@@ -484,8 +525,6 @@ body{
 	<canvas id="gjfxCanvas">
 	</canvas>
 </div>
-<input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
-<input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
 <%@include file="nav.jsp"%>
 </body>
 </html>

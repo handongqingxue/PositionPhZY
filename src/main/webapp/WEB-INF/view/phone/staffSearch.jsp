@@ -31,6 +31,7 @@ var arSpace=43;
 var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
+var reSizeTimeout;
 var locationList;
 $(function(){
 	jiSuanScale();
@@ -181,9 +182,10 @@ function loadRYSSCanvas(flag){
 		bigButDiv.removeAttr("onclick");
 	}
 	else{
-		setTimeout(function(){
+		reSizeTimeout=setTimeout(function(){
 			smallButDiv.attr("onclick","changeCanvasSize(false,true)");
 			bigButDiv.attr("onclick","changeCanvasSize(true,true)");
+			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
 }

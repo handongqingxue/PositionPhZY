@@ -127,7 +127,7 @@ function getLocationRecords(){
 	
 function initGJFXCanvas(reloadFlag,reSizeFlag){
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
-	if(reSizeFlag){
+	if(reSizeFlag){//改变画布大小，这时一下子画完所有轨迹就可以，不需要一点点播放
 		var gjfxCanvasImg = new Image();
 		gjfxCanvasImg.src=path+"resource/image/003.jpg";
 		gjfxCanvas = document.createElement("canvas");
@@ -158,6 +158,9 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		}
 	}
 	else{
+		//当reSizeFlag为false时，说明不改变画布大小。
+		//这分为两种情况：1.初次访问页面，只显示地图，不加载轨迹。这时设置reloadFlag为false;
+		//2.根据条件搜索轨迹，需要重新加载地图和轨迹，这时reloadFlag为true
 		if(reloadFlag){
 			paintInterval=setInterval(function(){
 				var gjfxCanvasImg = new Image();

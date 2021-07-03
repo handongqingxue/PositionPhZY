@@ -35,8 +35,10 @@ var fontSize=50;
 var fontMarginLeft=45;
 var locRecListIndex=0;
 var paintInterval;
+var reSizeTimeout;
 var locRecList;
 $(function(){
+	showSSTJDiv();
 	initEntitySelect();
 	initTodayDateCalendar();
 	initStartTimePickerDiv();
@@ -47,6 +49,22 @@ $(function(){
 function jiSuanScale(){
 	widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
 	heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+}
+
+function showSSTJDiv(){
+	var sstjDiv=$("#sstj_div");
+	var display=sstjDiv.css("display");
+	var xssstj;
+	if(display=="none"){
+		xssstj="隐藏";
+		sstjDiv.css("display","block");
+	}
+	else{
+		xssstj="显示";
+		sstjDiv.css("display","none");
+	}
+	var xssstjButDiv=$("#xssstj_but_div");
+	xssstjButDiv.text(xssstj+"搜索条件");
 }
 
 function checkStaff(){
@@ -86,6 +104,7 @@ function getLocationRecords(){
 			$.post("getLocationRecords",
 				{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
 				function(data){
+					showSSTJDiv();
 					locRecList=data.locRecList;
 					console.log("length==="+locRecList.length);
 					initGJFXCanvas(0);
@@ -302,9 +321,10 @@ function loadGJFXCanvas(flag){
 		bigBut.attr("disabled",true);
 	}
 	else{
-		setTimeout(function(){
+		reSizeTimeout=setTimeout(function(){
 			smallBut.attr("disabled",false);
 			bigBut.attr("disabled",false);
+			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
 }
@@ -313,11 +333,100 @@ function loadGJFXCanvas(flag){
 body{
 	margin: 0;
 }
-.main_div{
+.top_div{
 	width: 100%;
+	height: 40px;
+	background-color: #eee;
 }
-.main_div .tool_div{
+.tool_div{
+	width: 250px;
+	height: 40px;
+	margin: 0 auto;
+	padding: 1px;
+}
+.xssstj_but_div{
+	width: 120px;
+	height:30px;
+	line-height:30px;
+	margin-top:5px;
+	color: #fff;
+	font-size:15px;
+	text-align: center;
+	background-color: #00f;
+	border-radius:5px;
+}
+.scale_set_div{
+	margin-top:-25px;
+	float: right;
+}
+.scale_set_div .but_div{
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	color:#fff;
+	text-align:center; 
+	background-color: #00f;
+	border-radius:5px;
+}
+.scale_set_div .big_but_div{
+	margin-top:-20px;
+	margin-left: 85px;
+}
+.scale_set_div .scale_inp{
+	width:30px;
+	margin-top: -28px;
+	margin-left:25px;
+	text-align: center;
+}
+.scale_set_div .scale_fuhao_span{
+	margin-top: -22px;
+	margin-left:5px;
+	position: absolute;
+}
+.sstj_div{
 	width: 100%;
+	margin-top: 3px;
+	padding:1px;
+	background-color: #eee;
+	position: fixed;
+	border-radius:5px;
+	display: block;
+}
+.sstj_div .row_ry_div{
+	width: 100%;height: 40px;line-height: 40px;margin-top: 5px;
+}
+.sstj_div .row_sj_div{
+	width: 100%;height: 30px;line-height: 30px;
+}
+.sstj_div .row_ysb_div{
+	width: 100%;height: 42px;line-height: 42px;margin-bottom: 10px;
+}
+.sstj_div .ry_span,.sstj_div .sj_span,.sstj_div .ysb_span{
+	margin-left: 15px;font-size: 15px;
+}
+.sstj_div .staff_sel{
+	width: 254px;height: 26px;	
+}
+.sstj_div .stp_div{
+	margin-top: -30px;margin-left: 183px;
+}
+.sstj_div .etp_div{
+	margin-top: 5px;margin-left: 183px;
+}
+.sstj_div .ysb_inp{
+	width: 85px;
+}
+.sstj_div .search_but_div{
+	width: 50px;
+	height: 30px;
+	line-height: 30px;
+	margin-top:-34px;
+	margin-left:183px; 
+	color:#fff;
+	font-size:15px;
+	text-align:center;
+	background-color: #00f;
+	border-radius:5px;
 }
 .gjfxCanvas_div{
 	width: 100%;height: 600px;overflow: auto;
@@ -326,42 +435,54 @@ body{
 <title>轨迹分析</title>
 </head>
 <body>
-<div class="main_div" id="main_div">
+<div class="top_div" id="top_div">
 	<div class="tool_div">
-		<div>
-			人员
-			<select id="staff_sel">
+		<div class="xssstj_but_div" id="xssstj_but_div" onclick="showSSTJDiv();"></div>
+		<div class="scale_set_div">
+			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(false,true);">-</div>
+			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,false)"/>
+			<span class="scale_fuhao_span">%</span>
+			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,true);">+</div>
+		</div>
+	</div>
+</div>
+<div class="sstj_div" id="sstj_div">
+	<div class="row_ry_div">
+		<span class="ry_span">人&nbsp;&nbsp;&nbsp;员：</span>
+		<select class="staff_sel" id="staff_sel">
+		</select>
+	</div>
+	<div class="row_sj_div">
+		<span class="sj_span">时&nbsp;&nbsp;&nbsp;间：</span>
+		<input  type="text" class="Wdate" id="td_cal" style="width: 90px;" onclick="WdatePicker()" readonly="readonly"/>
+		<div class="stp_div">
+			<select id="sth_sel">
+			</select>:
+			<select id="stm_sel">
+			</select>:
+			<select id="sts_sel">
 			</select>
 		</div>
-		<div style="margin-top: 5px;">
-			时间：
-			<input  type="text" class="Wdate" id="td_cal" style="width: 90px;" onclick="WdatePicker()" readonly="readonly"/>
-			<div class="stp_div" style="margin-left: 160px;margin-top: -25px;">
-				<select id="sth_sel">
-				</select>:
-				<select id="stm_sel">
-				</select>:
-				<select id="sts_sel">
-				</select>
-			</div>
-			<div class="etp_div" style="margin-left: 160px;margin-top: 5px;">
-				<select id="eth_sel">
-				</select>:
-				<select id="etm_sel">
-				</select>:
-				<select id="ets_sel">
-				</select>
-			</div>
-		</div>
-		<div style="margin-top: 5px;">
-			压缩比<input type="number" id="ysb_inp" size="10" value="200"/>
-			<input type="button" value="查询" onclick="getLocationRecords();"/>
+	</div>
+	<div class="row_sj_div">
+		<div class="etp_div">
+			<select id="eth_sel">
+			</select>:
+			<select id="etm_sel">
+			</select>:
+			<select id="ets_sel">
+			</select>
 		</div>
 	</div>
-	<div class="gjfxCanvas_div" id="gjfxCanvas_div">
-		<canvas id="gjfxCanvas">
-		</canvas>
+	<div class="row_ysb_div">
+		<span class="ysb_span">压缩比：</span>
+		<input class="ysb_inp" id="ysb_inp" type="number" value="200"/>
+		<div class="search_but_div" onclick="getLocationRecords();">查询</div>
 	</div>
+</div>
+<div class="gjfxCanvas_div" id="gjfxCanvas_div">
+	<canvas id="gjfxCanvas">
+	</canvas>
 </div>
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>

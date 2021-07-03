@@ -35,7 +35,7 @@ var locationList;
 $(function(){
 	jiSuanScale();
 	initRYSSCanvasDivHeight();
-	initRYSSCanvas(0,1);
+	initRYSSCanvas(false,true);
 });
 
 function jiSuanScale(){
@@ -64,7 +64,7 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 	ryssCanvasContext = ryssCanvas.getContext("2d");
 	ryssCanvasImg.onload=function(){
 		ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
-		if(reloadFlag==1){
+		if(reloadFlag){
 			if(checkEntityName()){
 				var entityName=$("#entityName_inp").val();
 				$.post("selectEntityLocation",
@@ -96,8 +96,8 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 		preRyssCanvas.parentNode.removeChild(preRyssCanvas);//ryssCanvas_div
 		var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
 		ryssCanvasDiv.appendChild(ryssCanvas);
-		if(reSizeFlag==1)
-			loadRYSSCanvas(0);
+		if(reSizeFlag)
+			loadRYSSCanvas(false);
 	}
 }
 
@@ -113,11 +113,11 @@ function checkEntityName(){
 
 //缩放画布,bigFlag在autoFlag为false手动缩放，通过缩放比控制时不传
 function changeCanvasSize(bigFlag,autoFlag){
-	loadRYSSCanvas(1);
+	loadRYSSCanvas(true);
     var mcw=ryssCanvasStyleWidth;
 	var mch=ryssCanvasStyleHeight;
-	if(autoFlag==1){
-		if(bigFlag==1)
+	if(autoFlag){
+		if(bigFlag)
 			ryssCanvasStyleWidth+=30;
 		else
 			ryssCanvasStyleWidth-=30;
@@ -150,7 +150,7 @@ function changeCanvasSize(bigFlag,autoFlag){
 	fontSize=fontSize*mch/ryssCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ryssCanvasStyleWidth;
 	
-	initRYSSCanvas(0,1);
+	initRYSSCanvas(false,true);
 }
 
 function setEntityLocation(context,x,y,name,floor){
@@ -176,14 +176,14 @@ function setEntityLocation(context,x,y,name,floor){
 function loadRYSSCanvas(flag){
 	var smallButDiv=$("#small_but_div");
 	var bigButDiv=$("#big_but_div");
-	if(flag==1){
+	if(flag){
 		smallButDiv.removeAttr("onclick");
 		bigButDiv.removeAttr("onclick");
 	}
 	else{
 		setTimeout(function(){
-			smallButDiv.attr("onclick","changeCanvasSize(0,1)");
-			bigButDiv.attr("onclick","changeCanvasSize(1,1)");
+			smallButDiv.attr("onclick","changeCanvasSize(false,true)");
+			bigButDiv.attr("onclick","changeCanvasSize(true,true)");
 		},"1000");
 	}
 }
@@ -264,12 +264,12 @@ body{
 	<div class="tool_div">
 		<span class="name_span">姓名:</span>
 		<input type="text" class="entityName_inp" id="entityName_inp"/>
-		<div class="search_but_div" onclick="initRYSSCanvas(1,0);">搜索</div>
+		<div class="search_but_div" onclick="initRYSSCanvas(true,false);">搜索</div>
 		<div class="scale_set_div">
-			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(0,1);">-</div>
-			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,0)"/>
+			<div class="but_div" id="small_but_div" onclick="changeCanvasSize(false,true);">-</div>
+			<input class="scale_inp" id="scale_inp" type="text" value="100" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onblur="changeCanvasSize(null,false)"/>
 			<span class="scale_fuhao_span">%</span>
-			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(1,1);">+</div>
+			<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,true);">+</div>
 		</div>
 	</div>
 </div>

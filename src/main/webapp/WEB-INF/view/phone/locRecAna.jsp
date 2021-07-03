@@ -38,7 +38,7 @@ var paintInterval;
 var reSizeTimeout;
 var locRecList;
 $(function(){
-	showSSTJDiv();
+	showSSTJDiv(false);
 	initEntitySelect();
 	initTodayDateCalendar();
 	initStartTimePickerDiv();
@@ -60,15 +60,15 @@ function initGJFXCanvasDivHeight(){
 	$("#gjfxCanvas_div").css("height",windowHeight-bottomDivHeight+"px");
 }
 
-function showSSTJDiv(){
+function showSSTJDiv(flag){
+	var xssstjButImg=$("#xssstj_but_img");
 	var sstjDiv=$("#sstj_div");
-	var display=sstjDiv.css("display");
-	if(display=="none"){
-		$("#xssstj_but_img").css("display","none");
+	if(flag){
+		xssstjButImg.css("display","none");
 		sstjDiv.css("display","block");
 	}
 	else{
-		$("#xssstj_but_img").css("display","block");
+		xssstjButImg.css("display","block");
 		sstjDiv.css("display","none");
 	}
 }
@@ -110,7 +110,7 @@ function getLocationRecords(){
 			$.post("getLocationRecords",
 				{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
 				function(data){
-					showSSTJDiv();
+					showSSTJDiv(false);
 					locRecList=data.locRecList;
 					console.log("length==="+locRecList.length);
 					initGJFXCanvas(true,false);
@@ -389,10 +389,10 @@ body{
 	background-color: #F6F6F6;
 }
 .scale_set_div .reset_but_div{
-	width: 30px;
-	height: 30px;
 	line-height: 30px;
-	font-size: 16px;
+}
+.scale_set_div .reset_but_div img{
+	margin-top: 9px;
 }
 .scale_set_div .big_but_div{
 	margin-top:3px;
@@ -405,7 +405,6 @@ body{
 	padding:1px;
 	background-color: #F6F6F6;
 	position: fixed;
-	display: block;
 }
 .sstj_div .row_close_div{
 	width: 100%;height: 24px;
@@ -472,17 +471,17 @@ body{
 <title>轨迹分析</title>
 </head>
 <body>
-<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv();">
+<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
 <div class="scale_set_div">
 	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
-		<img alt="" src="<%=basePath %>resource/image/006.png" style="margin-top: 5px;">
+		<img alt="" src="<%=basePath %>resource/image/006.png">
 	</div>
 	<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,false);">+</div>
 	<div class="but_div small_but_div" id="small_but_div" onclick="changeCanvasSize(false,false);">-</div>
 </div>
 <div class="sstj_div" id="sstj_div">
 	<div class="row_close_div">
-		<div class="close_but_div" onclick="showSSTJDiv();">X</div>
+		<div class="close_but_div" onclick="showSSTJDiv(false);">X</div>
 	</div>
 	<div class="row_ry_div">
 		<span class="ry_span">人员</span>

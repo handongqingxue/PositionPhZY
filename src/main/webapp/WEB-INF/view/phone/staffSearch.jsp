@@ -25,6 +25,8 @@ var ryssCanvasHeight=ryssCanvasMaxHeight;
 var widthScale;
 var heightScale;
 var arcR=20;
+var staffImgWidth=100;
+var staffImgHeight=70;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
@@ -66,53 +68,74 @@ function showSSTJDiv(flag){
 }
 
 function initRYSSCanvas(reloadFlag,reSizeFlag){
-	var ryssCanvasImg = new Image();
-	ryssCanvasImg.src=path+"resource/image/003.jpg";
-	ryssCanvas = document.createElement("canvas");
-	ryssCanvas.id="ryssCanvas";
-	ryssCanvas.style.width=ryssCanvasStyleWidth+"px";
-	ryssCanvas.style.height=ryssCanvasStyleHeight+"px";
-	ryssCanvas.width=ryssCanvasWidth;
-	ryssCanvas.height=ryssCanvasHeight;
-	ryssCanvasContext = ryssCanvas.getContext("2d");
-	ryssCanvasImg.onload=function(){
-		ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
-		if(reloadFlag){
-			if(checkEntityName()){
-				var entityName=$("#entityName_inp").val();
-				$.post("selectEntityLocation",
-					{entityName:entityName},
-					function(data){
-						showSSTJDiv(false);
-						if(data.status=="ok"){
-							locationList=data.list;
-							for(var i=0;i<locationList.length;i++){
-								var location=locationList[i];
-								setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+	if(checkCookieValid()){
+		var ryssCanvasImg = new Image();
+		ryssCanvasImg.src=path+"resource/image/003.jpg";
+		ryssCanvas = document.createElement("canvas");
+		ryssCanvas.id="ryssCanvas";
+		ryssCanvas.style.width=ryssCanvasStyleWidth+"px";
+		ryssCanvas.style.height=ryssCanvasStyleHeight+"px";
+		ryssCanvas.width=ryssCanvasWidth;
+		ryssCanvas.height=ryssCanvasHeight;
+		ryssCanvasContext = ryssCanvas.getContext("2d");
+		ryssCanvasImg.onload=function(){
+			ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
+			if(reloadFlag){
+				if(checkEntityName()){
+					var entityName=$("#entityName_inp").val();
+					$.post("selectEntityLocation",
+						{entityName:entityName},
+						function(data){
+							showSSTJDiv(false);
+							if(data.status=="ok"){
+								locationList=data.list;
+								for(var i=0;i<locationList.length;i++){
+									var location=locationList[i];
+									setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
+								}
+							}
+							else{
+								alert(data.message);
 							}
 						}
-						else{
-							alert(data.message);
-						}
-					}
-				,"json");
-			}
-		}
-		else{
-			if(locationList!=undefined){//判断集合是否存在，第一次访问页面是不存在的，搜索之后才存在
-				for(var i=0;i<locationList.length;i++){
-					var location=locationList[i];
-					setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.floor);
+					,"json");
 				}
 			}
+			else{
+				if(locationList!=undefined){//判断集合是否存在，第一次访问页面是不存在的，搜索之后才存在
+					for(var i=0;i<locationList.length;i++){
+						var location=locationList[i];
+						setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
+					}
+				}
+			}
+			var preRyssCanvas=document.getElementById("ryssCanvas");
+			preRyssCanvas.parentNode.removeChild(preRyssCanvas);//ryssCanvas_div
+			var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
+			ryssCanvasDiv.appendChild(ryssCanvas);
+			if(reSizeFlag)
+				loadRYSSCanvas(false);
 		}
-		var preRyssCanvas=document.getElementById("ryssCanvas");
-		preRyssCanvas.parentNode.removeChild(preRyssCanvas);//ryssCanvas_div
-		var ryssCanvasDiv=document.getElementById("ryssCanvas_div");
-		ryssCanvasDiv.appendChild(ryssCanvas);
-		if(reSizeFlag)
-			loadRYSSCanvas(false);
 	}
+}
+
+function checkCookieValid(){
+	var flag;
+	$.ajaxSetup({async:false});
+	$.post("checkCookieValid",
+		function(data){
+			if(data.status=="ok"){
+				flag=true;
+			}
+			else{
+				if(confirm(data.message)){
+					location.href=phonePath+"goPage?page=login";
+				}
+				flag=false;
+			}
+		}
+	,"json");
+	return flag;
 }
 
 function checkEntityName(){
@@ -164,24 +187,61 @@ function changeCanvasSize(bigFlag,resetFlag){
 	initRYSSCanvas(false,true);
 }
 
-function setEntityLocation(context,x,y,name,floor){
-	context.beginPath();
-	context.strokeStyle = 'red';//点填充
-	context.fillStyle='red';
-	context.lineWidth=arcR*1.5;
-	context.arc(x/widthScale,ryssCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
-	context.stroke();
-
-	context.beginPath();
-	context.lineWidth = "1";
-	context.fillStyle = "blue";
-	context.fillRect(x/widthScale-rectWidth/2,ryssCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
-	context.stroke();
-
-	context.font=fontSize+"px bold 黑体";
-	context.fillStyle = "#fff";
-	context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ryssCanvasHeight-y/heightScale-atSpace);
-	context.stroke();
+function setEntityLocation(context,x,y,name,entityType,floor){
+	var entityImg = new Image();
+	if(entityType=="staff"){
+		entityImg.src=path+"resource/image/007.png";
+		entityImg.onload=function(){
+			ryssCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ryssCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+		}
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ryssCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ryssCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
+	else if(entityType=="car"){
+		entityImg.src=path+"resource/image/008.png";
+		entityImg.onload=function(){
+			ryssCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ryssCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+		}
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ryssCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ryssCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
+	else{
+		context.beginPath();
+		context.strokeStyle = 'red';//点填充
+		context.fillStyle='red';
+		context.lineWidth=arcR*1.5;
+		context.arc(x/widthScale,ryssCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
+		context.stroke();
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ryssCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ryssCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
 }
 
 function loadRYSSCanvas(flag){

@@ -37,15 +37,16 @@ var atSpace=78;
 var fontSize=50;
 var fontMarginLeft=45;
 var selectedFloorValue="";
+var sodInterval;
 $(function(){
 	showSSTJDiv(false);
 	initLabelListDiv();
 	jiSuanScale();
 	initSSDWCanvasDivHeight();
 	//initSSDWCanvas(0);
-	//setInterval(function(){
+	sodInterval=setInterval(function(){
 		summaryOnlineData();
-	//},"3000");
+	},"3000");
 });
 
 function jiSuanScale(){
@@ -76,11 +77,19 @@ function showSSTJDiv(flag){
 function summaryOnlineData(){
 	$.post("summaryOnlineData",
 		function(data){
-			var entityResult=data.entityResult;
-			initFloorSel(entityResult);
-			var dutyResult=data.dutyResult;
-			initDutySel(dutyResult);
-			initSSDWCanvas(0);
+			if(data.status=="ok"){
+				var entityResult=data.entityResult;
+				initFloorSel(entityResult);
+				var dutyResult=data.dutyResult;
+				initDutySel(dutyResult);
+				initSSDWCanvas(0);
+			}
+			else{
+				clearInterval(sodInterval);
+				if(confirm(data.message)){
+					location.href=phonePath+"goPage?page=login";
+				}
+			}
 		}
 	,"json");
 }

@@ -80,7 +80,14 @@ public class PhoneController {
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
-		String page=request.getParameter("page");
+		String page = null;
+		Map<String, Object> ccvMap = checkCookieValid(request);
+		if("ok".equals(ccvMap.get("status").toString())) {
+			page=request.getParameter("page");
+		}
+		else {
+			page="login";
+		}
 		return MODULE_NAME+"/"+page;
 	}
 
@@ -109,11 +116,15 @@ public class PhoneController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
-		Map<String, Object> soerMap = summaryOnlineEntity(request);
-		resultMap.put("entityResult", soerMap.get("result"));
-		
-		Map<String, Object> sodrMap = summaryOnlineDuty();
-		resultMap.put("dutyResult", sodrMap);
+		Map<String, Object> ccvMap = checkCookieValid(request);
+		if("ok".equals(ccvMap.get("status").toString())) {
+			Map<String, Object> soerMap = summaryOnlineEntity(request);
+			resultMap.put("entityResult", soerMap.get("result"));
+				
+			Map<String, Object> sodrMap = summaryOnlineDuty();
+			resultMap.put("dutyResult", sodrMap);
+		}
+		resultMap.putAll(ccvMap);
 		
 		return resultMap;
 	}
@@ -2138,7 +2149,7 @@ public class PhoneController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		com.alibaba.fastjson.JSONObject jsonJO = JSON.parseObject(json);
-		if(jsonJO.containsKey("Location1")) {//定位消息
+		if(jsonJO.containsKey("Location")) {//定位消息
 			System.out.println("更新定位信息...");
 			JSONArray locationJA = jsonJO.getJSONArray("Location");
 			
@@ -2277,7 +2288,6 @@ public class PhoneController {
 		if(serverURL.contains("public")&&"login".equals(method)) {
 			if(!checkCookieInSession(session)) {
 				getCookieFromHeader(connection,session);
-				System.out.println("sessionid==="+session.getId());
 			}
 		}
 		
@@ -2288,12 +2298,32 @@ public class PhoneController {
 		if(result.contains("DOCTYPE")) {
 			resultJO = new JSONObject();
 			resultJO.put("status", "no");
-			resultJO.put("message", "登录信息已过期，是否重新登录？");
 		}
 		else {
 			resultJO = new JSONObject(result);
+			resultJO.put("status", "ok");
 		}
 		return resultJO;
+	}
+	
+	/**
+	 * 验证登录信息是否有效
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/checkCookieValid")
+	@ResponseBody
+	public Map<String, Object> checkCookieValid(HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> soerMap = summaryOnlineEntity(request);
+		if("no".equals(soerMap.get("status").toString())) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "登录信息已过期，请重新登录");
+		}
+		else {
+			resultMap.put("status", "ok");
+		}
+		return resultMap;
 	}
 	
 	public boolean checkCookieInSession(HttpSession session) {

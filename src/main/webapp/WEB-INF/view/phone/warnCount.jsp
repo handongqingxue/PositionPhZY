@@ -96,168 +96,172 @@ function getAddDate(days){
 }
 
 function initBarChartDiv(flag){
-	var days;
-	$("#bar_search_type_div #but_div div").css("color","#000");
-    $("#bar_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
-	if(flag=="date"){
-		$("#bar_search_type_div #date_but_div").css("color","#477A8F");
-        $("#bar_search_type_div #date_but_div").css("border-bottom","#497DD0 solid 1px");
-        days=-7;
-        xzzh=10;
-        alignWithLabel=true;
-	}
-	else if(flag=="week"){
-		$("#bar_search_type_div #week_but_div").css("color","#477A8F");
-        $("#bar_search_type_div #week_but_div").css("border-bottom","#497DD0 solid 1px");
-
-        days=-30;
-        xzzh=9;
-        alignWithLabel=false;
-	}
-	else if(flag=="month"){
-		$("#bar_search_type_div #month_but_div").css("color","#477A8F");
-        $("#bar_search_type_div #month_but_div").css("border-bottom","#497DD0 solid 1px");
-
-        days=-365;
-        xzzh=9;
-        alignWithLabel=true;
-	}
-    //var barStartDate=getAddDate(days);
-    var barStartDate="2021-03-01";
-    //var barEndDate=getTodayDate();
-    var barEndDate="2021-04-01";
-    //alert(barStartDate+"-"+barEndDate);
-	
-	//https://echarts.apache.org/examples/zh/editor.html?c=bar1
-	$.post("initBJTJBarChartData",
-		{startDate:barStartDate,endDate:barEndDate,flag:flag},
-		function(data){
-			//alert(JSON.stringify(data.seriesList));
-			var legendDataList=data.legendDataList;
-			var xAxisDataLabelList=data.xAxisDataLabelList;
-			var seriesList=data.seriesList;
-			
-			var chartDom = document.getElementById('bar_chart_div');
-			var myChart = echarts.init(chartDom);
-			var option;
-			option = {
-			    tooltip: {
-			        trigger: 'axis'
-			    },
-			    legend: {
-		               itemWidth:10,
-		               itemHeight:10,
-		               x:'center',
-		               y: '15px',
-		               textStyle:{
-		                   fontSize:9
-		               },
-			        //data: ['蒸发量', '降水量']
-				    data: legendDataList
-			    },
-			    xAxis: [
-			        {
-			            type: 'category',
-			            //data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-			            data: xAxisDataLabelList,
-			            axisTick:{alignWithLabel:zhAlignWithLabel},
-			            axisLine:{
-			                lineStyle:{
-			                    color:"#999",
-			                    width:0.5
-			                }
-			            },
-			            axisLabel: {
-			                fontSize:zhxzzh,
-			                interval:0
-			                //rotate:45
-			            }
-			        }
-			    ],
-			    yAxis: [
-			        {
-			        	type:'value',
-		                minInterval: 1,
-		                axisLine:{
-		                    lineStyle:{
-		                        color:"#999",
-		                        width:0.5
-		                    }
-		                },
-		                axisLabel:{
-		                    fontSize:9
-		                },
-		                splitLine:{
-		                    lineStyle:{
-		                        color:"#ddd",
-		                        width:0.5
-		                    }
-		                }
-			        }
-			    ],
-			    /*
-			    series: [
-			        {
-			            name: '超速报警',
-			            type: 'bar',
-			            data: [2.0, 4.9, 7.0],
-			            barGap:0
-			        },
-			        {
-			            name: '按键报警',
-			            type: 'bar',
-			            data: [2.6, 5.9, 9.0],
-			            barGap:0
-			        }
-			    ]
-			    */
-			    //series:[{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"超速报警\",\"type\":\"bar\"},{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"按键报警\",\"type\":\"bar\"}]
-			    series:seriesList
-			};
-
-			option && myChart.setOption(option);
+	if(checkCookieValid()){
+		var days;
+		$("#bar_search_type_div #but_div div").css("color","#000");
+	    $("#bar_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
+		if(flag=="date"){
+			$("#bar_search_type_div #date_but_div").css("color","#477A8F");
+	        $("#bar_search_type_div #date_but_div").css("border-bottom","#497DD0 solid 1px");
+	        days=-7;
+	        xzzh=10;
+	        alignWithLabel=true;
 		}
-	,"json");
+		else if(flag=="week"){
+			$("#bar_search_type_div #week_but_div").css("color","#477A8F");
+	        $("#bar_search_type_div #week_but_div").css("border-bottom","#497DD0 solid 1px");
+	
+	        days=-30;
+	        xzzh=9;
+	        alignWithLabel=false;
+		}
+		else if(flag=="month"){
+			$("#bar_search_type_div #month_but_div").css("color","#477A8F");
+	        $("#bar_search_type_div #month_but_div").css("border-bottom","#497DD0 solid 1px");
+	
+	        days=-365;
+	        xzzh=9;
+	        alignWithLabel=true;
+		}
+	    //var barStartDate=getAddDate(days);
+	    var barStartDate="2021-03-01";
+	    //var barEndDate=getTodayDate();
+	    var barEndDate="2021-04-01";
+	    //alert(barStartDate+"-"+barEndDate);
+		
+		//https://echarts.apache.org/examples/zh/editor.html?c=bar1
+		$.post("initBJTJBarChartData",
+			{startDate:barStartDate,endDate:barEndDate,flag:flag},
+			function(data){
+				//alert(JSON.stringify(data.seriesList));
+				var legendDataList=data.legendDataList;
+				var xAxisDataLabelList=data.xAxisDataLabelList;
+				var seriesList=data.seriesList;
+				
+				var chartDom = document.getElementById('bar_chart_div');
+				var myChart = echarts.init(chartDom);
+				var option;
+				option = {
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+			               itemWidth:10,
+			               itemHeight:10,
+			               x:'center',
+			               y: '15px',
+			               textStyle:{
+			                   fontSize:9
+			               },
+				        //data: ['蒸发量', '降水量']
+					    data: legendDataList
+				    },
+				    xAxis: [
+				        {
+				            type: 'category',
+				            //data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				            data: xAxisDataLabelList,
+				            axisTick:{alignWithLabel:zhAlignWithLabel},
+				            axisLine:{
+				                lineStyle:{
+				                    color:"#999",
+				                    width:0.5
+				                }
+				            },
+				            axisLabel: {
+				                fontSize:zhxzzh,
+				                interval:0
+				                //rotate:45
+				            }
+				        }
+				    ],
+				    yAxis: [
+				        {
+				        	type:'value',
+			                minInterval: 1,
+			                axisLine:{
+			                    lineStyle:{
+			                        color:"#999",
+			                        width:0.5
+			                    }
+			                },
+			                axisLabel:{
+			                    fontSize:9
+			                },
+			                splitLine:{
+			                    lineStyle:{
+			                        color:"#ddd",
+			                        width:0.5
+			                    }
+			                }
+				        }
+				    ],
+				    /*
+				    series: [
+				        {
+				            name: '超速报警',
+				            type: 'bar',
+				            data: [2.0, 4.9, 7.0],
+				            barGap:0
+				        },
+				        {
+				            name: '按键报警',
+				            type: 'bar',
+				            data: [2.6, 5.9, 9.0],
+				            barGap:0
+				        }
+				    ]
+				    */
+				    //series:[{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"超速报警\",\"type\":\"bar\"},{\"data\":[{\"4-13\":0},{\"4-14\":0},{\"4-15\":0}],\"barGap\":0,\"name\":\"按键报警\",\"type\":\"bar\"}]
+				    series:seriesList
+				};
+	
+				option && myChart.setOption(option);
+			}
+		,"json");
+	}
 }
 
 function initPieChartDiv(flag){
-	var days;
-	$("#pie_search_type_div #but_div div").css("color","#000");
-    $("#pie_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
-	if(flag=="date"){
-		$("#pie_search_type_div #date_but_div").css("color","#477A8F");
-        $("#pie_search_type_div #date_but_div").css("border-bottom","#497DD0 solid 1px");
-        days=-1;
-	}
-	else if(flag=="week"){
-		$("#pie_search_type_div #week_but_div").css("color","#477A8F");
-        $("#pie_search_type_div #week_but_div").css("border-bottom","#497DD0 solid 1px");
-        days=-7;
-	}
-	else if(flag=="month"){
-		$("#pie_search_type_div #month_but_div").css("color","#477A8F");
-        $("#pie_search_type_div #month_but_div").css("border-bottom","#497DD0 solid 1px");
-        days=-30;
-	}
-	else if(flag=="three_month"){
-		$("#pie_search_type_div #three_month_but_div").css("color","#477A8F");
-        $("#pie_search_type_div #three_month_but_div").css("border-bottom","#497DD0 solid 1px");
-        days=-90;
-	}
-    var pieStartDate=getAddDate(days);
-    //var pieStartDate="2021-03-01";
-    var pieEndDate=getTodayDate();
-    //var pieEndDate="2021-04-01";
-    //alert(pieStartDate+"-"+pieEndDate);
-    
-	$.post("initBJTJPieChartData",
-		{startDate:pieStartDate,endDate:pieEndDate},
-		function(data){
-			initPieLegendData(data.seriesList);
-		
-			initPieOption();
+	if(checkCookieValid()){
+		var days;
+		$("#pie_search_type_div #but_div div").css("color","#000");
+	    $("#pie_search_type_div #but_div div").css("border-bottom","#fff solid 1px");
+		if(flag=="date"){
+			$("#pie_search_type_div #date_but_div").css("color","#477A8F");
+	        $("#pie_search_type_div #date_but_div").css("border-bottom","#497DD0 solid 1px");
+	        days=-1;
 		}
-	,"json");
+		else if(flag=="week"){
+			$("#pie_search_type_div #week_but_div").css("color","#477A8F");
+	        $("#pie_search_type_div #week_but_div").css("border-bottom","#497DD0 solid 1px");
+	        days=-7;
+		}
+		else if(flag=="month"){
+			$("#pie_search_type_div #month_but_div").css("color","#477A8F");
+	        $("#pie_search_type_div #month_but_div").css("border-bottom","#497DD0 solid 1px");
+	        days=-30;
+		}
+		else if(flag=="three_month"){
+			$("#pie_search_type_div #three_month_but_div").css("color","#477A8F");
+	        $("#pie_search_type_div #three_month_but_div").css("border-bottom","#497DD0 solid 1px");
+	        days=-90;
+		}
+	    var pieStartDate=getAddDate(days);
+	    //var pieStartDate="2021-03-01";
+	    var pieEndDate=getTodayDate();
+	    //var pieEndDate="2021-04-01";
+	    //alert(pieStartDate+"-"+pieEndDate);
+	    
+		$.post("initBJTJPieChartData",
+			{startDate:pieStartDate,endDate:pieEndDate},
+			function(data){
+				initPieLegendData(data.seriesList);
+			
+				initPieOption();
+			}
+		,"json");
+	}
 }
 
 function initPieOption(){
@@ -333,27 +337,48 @@ function initPieLegendData(seriesList){
 }
 
 function resetPieLegendData(showAll){
-	pieSeriesDataList.map((item,index)=>{
-        if(showAll){
-            pieLegendSelected[item.name]=true;
-        }
-        else{
-            if(index>=4){
-                pieLegendSelected[item.name]=false;
-            }
-        }
-    });
-	
-	initPieOption();
-	
-	if(showAll){
-        $(".show_all_div .show_all_but_div").css("display","none");
-        $(".show_all_div .hide_part_but_div").css("display","block");
-    }
-    else{
-        $(".show_all_div .show_all_but_div").css("display","block");
-        $(".show_all_div .hide_part_but_div").css("display","none");
-    }
+	if(checkCookieValid()){
+		pieSeriesDataList.map((item,index)=>{
+	        if(showAll){
+	            pieLegendSelected[item.name]=true;
+	        }
+	        else{
+	            if(index>=4){
+	                pieLegendSelected[item.name]=false;
+	            }
+	        }
+	    });
+		
+		initPieOption();
+		
+		if(showAll){
+	        $(".show_all_div .show_all_but_div").css("display","none");
+	        $(".show_all_div .hide_part_but_div").css("display","block");
+	    }
+	    else{
+	        $(".show_all_div .show_all_but_div").css("display","block");
+	        $(".show_all_div .hide_part_but_div").css("display","none");
+	    }
+	}
+}
+
+function checkCookieValid(){
+	var flag;
+	$.ajaxSetup({async:false});
+	$.post("checkCookieValid",
+		function(data){
+			if(data.status=="ok"){
+				flag=true;
+			}
+			else{
+				if(confirm(data.message)){
+					location.href=phonePath+"goPage?page=login";
+				}
+				flag=false;
+			}
+		}
+	,"json");
+	return flag;
 }
 
 function goPage(page){

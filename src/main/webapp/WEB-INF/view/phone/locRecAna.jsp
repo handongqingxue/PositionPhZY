@@ -73,6 +73,25 @@ function showSSTJDiv(flag){
 	}
 }
 
+function checkCookieValid(){
+	var flag;
+	$.ajaxSetup({async:false});
+	$.post("checkCookieValid",
+		function(data){
+			if(data.status=="ok"){
+				flag=true;
+			}
+			else{
+				if(confirm(data.message)){
+					location.href=phonePath+"goPage?page=login";
+				}
+				flag=false;
+			}
+		}
+	,"json");
+	return flag;
+}
+
 function checkStaff(){
 	var tagId=$("#staff_sel").val();
 	if(tagId==""||tagId==null){
@@ -94,28 +113,30 @@ function checkYsb(){
 }
 
 function getLocationRecords(){
-	if(checkStaff()){
-		if(checkYsb()){
-			var tagId=$("#staff_sel").val();
-			var todayDate=$("#td_cal").val();
-			var sth=$("#sth_sel").val();
-			var stm=$("#stm_sel").val();
-			var sts=$("#sts_sel").val();
-			var startTime=sth+":"+stm+":"+sts+":000";
-			var eth=$("#eth_sel").val();
-			var etm=$("#etm_sel").val();
-			var ets=$("#ets_sel").val();
-			var endTime=eth+":"+etm+":"+ets+":000";
-			var ysb=$("#ysb_inp").val();
-			$.post("getLocationRecords",
-				{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
-				function(data){
-					showSSTJDiv(false);
-					locRecList=data.locRecList;
-					console.log("length==="+locRecList.length);
-					initGJFXCanvas(true,false);
-				}	
-			,"json");
+	if(checkCookieValid()){
+		if(checkStaff()){
+			if(checkYsb()){
+				var tagId=$("#staff_sel").val();
+				var todayDate=$("#td_cal").val();
+				var sth=$("#sth_sel").val();
+				var stm=$("#stm_sel").val();
+				var sts=$("#sts_sel").val();
+				var startTime=sth+":"+stm+":"+sts+":000";
+				var eth=$("#eth_sel").val();
+				var etm=$("#etm_sel").val();
+				var ets=$("#ets_sel").val();
+				var endTime=eth+":"+etm+":"+ets+":000";
+				var ysb=$("#ysb_inp").val();
+				$.post("getLocationRecords",
+					{tagId:tagId,todayDate:todayDate,startTime:startTime,endTime:endTime,ysb:ysb},
+					function(data){
+						showSSTJDiv(false);
+						locRecList=data.locRecList;
+						console.log("length==="+locRecList.length);
+						initGJFXCanvas(true,false);
+					}	
+				,"json");
+			}
 		}
 	}
 }

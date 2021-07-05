@@ -2138,7 +2138,7 @@ public class PhoneController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		com.alibaba.fastjson.JSONObject jsonJO = JSON.parseObject(json);
-		if(jsonJO.containsKey("Location")) {//定位消息
+		if(jsonJO.containsKey("Location1")) {//定位消息
 			System.out.println("更新定位信息...");
 			JSONArray locationJA = jsonJO.getJSONArray("Location");
 			

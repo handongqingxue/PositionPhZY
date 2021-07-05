@@ -28,6 +28,8 @@ var ssdwCanvasHeight=ssdwCanvasMaxHeight;
 var widthScale;
 var heightScale;
 var arcR=20;
+var staffImgWidth=100;
+var staffImgHeight=70;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
@@ -39,6 +41,7 @@ $(function(){
 	showSSTJDiv(false);
 	initLabelListDiv();
 	jiSuanScale();
+	initSSDWCanvasDivHeight();
 	//initSSDWCanvas(0);
 	//setInterval(function(){
 		summaryOnlineData();
@@ -48,6 +51,13 @@ $(function(){
 function jiSuanScale(){
 	widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
 	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
+}
+
+function initSSDWCanvasDivHeight(){
+	var windowHeight=$(window).height();
+	var bottomDivHeight=$("#bottom_div").css("height");
+	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
+	$("#ssdwCanvas_div").css("height",windowHeight-bottomDivHeight+"px");
 }
 
 function showSSTJDiv(flag){
@@ -174,7 +184,7 @@ function initSSDWCanvas(reSizeFlag){
 						var location=locationList[i];
 						//console.log(location.uid+","+location.x+location.y+location.entityType+","+location.entityName+","+","+","+location.floor);
 						if($("#label_list_div #select_cb"+location.entityType).prop("checked"))
-							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.floor);
+							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
 					}
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");
@@ -183,20 +193,25 @@ function initSSDWCanvas(reSizeFlag){
 				ssdwCanvasDiv.appendChild(ssdwCanvas);
 			}
 		,"json");
-		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银",1);
+		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银","staff",1);
 		if(reSizeFlag==1)
 			loadSSDWCanvas(0);
 	}
 }
 
-function changeCanvasSize(flag){
-	loadSSDWCanvas(flag);
+function changeCanvasSize(bigFlag,resetFlag){
+	loadSSDWCanvas(true);
     var mcw=ssdwCanvasStyleWidth;
 	var mch=ssdwCanvasStyleHeight;
-	if(flag==1)
-		ssdwCanvasStyleWidth+=30;
-	else
-		ssdwCanvasStyleWidth-=30;
+	if(resetFlag){
+		ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
+	}
+	else{
+		if(bigFlag==1)
+			ssdwCanvasStyleWidth+=ssdwCanvasMinWidth*0.2;
+		else
+			ssdwCanvasStyleWidth-=ssdwCanvasMinWidth*0.2;
+	}
 	
 	if(ssdwCanvasStyleWidth<ssdwCanvasMinWidth){
 		ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
@@ -222,37 +237,75 @@ function changeCanvasSize(flag){
 	initSSDWCanvas(1);
 }
 
-function setEntityLocation(context,x,y,name,floor){
-	context.beginPath();
-	context.strokeStyle = 'red';//点填充
-	context.fillStyle='red';
-	context.lineWidth=arcR*1.5;
-	context.arc(x/widthScale,ssdwCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
-	context.stroke();
-
-	context.beginPath();
-	context.lineWidth = "1";
-	context.fillStyle = "blue";
-	context.fillRect(x/widthScale-rectWidth/2,ssdwCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
-	context.stroke();
-
-	context.font=fontSize+"px bold 黑体";
-	context.fillStyle = "#fff";
-	context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ssdwCanvasHeight-y/heightScale-atSpace);
-	context.stroke();
+function setEntityLocation(context,x,y,name,entityType,floor){
+	var entityImg = new Image();
+	if(entityType=="staff"){
+		entityImg.src=path+"resource/image/007.png";
+		entityImg.onload=function(){
+			ssdwCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ssdwCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+		}
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ssdwCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ssdwCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
+	else if(entityType=="car"){
+		entityImg.src=path+"resource/image/008.png";
+		entityImg.onload=function(){
+			ssdwCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ssdwCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+		}
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ssdwCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ssdwCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
+	else{
+		context.beginPath();
+		context.strokeStyle = 'red';//点填充
+		context.fillStyle='red';
+		context.lineWidth=arcR*1.5;
+		context.arc(x/widthScale,ssdwCanvasHeight-y/heightScale,arcR,0,2*Math.PI);
+		context.stroke();
+	
+		context.beginPath();
+		context.lineWidth = "1";
+		context.fillStyle = "blue";
+		context.fillRect(x/widthScale-rectWidth/2,ssdwCanvasHeight-y/heightScale-rectHeight-arSpace,rectWidth,rectHeight);
+		context.stroke();
+	
+		context.font=fontSize+"px bold 黑体";
+		context.fillStyle = "#fff";
+		context.fillText(name+"("+floor+"层)",x/widthScale-rectWidth/2+fontMarginLeft,ssdwCanvasHeight-y/heightScale-atSpace);
+		context.stroke();
+	}
 }
 
 function loadSSDWCanvas(flag){
-	var smallBut=$("#small_but");
-	var bigBut=$("#big_but");
-	if(flag==1){
-		smallBut.attr("disabled",true);
-		bigBut.attr("disabled",true);
+	var smallButDiv=$("#small_but_div");
+	var bigButDiv=$("#big_but_div");
+	if(flag){
+		smallButDiv.removeAttr("onclick");
+		bigButDiv.removeAttr("onclick");
 	}
 	else{
-		setTimeout(function(){
-			smallBut.attr("disabled",false);
-			bigBut.attr("disabled",false);
+		reSizeTimeout=setTimeout(function(){
+			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
+			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
+			clearTimeout(reSizeTimeout);
 		},"1000");
 	}
 }
@@ -263,6 +316,34 @@ body{
 }
 .xssstj_but_img{
 	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
+}
+.scale_set_div{
+	width:30px;
+	height:100px;
+	right:10px;
+	bottom:60px;
+	position: fixed;
+}
+.scale_set_div .but_div{
+	width: 30px;
+	height: 30px;
+	line-height: 27px;
+	color:#999;
+	font-size:25px;
+	text-align:center; 
+	background-color: #F6F6F6;
+}
+.scale_set_div .reset_but_div{
+	line-height: 30px;
+}
+.scale_set_div .reset_but_div img{
+	margin-top: 9px;
+}
+.scale_set_div .big_but_div{
+	margin-top:3px;
+}
+.scale_set_div .small_but_div{
+	border-top: #999 solid 1px;
 }
 .sstj_div{
 	width: 100%;
@@ -304,13 +385,21 @@ body{
 	margin-left: 5px;
 }
 .ssdwCanvas_div{
-	width: 100%;height: 600px;overflow: auto;
+	width: 100%;
+	overflow: auto;
 }
 </style>
 <title>首页</title>
 </head>
 <body>
 <img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
+<div class="scale_set_div">
+	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
+		<img alt="" src="<%=basePath %>resource/image/006.png">
+	</div>
+	<div class="but_div big_but_div" id="big_but_div" onclick="changeCanvasSize(true,false);">+</div>
+	<div class="but_div small_but_div" id="small_but_div" onclick="changeCanvasSize(false,false);">-</div>
+</div>
 <div class="sstj_div" id="sstj_div">
 	<div class="row_close_div">
 		<div class="close_but_div" onclick="showSSTJDiv(false);">X</div>
@@ -335,8 +424,10 @@ body{
 	<canvas id="ssdwCanvas">
 	</canvas>
 </div>
+<!-- 
 <input type="button" id="small_but" value="缩小" onclick="changeCanvasSize(0);"/>
 <input type="button" id="big_but" value="放大" onclick="changeCanvasSize(1);"/>
+ -->
 <%@include file="nav.jsp"%>
 </body>
 </html>

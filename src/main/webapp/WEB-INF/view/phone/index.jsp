@@ -27,9 +27,11 @@ var ssdwCanvasWidth=ssdwCanvasMaxWidth;
 var ssdwCanvasHeight=ssdwCanvasMaxHeight;
 var widthScale;
 var heightScale;
-var arcR=20;
 var staffImgWidth=100;
 var staffImgHeight=70;
+var carImgWidth=100;
+var carImgHeight=64;
+var arcR=20;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
@@ -236,11 +238,21 @@ function changeCanvasSize(bigFlag,resetFlag){
 		ssdwCanvasStyleHeight=ssdwCanvasMaxHeight;
 	}
 	ssdwCanvasStyleHeight=ssdwCanvasStyleWidth*ssdwCanvasHeight/ssdwCanvasWidth;
+	
+	staffImgWidth=staffImgWidth*mcw/ssdwCanvasStyleWidth;
+	staffImgHeight=staffImgHeight*mch/ssdwCanvasStyleHeight;
+	
+	carImgWidth=carImgWidth*mcw/ssdwCanvasStyleWidth;
+	carImgHeight=carImgHeight*mch/ssdwCanvasStyleHeight;
+	
 	arcR=arcR*mcw/ssdwCanvasStyleWidth;
+	
 	rectWidth=rectWidth*mcw/ssdwCanvasStyleWidth;
 	rectHeight=rectHeight*mch/ssdwCanvasStyleHeight;
+	
 	arSpace=arSpace*mch/ssdwCanvasStyleHeight;
 	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
+	
 	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
 	initSSDWCanvas(1);
@@ -268,7 +280,7 @@ function setEntityLocation(context,x,y,name,entityType,floor){
 	else if(entityType=="car"){
 		entityImg.src=path+"resource/image/008.png";
 		entityImg.onload=function(){
-			ssdwCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ssdwCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+			ssdwCanvasContext.drawImage(entityImg, x/widthScale-carImgWidth/2, ssdwCanvasHeight-y/heightScale-carImgHeight/2, carImgWidth, carImgHeight);
 		}
 	
 		context.beginPath();
@@ -328,25 +340,23 @@ body{
 }
 .scale_set_div{
 	width:30px;
-	height:100px;
+	height:112px;
 	right:10px;
 	bottom:60px;
 	position: fixed;
 }
 .scale_set_div .but_div{
-	width: 30px;
-	height: 30px;
-	line-height: 27px;
+	width: 35px;
+	height: 35px;
+	line-height: 30px;
 	color:#999;
-	font-size:25px;
+	font-size:30px;
 	text-align:center; 
 	background-color: #F6F6F6;
 }
-.scale_set_div .reset_but_div{
-	line-height: 30px;
-}
 .scale_set_div .reset_but_div img{
-	margin-top: 9px;
+	width:21px;
+	margin-top: 7px;
 }
 .scale_set_div .big_but_div{
 	margin-top:3px;
@@ -398,7 +408,7 @@ body{
 	overflow: auto;
 }
 </style>
-<title>首页</title>
+<title>辰麒人员定位安全管理平台</title>
 </head>
 <body>
 <img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">

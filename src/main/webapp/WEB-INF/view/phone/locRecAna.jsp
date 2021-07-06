@@ -26,7 +26,7 @@ var gjfxCanvasWidth=gjfxCanvasMaxWidth;
 var gjfxCanvasHeight=gjfxCanvasMaxHeight;
 var widthScale;
 var heightScale;
-var arcR=10;
+var lineWidth=10;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
@@ -268,7 +268,7 @@ function changeCanvasSize(bigFlag,resetFlag){
 		gjfxCanvasStyleHeight=gjfxCanvasMaxHeight;
 	}
 	gjfxCanvasStyleHeight=gjfxCanvasStyleWidth*gjfxCanvasHeight/gjfxCanvasWidth;
-	arcR=arcR*mcw/gjfxCanvasStyleWidth;
+	lineWidth=lineWidth*mcw/gjfxCanvasStyleWidth;
 	rectWidth=rectWidth*mcw/gjfxCanvasStyleWidth;
 	rectHeight=rectHeight*mch/gjfxCanvasStyleHeight;
 	arSpace=arSpace*mch/gjfxCanvasStyleHeight;
@@ -350,7 +350,7 @@ function setPointLocation(context,x1,y1,x2,y2){
 	//console.log(x1+","+y1+","+x2+","+y2);
 	context.strokeStyle = 'red';//点填充
 	context.fillStyle='red';
-	context.lineWidth=arcR*1.5;
+	context.lineWidth=lineWidth;
 	context.beginPath();
 	context.moveTo(x1/widthScale, gjfxCanvasHeight-y1/heightScale);//起始位置
 	context.lineTo(x2/widthScale, gjfxCanvasHeight-y2/heightScale);//停止位置
@@ -395,25 +395,23 @@ body{
 }
 .scale_set_div{
 	width:30px;
-	height:100px;
+	height:112px;
 	right:10px;
 	bottom:60px;
 	position: fixed;
 }
 .scale_set_div .but_div{
-	width: 30px;
-	height: 30px;
-	line-height: 27px;
+	width: 35px;
+	height: 35px;
+	line-height: 30px;
 	color:#999;
-	font-size:25px;
+	font-size:30px;
 	text-align:center; 
 	background-color: #F6F6F6;
 }
-.scale_set_div .reset_but_div{
-	line-height: 30px;
-}
 .scale_set_div .reset_but_div img{
-	margin-top: 9px;
+	width:21px;
+	margin-top: 7px;
 }
 .scale_set_div .big_but_div{
 	margin-top:3px;

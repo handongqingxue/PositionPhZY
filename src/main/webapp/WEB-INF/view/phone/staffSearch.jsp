@@ -24,9 +24,11 @@ var ryssCanvasWidth=ryssCanvasMaxWidth;
 var ryssCanvasHeight=ryssCanvasMaxHeight;
 var widthScale;
 var heightScale;
-var arcR=20;
 var staffImgWidth=100;
 var staffImgHeight=70;
+var carImgWidth=100;
+var carImgHeight=64;
+var arcR=20;
 var rectWidth=330;
 var rectHeight=100;
 var arSpace=43;
@@ -36,7 +38,6 @@ var fontMarginLeft=45;
 var reSizeTimeout;
 var locationList;
 $(function(){
-	showSSTJDiv(false);
 	jiSuanScale();
 	initRYSSCanvasDivHeight();
 	initRYSSCanvas(false,true);
@@ -49,22 +50,11 @@ function jiSuanScale(){
 
 function initRYSSCanvasDivHeight(){
 	var windowHeight=$(window).height();
+	var sstjDivHeight=$("#sstj_div").css("height");
+	sstjDivHeight=sstjDivHeight.substring(0,sstjDivHeight.length-2);
 	var bottomDivHeight=$("#bottom_div").css("height");
 	bottomDivHeight=bottomDivHeight.substring(0,bottomDivHeight.length-2);
-	$("#ryssCanvas_div").css("height",windowHeight-bottomDivHeight+"px");
-}
-
-function showSSTJDiv(flag){
-	var xssstjButImg=$("#xssstj_but_img");
-	var sstjDiv=$("#sstj_div");
-	if(flag){
-		xssstjButImg.css("display","none");
-		sstjDiv.css("display","block");
-	}
-	else{
-		xssstjButImg.css("display","block");
-		sstjDiv.css("display","none");
-	}
+	$("#ryssCanvas_div").css("height",windowHeight-sstjDivHeight-bottomDivHeight-2+"px");
 }
 
 function initRYSSCanvas(reloadFlag,reSizeFlag){
@@ -86,7 +76,6 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 					$.post("selectEntityLocation",
 						{entityName:entityName},
 						function(data){
-							showSSTJDiv(false);
 							if(data.status=="ok"){
 								locationList=data.list;
 								for(var i=0;i<locationList.length;i++){
@@ -176,11 +165,21 @@ function changeCanvasSize(bigFlag,resetFlag){
 		ryssCanvasStyleHeight=ryssCanvasMaxHeight;
 	}
 	ryssCanvasStyleHeight=ryssCanvasStyleWidth*ryssCanvasHeight/ryssCanvasWidth;
+	
+	staffImgWidth=staffImgWidth*mcw/ryssCanvasStyleWidth;
+	staffImgHeight=staffImgHeight*mch/ryssCanvasStyleHeight;
+	
+	carImgWidth=carImgWidth*mcw/ryssCanvasStyleWidth;
+	carImgHeight=carImgHeight*mch/ryssCanvasStyleHeight;
+	
 	arcR=arcR*mcw/ryssCanvasStyleWidth;
+	
 	rectWidth=rectWidth*mcw/ryssCanvasStyleWidth;
 	rectHeight=rectHeight*mch/ryssCanvasStyleHeight;
+	
 	arSpace=arSpace*mch/ryssCanvasStyleHeight;
 	atSpace=atSpace*mch/ryssCanvasStyleHeight;
+	
 	fontSize=fontSize*mch/ryssCanvasStyleHeight;
 	fontMarginLeft=fontMarginLeft*mcw/ryssCanvasStyleWidth;
 	
@@ -209,7 +208,7 @@ function setEntityLocation(context,x,y,name,entityType,floor){
 	else if(entityType=="car"){
 		entityImg.src=path+"resource/image/008.png";
 		entityImg.onload=function(){
-			ryssCanvasContext.drawImage(entityImg, x/widthScale-staffImgWidth/2, ryssCanvasHeight-y/heightScale-staffImgHeight/2, staffImgWidth, staffImgHeight);
+			ryssCanvasContext.drawImage(entityImg, x/widthScale-carImgWidth/2, ryssCanvasHeight-y/heightScale-carImgHeight/2, carImgWidth, carImgHeight);
 		}
 	
 		context.beginPath();
@@ -264,31 +263,25 @@ function loadRYSSCanvas(flag){
 body{
 	margin: 0;
 }
-.xssstj_but_img{
-	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
-}
-
 .scale_set_div{
 	width:30px;
-	height:100px;
+	height:112px;
 	right:10px;
 	bottom:60px;
 	position: fixed;
 }
 .scale_set_div .but_div{
-	width: 30px;
-	height: 30px;
-	line-height: 27px;
+	width: 35px;
+	height: 35px;
+	line-height: 30px;
 	color:#999;
-	font-size:25px;
+	font-size:30px;
 	text-align:center; 
 	background-color: #F6F6F6;
 }
-.scale_set_div .reset_but_div{
-	line-height: 30px;
-}
 .scale_set_div .reset_but_div img{
-	margin-top: 9px;
+	width:21px;
+	margin-top: 7px;
 }
 .scale_set_div .big_but_div{
 	margin-top:3px;
@@ -298,39 +291,27 @@ body{
 }
 
 .sstj_div{
-	width: 100%;
+	width: 99%;
+	height: 40px;
 	padding:1px;
 	background-color: #F6F6F6;
-	position: fixed;
-}
-.sstj_div .row_close_div{
-	width: 100%;height: 24px;
-}
-.sstj_div .row_name_div{
-	width: 100%;height: 40px;line-height: 40px;margin-bottom: 10px;
-}
-.sstj_div .close_but_div{
-	margin-top: 3px;
-	margin-right: 20px;
-	color: #636468;
-	float: right;
-}
-.sstj_div .name_span{
-	margin-left: 15px;color: #636468;font-size: 15px;
 }
 .sstj_div .entityName_inp{
-	width: 130px;
+	width: 230px;
 	height: 23px;
 	line-height: 23px;
+	margin-top: 5px;
 	margin-left: 10px;
+	padding-left:10px;
 	color: #636468;
 }
 .sstj_div .search_but_div{
 	width: 50px;
 	height: 30px;
 	line-height: 30px;
-	margin-top:-34px;
-	margin-left:213px; 
+	margin-top:5px;
+	margin-right:20px; 
+	float: right;
 	color:#fff;
 	font-size:15px;
 	text-align:center;
@@ -346,7 +327,6 @@ body{
 <title>人员搜索</title>
 </head>
 <body>
-<img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
 <div class="scale_set_div">
 	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
 		<img alt="" src="<%=basePath %>resource/image/006.png">
@@ -355,14 +335,8 @@ body{
 	<div class="but_div small_but_div" id="small_but_div" onclick="changeCanvasSize(false,false);">-</div>
 </div>
 <div class="sstj_div" id="sstj_div">
-	<div class="row_close_div">
-		<div class="close_but_div" onclick="showSSTJDiv(false);">X</div>
-	</div>
-	<div class="row_name_div">
-		<span class="name_span">姓名</span>
-		<input type="text" class="entityName_inp" id="entityName_inp"/>
-		<div class="search_but_div" onclick="initRYSSCanvas(true,false);">搜索</div>
-	</div>
+	<input type="text" class="entityName_inp" id="entityName_inp" placeholder="请输入人员姓名"/>
+	<div class="search_but_div" onclick="initRYSSCanvas(true,false);">搜索</div>
 </div>
 <div class="ryssCanvas_div" id="ryssCanvas_div">
 	<canvas id="ryssCanvas">

@@ -11,11 +11,11 @@ function goPage(page){
 	case "ssdw":
 		location.href=phonePath+"goPage?page=index";
 		break;
-	case "ryss":
-		location.href=phonePath+"goPage?page=staffSearch";
-		break;
 	case "gjfx":
 		location.href=phonePath+"goPage?page=locRecAna";
+		break;
+	case "ryss":
+		location.href=phonePath+"goPage?page=staffSearch";
 		break;
 	case "bjtj":
 		location.href=phonePath+"goPage?page=warnCount";
@@ -39,10 +39,10 @@ function goPage(page){
 .bottom_div .selected{
 	color: #1777FF;font-weight: bold;
 }
-.bottom_div .ryss_div{
+.bottom_div .gjfx_div{
 	margin-top: -50px;margin-left: 25%;
 }
-.bottom_div .gjfx_div{
+.bottom_div .ryss_div{
 	margin-top: -50px;margin-left: 50%;
 }
 .bottom_div .bjtj_div{
@@ -55,8 +55,8 @@ function goPage(page){
 <div class="bottom_space_div"></div>
 <div class="bottom_div" id="bottom_div">
 	<div class="item_div ${param.page eq 'index'?'selected':''}" onclick="goPage('ssdw')">实时定位</div>
-	<div class="item_div ryss_div ${param.page eq 'staffSearch'?'selected':''}" onclick="goPage('ryss')">人员搜索</div>
 	<div class="item_div gjfx_div ${param.page eq 'locRecAna'?'selected':''}" onclick="goPage('gjfx')">轨迹分析</div>
+	<div class="item_div ryss_div ${param.page eq 'staffSearch'?'selected':''}" onclick="goPage('ryss')">人员搜索</div>
 	<div class="item_div bjtj_div ${param.page eq 'warnCount'?'selected':''}" onclick="goPage('bjtj')">报警统计</div>
 </div>
 </body>

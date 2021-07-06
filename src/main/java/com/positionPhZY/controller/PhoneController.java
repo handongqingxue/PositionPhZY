@@ -2252,7 +2252,7 @@ public class PhoneController {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
 			String cookie = null;
 			Object cookieObj = session.getAttribute("Cookie");
-			System.out.println("cookieObj==="+cookieObj);
+			//System.out.println("cookieObj==="+cookieObj);
 			if(cookieObj!=null)
 				cookie = cookieObj.toString();
 			else
@@ -2273,7 +2273,7 @@ public class PhoneController {
 		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
 		//body参数放这里
 		String bodyParamStr = bodyParamJO.toString();
-		System.out.println("bodyParamStr==="+bodyParamStr);
+		//System.out.println("bodyParamStr==="+bodyParamStr);
 		writer.write(bodyParamStr);
 		//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
 		writer.flush();
@@ -2293,7 +2293,7 @@ public class PhoneController {
 		
 		connection.disconnect();
 		String result = sbf.toString();
-		System.out.println("result==="+result);
+		//System.out.println("result==="+result);
 		JSONObject resultJO = null;
 		if(result.contains("DOCTYPE")) {
 			resultJO = new JSONObject();

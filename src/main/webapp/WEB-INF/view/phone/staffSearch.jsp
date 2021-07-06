@@ -13,6 +13,8 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
+var windowWidth;
+var windowHeight;
 var ryssCanvas;
 var ryssCanvasMinWidth=720.52;
 var ryssCanvasMinHeight=670.49;
@@ -43,13 +45,22 @@ $(function(){
 	initRYSSCanvas(false,true);
 });
 
+function changeScrollPosition(x,y){
+	var ryssCanvasDiv=$("#ryssCanvas_div");
+	var widthBL=ryssCanvasMinWidth/ryssCanvasStyleWidth;
+	ryssCanvasDiv.scrollLeft(x/widthBL-windowWidth/2);
+	var heightBL=ryssCanvasMinHeight/ryssCanvasStyleHeight;
+	ryssCanvasDiv.scrollTop(ryssCanvasStyleHeight-y/heightBL-windowHeight/2);
+}
+
 function jiSuanScale(){
 	widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
 	heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
 }
 
 function initRYSSCanvasDivHeight(){
-	var windowHeight=$(window).height();
+	windowWidth=$(window).width();
+	windowHeight=$(window).height();
 	var sstjDivHeight=$("#sstj_div").css("height");
 	sstjDivHeight=sstjDivHeight.substring(0,sstjDivHeight.length-2);
 	var bottomDivHeight=$("#bottom_div").css("height");
@@ -81,6 +92,7 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 								for(var i=0;i<locationList.length;i++){
 									var location=locationList[i];
 									setEntityLocation(ryssCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
+									changeScrollPosition(location.x,location.y);
 								}
 							}
 							else{
@@ -165,23 +177,25 @@ function changeCanvasSize(bigFlag,resetFlag){
 		ryssCanvasStyleHeight=ryssCanvasMaxHeight;
 	}
 	ryssCanvasStyleHeight=ryssCanvasStyleWidth*ryssCanvasHeight/ryssCanvasWidth;
+
+	var cswSFB=mcw/ryssCanvasStyleWidth;
+	var cshSFB=mch/ryssCanvasStyleHeight;
+	staffImgWidth=staffImgWidth*cswSFB;
+	staffImgHeight=staffImgHeight*cshSFB;
 	
-	staffImgWidth=staffImgWidth*mcw/ryssCanvasStyleWidth;
-	staffImgHeight=staffImgHeight*mch/ryssCanvasStyleHeight;
+	carImgWidth=carImgWidth*cswSFB;
+	carImgHeight=carImgHeight*cshSFB;
 	
-	carImgWidth=carImgWidth*mcw/ryssCanvasStyleWidth;
-	carImgHeight=carImgHeight*mch/ryssCanvasStyleHeight;
+	arcR=arcR*cswSFB;
 	
-	arcR=arcR*mcw/ryssCanvasStyleWidth;
+	rectWidth=rectWidth*cswSFB;
+	rectHeight=rectHeight*cshSFB;
 	
-	rectWidth=rectWidth*mcw/ryssCanvasStyleWidth;
-	rectHeight=rectHeight*mch/ryssCanvasStyleHeight;
+	arSpace=arSpace*cshSFB;
+	atSpace=atSpace*cshSFB;
 	
-	arSpace=arSpace*mch/ryssCanvasStyleHeight;
-	atSpace=atSpace*mch/ryssCanvasStyleHeight;
-	
-	fontSize=fontSize*mch/ryssCanvasStyleHeight;
-	fontMarginLeft=fontMarginLeft*mcw/ryssCanvasStyleWidth;
+	fontSize=fontSize*cshSFB;
+	fontMarginLeft=fontMarginLeft*cswSFB;
 	
 	initRYSSCanvas(false,true);
 }

@@ -17,6 +17,11 @@ $(function(){
 	
 });
 
+function runAndroidFunction(flag){
+	if(flag=="getPageName")
+		AndroidFunction.getPageName('${param.page}');
+}
+
 function checkLogin(){
 	if(checkTenantId()){
 		if(checkUserId()){

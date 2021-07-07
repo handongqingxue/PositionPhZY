@@ -80,15 +80,19 @@ public class PhoneController {
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
-		String page = null;
+		String url = null;
 		Map<String, Object> ccvMap = checkCookieValid(request);
+		String page = request.getParameter("page");
 		if("ok".equals(ccvMap.get("status").toString())) {
-			page=request.getParameter("page");
+			url=MODULE_NAME+"/"+page;
+		}
+		else if("login".equals(page)){
+			url=MODULE_NAME+"/login";
 		}
 		else {
-			page="login";
+			url="redirect:goPage?page=login";
 		}
-		return MODULE_NAME+"/"+page;
+		return url;
 	}
 
 	@RequestMapping(value="/initEntitySelect")
@@ -694,6 +698,15 @@ public class PhoneController {
 		finally {
 			return resultMap;
 		}
+	}
+
+	@RequestMapping(value="/exit")
+	public String exit(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		session.removeAttribute("loginUser");
+		
+		return MODULE_NAME+"/login";
 	}
 
 	/**
@@ -2251,11 +2264,14 @@ public class PhoneController {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
 			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
 			String cookie = null;
-			Object cookieObj = session.getAttribute("Cookie");
-			//System.out.println("cookieObj==="+cookieObj);
-			if(cookieObj!=null)
-				cookie = cookieObj.toString();
-			else
+			Object LoginUserObj = session.getAttribute("loginUser");
+			//System.out.println("LoginUserObj==="+LoginUserObj);
+			if(LoginUserObj!=null) {
+				LoginUser loginUser = (LoginUser)LoginUserObj;
+				cookie = loginUser.getCookie();
+			}
+			
+			if(cookie==null)
 				cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
 				
 			if(!StringUtils.isEmpty(cookie))
@@ -2327,11 +2343,21 @@ public class PhoneController {
 	}
 	
 	public boolean checkCookieInSession(HttpSession session) {
-		Object cookieObj = session.getAttribute("Cookie");
-		if(cookieObj==null)
+		Object loginUserObj = session.getAttribute("loginUser");
+		if(loginUserObj==null)
 			return false;
-		else
-			return true;
+		else {
+			LoginUser loginUser = (LoginUser)loginUserObj;
+			if(loginUser==null)
+				return false;
+			else {
+				String cookie = loginUser.getCookie();
+				if(StringUtils.isEmpty(cookie))
+					return false;
+				else
+					return true;
+			}
+		}
 	}
 	
 	public String getCookieFromHeader(HttpURLConnection connection,HttpSession session) {
@@ -2340,7 +2366,9 @@ public class PhoneController {
 			String value = map.get(key).get(0);
 			if(value.contains("JSESSIONID=")) {
 				 System.out.println("key==="+value);
-				 session.setAttribute("Cookie", value);
+				 LoginUser loginUser=new LoginUser();
+				 loginUser.setCookie(value);
+				 session.setAttribute("loginUser", loginUser);
 			}
 		}
 		return "";

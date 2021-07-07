@@ -6,6 +6,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script type="text/javascript">
+function exit(){
+	if(confirm("确实要退出吗？")){
+		location.href=phonePath+"exit";
+	}
+}
+
+function runAndroidFunction(flag){
+	if(flag=="getPageName")
+		AndroidFunction.getPageName('${param.page}');
+	else if(flag=="showUserId")
+		AndroidFunction.showUserId("test001");
+}
+
 function goPage(page){
 	switch (page) {
 	case "ssdw":
@@ -52,6 +65,7 @@ function goPage(page){
 <title>Insert title here</title>
 </head>
 <body>
+<input id="exit_but" type="button" value="退出" style="display: none;" onclick="exit();"/>
 <div class="bottom_space_div"></div>
 <div class="bottom_div" id="bottom_div">
 	<div class="item_div ${param.page eq 'index'?'selected':''}" onclick="goPage('ssdw')">实时定位</div>

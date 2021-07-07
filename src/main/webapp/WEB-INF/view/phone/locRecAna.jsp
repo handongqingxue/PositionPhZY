@@ -268,13 +268,16 @@ function changeCanvasSize(bigFlag,resetFlag){
 		gjfxCanvasStyleHeight=gjfxCanvasMaxHeight;
 	}
 	gjfxCanvasStyleHeight=gjfxCanvasStyleWidth*gjfxCanvasHeight/gjfxCanvasWidth;
-	lineWidth=lineWidth*mcw/gjfxCanvasStyleWidth;
-	rectWidth=rectWidth*mcw/gjfxCanvasStyleWidth;
-	rectHeight=rectHeight*mch/gjfxCanvasStyleHeight;
-	arSpace=arSpace*mch/gjfxCanvasStyleHeight;
-	atSpace=atSpace*mch/gjfxCanvasStyleHeight;
-	fontSize=fontSize*mch/gjfxCanvasStyleHeight;
-	fontMarginLeft=fontMarginLeft*mcw/gjfxCanvasStyleWidth;
+	
+	var cswSFB=mcw/gjfxCanvasStyleWidth;
+	var cshSFB=mch/gjfxCanvasStyleHeight;
+	lineWidth=lineWidth*cswSFB;
+	rectWidth=rectWidth*cswSFB;
+	rectHeight=rectHeight*cshSFB;
+	arSpace=arSpace*cshSFB;
+	atSpace=atSpace*cshSFB;
+	fontSize=fontSize*cshSFB;
+	fontMarginLeft=fontMarginLeft*cswSFB;
 	initGJFXCanvas(null,true);
 }
 
@@ -391,7 +394,12 @@ body{
 	margin: 0;
 }
 .xssstj_but_img{
-	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
+	width:30px;
+	height:25px;
+	margin-top:10px;
+	right:10px;
+	position: fixed;
+	z-index: 1;
 }
 .scale_set_div{
 	width:30px;
@@ -426,16 +434,24 @@ body{
 	position: fixed;
 }
 .sstj_div .row_close_div{
-	width: 100%;height: 24px;
+	width: 100%;
+	height: 24px;
 }
 .sstj_div .row_ry_div{
-	width: 100%;height: 40px;line-height: 40px;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
 }
 .sstj_div .row_sj_div{
-	width: 100%;height: 30px;line-height: 30px;
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
 }
 .sstj_div .row_ysb_div{
-	width: 100%;height: 42px;line-height: 42px;margin-bottom: 10px;
+	width: 100%;
+	height: 42px;
+	line-height: 42px;
+	margin-bottom: 10px;
 }
 .sstj_div .close_but_div{
 	margin-top: 3px;
@@ -444,19 +460,30 @@ body{
 	float: right;
 }
 .sstj_div .ry_span,.sstj_div .sj_span,.sstj_div .ysb_span{
-	margin-left: 15px;color: #636468;font-size: 15px;
+	margin-left: 15px;
+	color: #636468;
+	font-size: 15px;
 }
 .sstj_div .staff_sel{
-	width: 257px;height: 25px;line-height: 25px;margin-left:25px;color: #636468;
+	width: 257px;
+	height: 25px;
+	line-height: 25px;
+	margin-left:25px;
+	color: #636468;
 }
 .sstj_div .td_cal{
-	width: 90px;margin-left: 25px;color: #636468;border-color: #95B8E7;
+	width: 90px;
+	margin-left: 25px;
+	color: #636468;
+	border-color: #95B8E7;
 }
 .sstj_div .stp_div{
-	margin-top: -30px;margin-left: 183px;
+	margin-top: -30px;
+	margin-left: 183px;
 }
 .sstj_div .etp_div{
-	margin-top: 5px;margin-left: 183px;
+	margin-top: 5px;
+	margin-left: 183px;
 }
 .sstj_div .stp_div select,.sstj_div .etp_div select{
 	height: 25px;

@@ -8,6 +8,7 @@
 <script type="text/javascript">
 function exit(){
 	if(confirm("确实要退出吗？")){
+		runAndroidFunction("removeUserId");
 		location.href=phonePath+"exit";
 	}
 }
@@ -17,6 +18,8 @@ function runAndroidFunction(flag){
 		AndroidFunction.getPageName('${param.page}');
 	else if(flag=="showUserId")
 		AndroidFunction.showUserId("test001");
+	else if(flag=="removeUserId")
+		AndroidFunction.removeUserId();
 }
 
 function goPage(page){
@@ -40,32 +43,48 @@ function goPage(page){
 }
 </script>
 <style type="text/css">
+.exit_but{
+	display: none;
+}
 .bottom_space_div{
-	width: 100%;height: 50px;
+	width: 100%;
+	height: 50px;
 }
 .bottom_div{
-	width: 100%;height: 50px;line-height: 50px;bottom: 0;position: fixed;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	bottom: 0;
+	position: fixed;
 }
 .bottom_div .item_div{
-	width: 25%;height: 50px;text-align: center;color:#636468;background-color: #F6F6F6;
+	width: 25%;
+	height: 50px;
+	text-align: center;
+	color:#636468;
+	background-color: #F6F6F6;
 }
 .bottom_div .selected{
-	color: #1777FF;font-weight: bold;
+	color: #1777FF;
+	font-weight: bold;
 }
 .bottom_div .gjfx_div{
-	margin-top: -50px;margin-left: 25%;
+	margin-top: -50px;
+	margin-left: 25%;
 }
 .bottom_div .ryss_div{
-	margin-top: -50px;margin-left: 50%;
+	margin-top: -50px;
+	margin-left: 50%;
 }
 .bottom_div .bjtj_div{
-	margin-top: -50px;margin-left: 75%;
+	margin-top: -50px;
+	margin-left: 75%;
 }
 </style>
 <title>Insert title here</title>
 </head>
 <body>
-<input id="exit_but" type="button" value="退出" style="display: none;" onclick="exit();"/>
+<input class="exit_but" id="exit_but" type="button" value="退出" onclick="exit();"/>
 <div class="bottom_space_div"></div>
 <div class="bottom_div" id="bottom_div">
 	<div class="item_div ${param.page eq 'index'?'selected':''}" onclick="goPage('ssdw')">实时定位</div>

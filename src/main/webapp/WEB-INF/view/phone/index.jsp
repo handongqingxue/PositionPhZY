@@ -171,7 +171,7 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvasImg.src=path+"resource/image/003.jpg";
 	ssdwCanvas = document.createElement("canvas");
 	ssdwCanvas.id="ssdwCanvas";
-	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";
+	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";//通过缩放来改变画布大小，画布大小改变后，上面的定位点位置也就跟着改变了
 	ssdwCanvas.style.height=ssdwCanvasStyleHeight+"px";
 	ssdwCanvas.width=ssdwCanvasWidth;
 	ssdwCanvas.height=ssdwCanvasHeight;
@@ -239,22 +239,25 @@ function changeCanvasSize(bigFlag,resetFlag){
 	}
 	ssdwCanvasStyleHeight=ssdwCanvasStyleWidth*ssdwCanvasHeight/ssdwCanvasWidth;
 	
-	staffImgWidth=staffImgWidth*mcw/ssdwCanvasStyleWidth;
-	staffImgHeight=staffImgHeight*mch/ssdwCanvasStyleHeight;
+	//缩放地图改变尺寸时，不改变点的坐标（坐标自动跟着变），改变的只有上面矩形框大小、文字大小
+	var cswSFB=mcw/ssdwCanvasStyleWidth;
+	var cshSFB=mch/ssdwCanvasStyleHeight;
+	staffImgWidth=staffImgWidth*cswSFB;
+	staffImgHeight=staffImgHeight*cshSFB;
 	
-	carImgWidth=carImgWidth*mcw/ssdwCanvasStyleWidth;
-	carImgHeight=carImgHeight*mch/ssdwCanvasStyleHeight;
+	carImgWidth=carImgWidth*cswSFB;
+	carImgHeight=carImgHeight*cshSFB;
 	
-	arcR=arcR*mcw/ssdwCanvasStyleWidth;
+	arcR=arcR*cswSFB;
 	
-	rectWidth=rectWidth*mcw/ssdwCanvasStyleWidth;
-	rectHeight=rectHeight*mch/ssdwCanvasStyleHeight;
+	rectWidth=rectWidth*cswSFB;
+	rectHeight=rectHeight*cshSFB;
 	
-	arSpace=arSpace*mch/ssdwCanvasStyleHeight;
-	atSpace=atSpace*mch/ssdwCanvasStyleHeight;
+	arSpace=arSpace*cshSFB;
+	atSpace=atSpace*cshSFB;
 	
-	fontSize=fontSize*mch/ssdwCanvasStyleHeight;
-	fontMarginLeft=fontMarginLeft*mcw/ssdwCanvasStyleWidth;
+	fontSize=fontSize*cshSFB;
+	fontMarginLeft=fontMarginLeft*cswSFB;
 	initSSDWCanvas(1);
 }
 
@@ -336,7 +339,12 @@ body{
 	margin: 0;
 }
 .xssstj_but_img{
-	width:30px;height:25px;margin-top:10px;right:10px;position: fixed;z-index: 1;
+	width:30px;
+	height:25px;
+	margin-top:10px;
+	right:10px;
+	position: fixed;
+	z-index: 1;
 }
 .scale_set_div{
 	width:30px;
@@ -371,13 +379,17 @@ body{
 	position: fixed;
 }
 .sstj_div .row_close_div{
-	width: 100%;height: 24px;
+	width: 100%;
+	height: 24px;
 }
 .sstj_div .row_dtrs_div,.sstj_div .row_duty_div{
-	width: 100%;height: 40px;line-height: 40px;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
 }
 .sstj_div .row_label_div{
-	width: 100%;margin: 10px 0 10px;
+	width: 100%;
+	margin: 10px 0 10px;
 }
 .sstj_div .close_but_div{
 	margin-top: 3px;
@@ -386,16 +398,31 @@ body{
 	float: right;
 }
 .sstj_div .dtrs_span,.sstj_div .duty_span,.sstj_div .label_span{
-	margin-left: 15px;color: #636468;font-size: 15px;
+	margin-left: 15px;
+	color: #636468;
+	font-size: 15px;
 }
 .sstj_div .floor_sel,.sstj_div .duty_sel{
-	width: 150px;height: 25px;line-height: 25px;margin-left:25px;color: #636468;
+	width: 150px;
+	height: 25px;
+	line-height: 25px;
+	margin-left:25px;
+	color: #636468;
 }
 .sstj_div .label_list_div{
-	width: 150px;height: 270px;margin-top: -25px;margin-left: 104px;border: #999 solid 1px;border-radius:5px;overflow: auto; 
+	width: 150px;
+	height: 270px;
+	margin-top: -25px;
+	margin-left: 104px;
+	border: #999 solid 1px;
+	border-radius:5px;
+	overflow: auto; 
 }
 .sstj_div .label_list_div .item_div{
-	width: 100%;height: 30px;line-height: 30px;color: #636468;
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	color: #636468;
 }
 .sstj_div .label_list_div .item_div .select_cb{
 	margin-top: 10px;

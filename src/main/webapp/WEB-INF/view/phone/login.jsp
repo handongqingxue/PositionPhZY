@@ -105,7 +105,8 @@ function checkPassword(){
 }
 </script>
 <style type="text/css">
-.loginPage_div{
+body{
+	margin:0;
 	background-color:#fff;
 }
 .main_div{
@@ -113,32 +114,41 @@ function checkPassword(){
 	height: 250px;
 	margin:65px auto 0;
 }
-  .title_h1{
+.title_h1{
     font-size:18px;
     text-align: center;
-  }
-  .tenantId_div,.userId_div,.password_div {
+}
+.tenantId_div,.userId_div,.password_div {
     width: 230px;
     height: 48px;
     line-height: 48px;
     margin: 20px auto 0;
-  }
-  .tenantId_inp_div,.userId_inp_div,.password_inp_div{
+}
+.tenantId_img,.userId_img{
+	width: 20px;
+	height:26px;
+}
+.passwor_img{
+	width: 24px;
+	height:23px;
+}
+.tenantId_inp_div,.userId_inp_div,.password_inp_div{
     width: 200px;
     height: 48px;
     margin-top: -48px;
     margin-left: 28px;
     background-color: #fff;
     border-bottom: 3px solid #eee;
-  }
-  .tenantId_inp,.userId_inp,.password_inp{
+}
+.tenantId_inp,.userId_inp,.password_inp{
     width: 180px;
     height: 45px;
+    margin-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
     border: 0;
-  }
-  .loginBut_div{
+}
+.loginBut_div{
     width: 230px;
     height: 38px;
     line-height: 38px;
@@ -146,36 +156,34 @@ function checkPassword(){
     font-size: 16px;
     color: #fff;
     text-align: center;
-    background-color: #4caf50;
+    background-color: #1777FF;
     border-radius: 4px;
-  }
+}
 </style>
 <title>登录</title>
 </head>
 <body>
-<div class="loginPage_div">
-	<div class="main_div">
-       <h1 class="title_h1">人员定位系统手机版</h1>
-       <div class="tenantId_div">
-           <img alt="" src="<%=basePath %>resource/image/001.png" style="width: 20px;height:26px;">
-           <div class="tenantId_inp_div">
-               <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" value="ts00000006" onfocus="focusTenantId()" onblur="checkTenantId()"/>
-           </div>
-       </div>
-       <div class="userId_div">
-           <img alt="" src="<%=basePath %>resource/image/001.png" style="width: 20px;height:26px;">
-           <div class="userId_inp_div">
-               <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" value="test001" onfocus="focusUserId()" onblur="checkUserId()"/>
-           </div>
-       </div>
-       <div class="password_div">
-           <img alt="" src="<%=basePath %>resource/image/002.png" style="width: 24px;height:23px;">
-           <div class="password_inp_div">
-               <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" value="test001" onblur="checkPassword()"/>
-           </div>
-       </div>
-       <div class="loginBut_div" onclick="checkLogin()">登录</div>
-   </div>
+<div class="main_div">
+    <h1 class="title_h1">人员定位系统手机版</h1>
+    <div class="tenantId_div">
+        <img class="tenantId_img" alt="" src="<%=basePath %>resource/image/001.png">
+        <div class="tenantId_inp_div">
+            <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" value="ts00000006" onfocus="focusTenantId()" onblur="checkTenantId()"/>
+        </div>
+    </div>
+    <div class="userId_div">
+        <img class="userId_img" alt="" src="<%=basePath %>resource/image/001.png">
+        <div class="userId_inp_div">
+            <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" value="test001" onfocus="focusUserId()" onblur="checkUserId()"/>
+        </div>
+    </div>
+    <div class="password_div">
+        <img class="passwor_img" alt="" src="<%=basePath %>resource/image/002.png">
+        <div class="password_inp_div">
+            <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" value="test001" onblur="checkPassword()"/>
+        </div>
+    </div>
+    <div class="loginBut_div" onclick="checkLogin()">登录</div>
 </div>
 </body>
 </html>

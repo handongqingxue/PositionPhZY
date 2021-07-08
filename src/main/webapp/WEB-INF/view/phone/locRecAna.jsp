@@ -16,12 +16,12 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 var gjfxCanvas;
-var gjfxCanvasMinWidth=720.52;
-var gjfxCanvasMinHeight=670.49;
+var gjfxCanvasMinWidth;//720.52
+var gjfxCanvasMinHeight;//670.49
 var gjfxCanvasMaxWidth=2841;
 var gjfxCanvasMaxHeight=2643;
-var gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
-var gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
+var gjfxCanvasStyleWidth;//gjfxCanvasMinWidth
+var gjfxCanvasStyleHeight;//gjfxCanvasMinHeight
 var gjfxCanvasWidth=gjfxCanvasMaxWidth;
 var gjfxCanvasHeight=gjfxCanvasMaxHeight;
 var widthScale;
@@ -45,12 +45,27 @@ $(function(){
 	initEndTimePickerDiv();
 	jiSuanScale();
 	initGJFXCanvasDivHeight();
-	initGJFXCanvas(false,false);
 });
 
 function jiSuanScale(){
-	widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
-	heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+	$.post("getRootAreas",
+		function(data){
+			//alert(JSON.stringify(data));
+			if(data.status=="ok"){
+				var result=data.result;
+				var area=result[0];
+				gjfxCanvasMinWidth=area.width;
+				gjfxCanvasMinHeight=area.length;
+				gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
+				gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
+				
+				widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
+				heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+				
+				initGJFXCanvas(false,false);
+			}
+		}
+	,"json");
 }
 
 function initGJFXCanvasDivHeight(){

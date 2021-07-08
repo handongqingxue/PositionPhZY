@@ -686,10 +686,17 @@ public class PhoneController {
 			//bodyParamStr==={"method":"login","id":1,"jsonrpc":"2.0","params":{"tenantId":"ts00000006","userId":"test001","key":"415c9486b11c55592bfb20082e5b55184c11d3661e46f37efff7c118ab64bdda"}}
 			//result==={"result":{"role":1,"staffId":null},"id":1,"jsonrpc":"2.0"}
 			//result==={"id":1,"jsonrpc":"2.0","error":{"code":-2,"message":"ts00000006: code miss"}}
-			System.out.println("resultJO==="+resultJO.toString());
-			JSONObject resJO=(JSONObject)resultJO.get("result");
-			System.out.println(">>>=="+resultJO.get("result"));
-			resultMap.put("role", resJO.get("role"));
+			String resultStr = resultJO.toString();
+			System.out.println("resultJO==="+resultStr);
+			resultMap=JSON.parseObject(resultStr, Map.class);
+			if("ok".equals(resultJO.get("status").toString())) {
+				HttpSession session = request.getSession();
+				LoginUser loginUser=(LoginUser)session.getAttribute("loginUser");
+				loginUser.setUserId(userId);
+			}
+			else {
+				resultMap.put("message", "用户不存在");
+			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -1351,7 +1358,7 @@ public class PhoneController {
 	@ResponseBody
 	public Map<String, Object> getRootAreas(HttpServletRequest request) {
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> resultMap = null;
 		try {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
@@ -1361,7 +1368,9 @@ public class PhoneController {
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getRootAreas",request);
-			System.out.println("getRootAreas:resultJO==="+resultJO.toString());
+			String resultStr = resultJO.toString();
+			System.out.println("getRootAreas:resultJO==="+resultStr);
+			resultMap=JSON.parseObject(resultStr);
 			/*
 			{"result":[
 			{
@@ -2313,6 +2322,10 @@ public class PhoneController {
 		JSONObject resultJO = null;
 		if(result.contains("DOCTYPE")) {
 			resultJO = new JSONObject();
+			resultJO.put("status", "no");
+		}
+		else if(result.contains("error")) {
+			resultJO = new JSONObject(result);
 			resultJO.put("status", "no");
 		}
 		else {

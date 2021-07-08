@@ -17,12 +17,12 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 var ssdwCanvas;
-var ssdwCanvasMinWidth=720.52;
-var ssdwCanvasMinHeight=670.49;
+var ssdwCanvasMinWidth;//720.52
+var ssdwCanvasMinHeight;//670.49
 var ssdwCanvasMaxWidth=2841;
 var ssdwCanvasMaxHeight=2643;
-var ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
-var ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+var ssdwCanvasStyleWidth;//ssdwCanvasMinWidth
+var ssdwCanvasStyleHeight;//ssdwCanvasMinHeight
 var ssdwCanvasWidth=ssdwCanvasMaxWidth;
 var ssdwCanvasHeight=ssdwCanvasMaxHeight;
 var widthScale;
@@ -52,8 +52,22 @@ $(function(){
 });
 
 function jiSuanScale(){
-	widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
-	heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
+	$.post("getRootAreas",
+		function(data){
+			//alert(JSON.stringify(data));
+			if(data.status=="ok"){
+				var result=data.result;
+				var area=result[0];
+				ssdwCanvasMinWidth=area.width;
+				ssdwCanvasMinHeight=area.length;
+				ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
+				ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+				
+				widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
+				heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
+			}
+		}
+	,"json");
 }
 
 function initSSDWCanvasDivHeight(){

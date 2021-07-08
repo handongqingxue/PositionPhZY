@@ -16,12 +16,12 @@ var phonePath=path+"phone/";
 var windowWidth;
 var windowHeight;
 var ryssCanvas;
-var ryssCanvasMinWidth=720.52;
-var ryssCanvasMinHeight=670.49;
+var ryssCanvasMinWidth;//720.52
+var ryssCanvasMinHeight;//670.49
 var ryssCanvasMaxWidth=2841;
 var ryssCanvasMaxHeight=2643;
-var ryssCanvasStyleWidth=ryssCanvasMinWidth;//画布缩放时对应的宽度，默认是画布最小宽度，之后每次缩放都会变化
-var ryssCanvasStyleHeight=ryssCanvasMinHeight;//画布缩放时对应的长度，默认是画布最小长度，之后每次缩放都会变化
+var ryssCanvasStyleWidth;//ryssCanvasMinWidth
+var ryssCanvasStyleHeight;//ryssCanvasMinHeight
 var ryssCanvasWidth=ryssCanvasMaxWidth;
 var ryssCanvasHeight=ryssCanvasMaxHeight;
 var widthScale;
@@ -42,20 +42,27 @@ var locationList;
 $(function(){
 	jiSuanScale();
 	initRYSSCanvasDivHeight();
-	initRYSSCanvas(false,true);
 });
 
-function changeScrollPosition(x,y){
-	var ryssCanvasDiv=$("#ryssCanvas_div");
-	var widthBL=ryssCanvasMinWidth/ryssCanvasStyleWidth;
-	ryssCanvasDiv.scrollLeft(x/widthBL-windowWidth/2);
-	var heightBL=ryssCanvasMinHeight/ryssCanvasStyleHeight;
-	ryssCanvasDiv.scrollTop(ryssCanvasStyleHeight-y/heightBL-windowHeight/2);
-}
-
 function jiSuanScale(){
-	widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
-	heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
+	$.post("getRootAreas",
+		function(data){
+			//alert(JSON.stringify(data));
+			if(data.status=="ok"){
+				var result=data.result;
+				var area=result[0];
+				ryssCanvasMinWidth=area.width;
+				ryssCanvasMinHeight=area.length;
+				ryssCanvasStyleWidth=ryssCanvasMinWidth;//画布缩放时对应的宽度，默认是画布最小宽度，之后每次缩放都会变化
+				ryssCanvasStyleHeight=ryssCanvasMinHeight;//画布缩放时对应的长度，默认是画布最小长度，之后每次缩放都会变化
+				
+				widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
+				heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
+				
+				initRYSSCanvas(false,true);
+			}
+		}
+	,"json");
 }
 
 function initRYSSCanvasDivHeight(){
@@ -118,6 +125,14 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 				loadRYSSCanvas(false);
 		}
 	}
+}
+
+function changeScrollPosition(x,y){
+	var ryssCanvasDiv=$("#ryssCanvas_div");
+	var widthBL=ryssCanvasMinWidth/ryssCanvasStyleWidth;
+	ryssCanvasDiv.scrollLeft(x/widthBL-windowWidth/2);
+	var heightBL=ryssCanvasMinHeight/ryssCanvasStyleHeight;
+	ryssCanvasDiv.scrollTop(ryssCanvasStyleHeight-y/heightBL-windowHeight/2);
 }
 
 function checkCookieValid(){

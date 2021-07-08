@@ -39,8 +39,13 @@ function login(){
 	$.post("login",
 		{tenantId:tenantId,userId:userId,password:password},
 		function(data){
-			//alert(data.role);
-			location.href=phonePath+"goPage?page=index";
+			//alert(JSON.stringify(data));
+			if(data.status=="ok"){
+				location.href=phonePath+"goPage?page=index";
+			}
+			else{
+				alert(data.message);
+			}
 		}
 	,"json");
 	/*

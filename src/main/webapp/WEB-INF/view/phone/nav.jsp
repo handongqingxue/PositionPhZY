@@ -17,7 +17,7 @@ function runAndroidFunction(flag){
 	if(flag=="getPageName")
 		AndroidFunction.getPageName('${param.page}');
 	else if(flag=="showUserId")
-		AndroidFunction.showUserId("test001");
+		AndroidFunction.showUserId('${sessionScope.loginUser.userId}');
 	else if(flag=="removeUserId")
 		AndroidFunction.removeUserId();
 }

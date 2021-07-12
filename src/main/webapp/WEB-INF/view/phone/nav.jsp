@@ -16,8 +16,10 @@ function exit(){
 function runAndroidFunction(flag){
 	if(flag=="getPageName")
 		AndroidFunction.getPageName('${param.page}');
-	else if(flag=="showUserId")
-		AndroidFunction.showUserId('${sessionScope.loginUser.userId}');
+	else if(flag=="showUserInfo"){
+		//手机桌面图标打壳处接收的是一整个字符串，这里不管多少个参数，都要用+拼接成一个整体的字符串
+		AndroidFunction.showUserInfo('${sessionScope.loginUser.userId}'+","+'${sessionScope.loginUser.role}');
+	}
 	else if(flag=="removeUserId")
 		AndroidFunction.removeUserId();
 }

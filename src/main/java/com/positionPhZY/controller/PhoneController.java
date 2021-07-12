@@ -690,9 +690,12 @@ public class PhoneController {
 			System.out.println("resultJO==="+resultStr);
 			resultMap=JSON.parseObject(resultStr, Map.class);
 			if("ok".equals(resultJO.get("status").toString())) {
+				Map<String, Object> resultJOMap = (Map<String, Object>)resultMap.get("result");
+				
 				HttpSession session = request.getSession();
 				LoginUser loginUser=(LoginUser)session.getAttribute("loginUser");
 				loginUser.setUserId(userId);
+				loginUser.setRole(Integer.valueOf(resultJOMap.get("role").toString()));
 			}
 			else {
 				resultMap.put("message", "用户不存在");

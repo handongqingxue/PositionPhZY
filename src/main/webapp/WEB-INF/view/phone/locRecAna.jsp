@@ -167,6 +167,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
 	if(reSizeFlag){//改变画布大小，这时一下子画完所有轨迹就可以，不需要一点点播放
 		var gjfxCanvasImg = new Image();
+		//gjfxCanvasImg.src=path+"resource/image/area2d-1.png";
 		gjfxCanvasImg.src=gjfxCanvasImgSrc;
 		gjfxCanvas = document.createElement("canvas");
 		gjfxCanvas.id="gjfxCanvas";
@@ -202,6 +203,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		if(reloadFlag){
 			paintInterval=setInterval(function(){
 				var gjfxCanvasImg = new Image();
+				//gjfxCanvasImg.src=path+"resource/image/area2d-1.png";
 				gjfxCanvasImg.src=gjfxCanvasImgSrc;
 				gjfxCanvas = document.createElement("canvas");
 				gjfxCanvas.id="gjfxCanvas";
@@ -243,6 +245,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		}
 		else{
 			var gjfxCanvasImg = new Image();
+			//gjfxCanvasImg.src=path+"resource/image/area2d-1.png";
 			gjfxCanvasImg.src=gjfxCanvasImgSrc;
 			gjfxCanvas = document.createElement("canvas");
 			gjfxCanvas.id="gjfxCanvas";

@@ -44,11 +44,11 @@ public class PhoneController {
 	//https://www.liankexing.com/question/825
 	
 	//这些接口不允许跨域访问，一律用127.0.0.1在本地搭建接口服务访问本地接口
-	private static final String PUBLIC_URL="http://127.0.0.1:8081/position/public/embeded.smd";
-	//private static final String PUBLIC_URL="http://124.70.38.226:8081/position/public/embeded.smd";
+	//private static final String PUBLIC_URL="http://127.0.0.1:8081/position/public/embeded.smd";
+	private static final String PUBLIC_URL="http://124.70.38.226:8081/position/public/embeded.smd";
 	//private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
-	private static final String SERVICE_URL="http://127.0.0.1:8081/position/service/embeded.smd";
-	//private static final String SERVICE_URL="http://124.70.38.226:8081/position/service/embeded.smd";
+	//private static final String SERVICE_URL="http://127.0.0.1:8081/position/service/embeded.smd";
+	private static final String SERVICE_URL="http://124.70.38.226:8081/position/service/embeded.smd";
 	//private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
 	private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
 	public static final String MODULE_NAME="/phone";

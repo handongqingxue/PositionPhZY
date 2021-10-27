@@ -188,7 +188,7 @@ function initLabelListDiv(){
 
 function initSSDWCanvas(reSizeFlag){
 	var ssdwCanvasImg = new Image();
-	//ssdwCanvasImg.src=path+"resource/image/003.jpg";
+	//ssdwCanvasImg.src=path+"resource/image/area2d-1.png";
 	ssdwCanvasImg.src=ssdwCanvasImgSrc;
 	ssdwCanvas = document.createElement("canvas");
 	ssdwCanvas.id="ssdwCanvas";

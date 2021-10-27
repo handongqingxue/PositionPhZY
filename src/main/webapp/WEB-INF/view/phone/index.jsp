@@ -17,14 +17,15 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 var ssdwCanvas;
+var ssdwCanvasImgSrc;
 var ssdwCanvasMinWidth;//720.52
 var ssdwCanvasMinHeight;//670.49
-var ssdwCanvasMaxWidth=2841;
-var ssdwCanvasMaxHeight=2643;
+var ssdwCanvasMaxWidth;//6226
+var ssdwCanvasMaxHeight;//6794
 var ssdwCanvasStyleWidth;//ssdwCanvasMinWidth
 var ssdwCanvasStyleHeight;//ssdwCanvasMinHeight
-var ssdwCanvasWidth=ssdwCanvasMaxWidth;
-var ssdwCanvasHeight=ssdwCanvasMaxHeight;
+var ssdwCanvasWidth;//=ssdwCanvasMaxWidth;
+var ssdwCanvasHeight;//=ssdwCanvasMaxHeight;
 var widthScale;
 var heightScale;
 var staffImgWidth=100;
@@ -54,7 +55,7 @@ $(function(){
 function jiSuanScale(){
 	$.post("getRootAreas",
 		function(data){
-			//alert(JSON.stringify(data));
+			//console.log(JSON.stringify(data));
 			if(data.status=="ok"){
 				var result=data.result;
 				var area=result[0];
@@ -62,6 +63,11 @@ function jiSuanScale(){
 				ssdwCanvasMinHeight=area.length;
 				ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
 				ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+				ssdwCanvasMaxWidth=area.picWidth;
+				ssdwCanvasMaxHeight=area.picHeight;
+				ssdwCanvasWidth=ssdwCanvasMaxWidth;
+				ssdwCanvasHeight=ssdwCanvasMaxHeight;
+				ssdwCanvasImgSrc=path+area.virtualPath;
 				
 				widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
 				heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
@@ -182,7 +188,8 @@ function initLabelListDiv(){
 
 function initSSDWCanvas(reSizeFlag){
 	var ssdwCanvasImg = new Image();
-	ssdwCanvasImg.src=path+"resource/image/003.jpg";
+	//ssdwCanvasImg.src=path+"resource/image/003.jpg";
+	ssdwCanvasImg.src=ssdwCanvasImgSrc;
 	ssdwCanvas = document.createElement("canvas");
 	ssdwCanvas.id="ssdwCanvas";
 	ssdwCanvas.style.width=ssdwCanvasStyleWidth+"px";//通过缩放来改变画布大小，画布大小改变后，上面的定位点位置也就跟着改变了

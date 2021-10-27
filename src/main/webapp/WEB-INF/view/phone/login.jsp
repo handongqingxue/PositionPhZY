@@ -173,19 +173,19 @@ body{
     <div class="tenantId_div">
         <img class="tenantId_img" alt="" src="<%=basePath %>resource/image/001.png">
         <div class="tenantId_inp_div">
-            <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" value="ts00000006" onfocus="focusTenantId()" onblur="checkTenantId()"/>
+            <input class="tenantId_inp" id="tenantId_inp" placeholder="请输入租户编号" value="sc21090414" onfocus="focusTenantId()" onblur="checkTenantId()"/>
         </div>
     </div>
     <div class="userId_div">
         <img class="userId_img" alt="" src="<%=basePath %>resource/image/001.png">
         <div class="userId_inp_div">
-            <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" value="test001" onfocus="focusUserId()" onblur="checkUserId()"/>
+            <input class="userId_inp" id="userId_inp" placeholder="请输入用户名" value="test" onfocus="focusUserId()" onblur="checkUserId()"/>
         </div>
     </div>
     <div class="password_div">
         <img class="passwor_img" alt="" src="<%=basePath %>resource/image/002.png">
         <div class="password_inp_div">
-            <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" value="test001" onblur="checkPassword()"/>
+            <input class="password_inp" id="password_inp" type="password" placeholder="请输入密码" value="test" onblur="checkPassword()"/>
         </div>
     </div>
     <div class="loginBut_div" onclick="checkLogin()">登录</div>

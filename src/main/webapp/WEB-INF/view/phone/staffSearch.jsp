@@ -16,14 +16,15 @@ var phonePath=path+"phone/";
 var windowWidth;
 var windowHeight;
 var ryssCanvas;
+var ryssCanvasImgSrc;
 var ryssCanvasMinWidth;//720.52
 var ryssCanvasMinHeight;//670.49
-var ryssCanvasMaxWidth=2841;
-var ryssCanvasMaxHeight=2643;
+var ryssCanvasMaxWidth;//2841
+var ryssCanvasMaxHeight;//2643
 var ryssCanvasStyleWidth;//ryssCanvasMinWidth
 var ryssCanvasStyleHeight;//ryssCanvasMinHeight
-var ryssCanvasWidth=ryssCanvasMaxWidth;
-var ryssCanvasHeight=ryssCanvasMaxHeight;
+var ryssCanvasWidth;//ryssCanvasMaxWidth
+var ryssCanvasHeight;//ryssCanvasMaxHeight
 var widthScale;
 var heightScale;
 var staffImgWidth=100;
@@ -56,6 +57,12 @@ function jiSuanScale(){
 				ryssCanvasStyleWidth=ryssCanvasMinWidth;//画布缩放时对应的宽度，默认是画布最小宽度，之后每次缩放都会变化
 				ryssCanvasStyleHeight=ryssCanvasMinHeight;//画布缩放时对应的长度，默认是画布最小长度，之后每次缩放都会变化
 				
+				ryssCanvasMaxWidth=area.picWidth;
+				ryssCanvasMaxHeight=area.picHeight;
+				ryssCanvasWidth=ryssCanvasMaxWidth;
+				ryssCanvasHeight=ryssCanvasMaxHeight;
+				ryssCanvasImgSrc=path+area.virtualPath;
+				
 				widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
 				heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
 				
@@ -78,7 +85,8 @@ function initRYSSCanvasDivHeight(){
 function initRYSSCanvas(reloadFlag,reSizeFlag){
 	if(checkCookieValid()){
 		var ryssCanvasImg = new Image();
-		ryssCanvasImg.src=path+"resource/image/003.jpg";
+		//ryssCanvasImg.src=path+"resource/image/003.jpg";
+		ryssCanvasImg.src=ryssCanvasImgSrc;
 		ryssCanvas = document.createElement("canvas");
 		ryssCanvas.id="ryssCanvas";
 		ryssCanvas.style.width=ryssCanvasStyleWidth+"px";

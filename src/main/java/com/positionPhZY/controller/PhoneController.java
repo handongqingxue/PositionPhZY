@@ -56,7 +56,9 @@ public class PhoneController {
 	public static final String LOCAL_Server_NAME="localhost";
 	public static final String HWY_SERVER_NAME="124.70.38.226";
 	public static final String TEST_USER_Id="test001";
-	
+
+	@Autowired
+	private AreaService areaService;
 	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
@@ -1371,6 +1373,9 @@ public class PhoneController {
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getRootAreas",request);
+			
+			areaService.putInResult(resultJO);
+			
 			String resultStr = resultJO.toString();
 			System.out.println("getRootAreas:resultJO==="+resultStr);
 			resultMap=JSON.parseObject(resultStr);

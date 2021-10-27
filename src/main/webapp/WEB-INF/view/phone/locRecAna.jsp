@@ -16,14 +16,15 @@
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
 var gjfxCanvas;
+var gjfxCanvasImgSrc;
 var gjfxCanvasMinWidth;//720.52
 var gjfxCanvasMinHeight;//670.49
-var gjfxCanvasMaxWidth=2841;
-var gjfxCanvasMaxHeight=2643;
+var gjfxCanvasMaxWidth;//2841
+var gjfxCanvasMaxHeight;//2643
 var gjfxCanvasStyleWidth;//gjfxCanvasMinWidth
 var gjfxCanvasStyleHeight;//gjfxCanvasMinHeight
-var gjfxCanvasWidth=gjfxCanvasMaxWidth;
-var gjfxCanvasHeight=gjfxCanvasMaxHeight;
+var gjfxCanvasWidth;//=gjfxCanvasMaxWidth
+var gjfxCanvasHeight;//=gjfxCanvasMaxHeight
 var widthScale;
 var heightScale;
 var lineWidth=10;
@@ -58,6 +59,12 @@ function jiSuanScale(){
 				gjfxCanvasMinHeight=area.length;
 				gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
 				gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
+				
+				gjfxCanvasMaxWidth=area.picWidth;
+				gjfxCanvasMaxHeight=area.picHeight;
+				gjfxCanvasWidth=gjfxCanvasMaxWidth;
+				gjfxCanvasHeight=gjfxCanvasMaxHeight;
+				gjfxCanvasImgSrc=path+area.virtualPath;
 				
 				widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
 				heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
@@ -160,7 +167,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 	var staffName=$("#staff_sel option:selected").text().split("(")[0];
 	if(reSizeFlag){//改变画布大小，这时一下子画完所有轨迹就可以，不需要一点点播放
 		var gjfxCanvasImg = new Image();
-		gjfxCanvasImg.src=path+"resource/image/003.jpg";
+		gjfxCanvasImg.src=gjfxCanvasImgSrc;
 		gjfxCanvas = document.createElement("canvas");
 		gjfxCanvas.id="gjfxCanvas";
 		gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
@@ -195,7 +202,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		if(reloadFlag){
 			paintInterval=setInterval(function(){
 				var gjfxCanvasImg = new Image();
-				gjfxCanvasImg.src=path+"resource/image/003.jpg";
+				gjfxCanvasImg.src=gjfxCanvasImgSrc;
 				gjfxCanvas = document.createElement("canvas");
 				gjfxCanvas.id="gjfxCanvas";
 				gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";
@@ -236,7 +243,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		}
 		else{
 			var gjfxCanvasImg = new Image();
-			gjfxCanvasImg.src=path+"resource/image/003.jpg";
+			gjfxCanvasImg.src=gjfxCanvasImgSrc;
 			gjfxCanvas = document.createElement("canvas");
 			gjfxCanvas.id="gjfxCanvas";
 			gjfxCanvas.style.width=gjfxCanvasStyleWidth+"px";

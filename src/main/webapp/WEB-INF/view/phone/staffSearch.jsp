@@ -84,6 +84,8 @@ function initRYSSCanvasDivHeight(){
 
 function initRYSSCanvas(reloadFlag,reSizeFlag){
 	if(checkCookieValid()){
+		if(!reSizeFlag)
+			showLoadMapDiv(true);
 		var ryssCanvasImg = new Image();
 		//ryssCanvasImg.src=path+"resource/image/003.jpg";
 		ryssCanvasImg.src=ryssCanvasImgSrc;
@@ -95,6 +97,8 @@ function initRYSSCanvas(reloadFlag,reSizeFlag){
 		ryssCanvas.height=ryssCanvasHeight;
 		ryssCanvasContext = ryssCanvas.getContext("2d");
 		ryssCanvasImg.onload=function(){
+			if(!reSizeFlag)
+				showLoadMapDiv(false);
 			ryssCanvasContext.drawImage(ryssCanvasImg, 0, 0, ryssCanvasWidth, ryssCanvasHeight);
 			if(reloadFlag){
 				if(checkEntityName()){
@@ -295,10 +299,20 @@ function loadRYSSCanvas(flag){
 		},"1000");
 	}
 }
+
+function showLoadMapDiv(flag){
+	$("#load_map_div").css("display",flag?"block":"none");
+}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
+}
+.load_map_div{
+	width: 100%;height:100%;background-color: rgba(0,0,0,0.5);position: fixed;display:none;z-index: 1;
+}
+.load_map_div .text_div{
+	width: 100%;color:#fff;text-align:center;font-size:25px;top:45%;position: absolute;
 }
 .scale_set_div{
 	width:30px;
@@ -364,6 +378,9 @@ body{
 <title>人员搜索</title>
 </head>
 <body>
+<div class="load_map_div" id="load_map_div">
+	<div class="text_div">地图加载中</div>
+</div>
 <div class="scale_set_div">
 	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">
 		<img alt="" src="<%=basePath %>resource/image/006.png">

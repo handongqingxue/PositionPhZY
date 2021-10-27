@@ -41,6 +41,7 @@ var fontSize=50;
 var fontMarginLeft=45;
 var selectedFloorValue="";
 var sodInterval;
+var firstLoad=true;
 $(function(){
 	showSSTJDiv(false);
 	initLabelListDiv();
@@ -187,6 +188,8 @@ function initLabelListDiv(){
 }
 
 function initSSDWCanvas(reSizeFlag){
+	if(firstLoad)
+		showLoadMapDiv(true);
 	var ssdwCanvasImg = new Image();
 	//ssdwCanvasImg.src=path+"resource/image/area2d-1.png";
 	ssdwCanvasImg.src=ssdwCanvasImgSrc;
@@ -198,6 +201,10 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvas.height=ssdwCanvasHeight;
 	ssdwCanvasContext = ssdwCanvas.getContext("2d");
 	ssdwCanvasImg.onload=function(){
+		if(firstLoad){
+			firstLoad=false;
+			showLoadMapDiv(false);
+		}
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
 
 		var floorArrStr="";
@@ -354,10 +361,20 @@ function loadSSDWCanvas(flag){
 		},"1000");
 	}
 }
+
+function showLoadMapDiv(flag){
+	$("#load_map_div").css("display",flag?"block":"none");
+}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
+}
+.load_map_div{
+	width: 100%;height:100%;background-color: rgba(0,0,0,0.5);position: fixed;display:none;z-index: 1;
+}
+.load_map_div .text_div{
+	width: 100%;color:#fff;text-align:center;font-size:25px;top:45%;position: absolute;
 }
 .xssstj_but_img{
 	width:30px;
@@ -459,6 +476,9 @@ body{
 <title>辰麒人员定位安全管理平台</title>
 </head>
 <body>
+<div class="load_map_div" id="load_map_div">
+	<div class="text_div">地图加载中</div>
+</div>
 <img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
 <div class="scale_set_div">
 	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">

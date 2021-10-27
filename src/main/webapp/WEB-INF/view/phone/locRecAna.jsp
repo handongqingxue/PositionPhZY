@@ -244,6 +244,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 			},"100");
 		}
 		else{
+			showLoadMapDiv(true);
 			var gjfxCanvasImg = new Image();
 			//gjfxCanvasImg.src=path+"resource/image/area2d-1.png";
 			gjfxCanvasImg.src=gjfxCanvasImgSrc;
@@ -255,6 +256,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 			gjfxCanvas.height=gjfxCanvasHeight;
 			gjfxCanvasContext = gjfxCanvas.getContext("2d");
 			gjfxCanvasImg.onload=function(){
+				showLoadMapDiv(false);
 				gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
 				var preGjfxCanvas=document.getElementById("gjfxCanvas");
 				preGjfxCanvas.parentNode.removeChild(preGjfxCanvas);
@@ -413,10 +415,20 @@ function loadGJFXCanvas(flag){
 		},"1000");
 	}
 }
+
+function showLoadMapDiv(flag){
+	$("#load_map_div").css("display",flag?"block":"none");
+}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
+}
+.load_map_div{
+	width: 100%;height:100%;background-color: rgba(0,0,0,0.5);position: fixed;display:none;z-index: 1;
+}
+.load_map_div .text_div{
+	width: 100%;color:#fff;text-align:center;font-size:25px;top:45%;position: absolute;
 }
 .xssstj_but_img{
 	width:30px;
@@ -542,6 +554,9 @@ body{
 <title>轨迹分析</title>
 </head>
 <body>
+<div class="load_map_div" id="load_map_div">
+	<div class="text_div">地图加载中</div>
+</div>
 <img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
 <div class="scale_set_div">
 	<div class="but_div reset_but_div" onclick="changeCanvasSize(null,true)">

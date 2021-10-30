@@ -386,7 +386,7 @@ public class PhoneController {
 	public Map<String, Object> insertEntityData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> erMap = getEntities("car", request);
+		Map<String, Object> erMap = getEntities("staff", request);
 		List<Entity> entityList = JSON.parseArray(erMap.get("result").toString(),Entity.class);
 		int count=entityService.add(entityList);
 		if(count==0) {
@@ -2051,7 +2051,7 @@ public class PhoneController {
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("triggerIds", "[1]");
 			paramJO.put("startTime", "1618267921076");
-			paramJO.put("endTime", "1618277921076");
+			paramJO.put("endTime", "1718277921076");
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);

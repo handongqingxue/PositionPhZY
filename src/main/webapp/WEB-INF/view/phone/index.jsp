@@ -48,9 +48,6 @@ $(function(){
 	jiSuanScale();
 	initSSDWCanvasDivHeight();
 	//initSSDWCanvas(0);
-	sodInterval=setInterval(function(){
-		summaryOnlineData();
-	},"3000");
 });
 
 function jiSuanScale(){
@@ -60,8 +57,28 @@ function jiSuanScale(){
 			if(data.status=="ok"){
 				var result=data.result;
 				var area=result[0];
-				ssdwCanvasMinWidth=area.width;
-				ssdwCanvasMinHeight=area.length;
+				
+				var areaWidth=area.width;
+				var areaLength=area.length;
+				var bodyWidth=$("body").width();
+				var bodyHeight=$("body").height()-$("#bottom_div").height();
+				
+				if(areaWidth<bodyWidth||areaLength<bodyHeight){
+					if(areaWidth/areaLength<bodyWidth/bodyHeight){
+						ssdwCanvasMinWidth=bodyWidth;
+						ssdwCanvasMinHeight=ssdwCanvasMinWidth*areaLength/areaWidth;
+					}
+					else{
+						ssdwCanvasMinHeight=bodyHeight;
+						ssdwCanvasMinWidth=areaWidth*ssdwCanvasMinHeight/areaLength
+					}
+				}
+				else{
+					ssdwCanvasMinWidth=areaWidth;
+					ssdwCanvasMinHeight=areaLength;
+				}
+				//ssdwCanvasMinWidth=1037;
+				//ssdwCanvasMinHeight=1132;
 				ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
 				ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
 				ssdwCanvasMaxWidth=area.picWidth;
@@ -73,6 +90,9 @@ function jiSuanScale(){
 				widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
 				heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
 			}
+			//sodInterval=setInterval(function(){
+				summaryOnlineData();
+			//},"3000");
 		}
 	,"json");
 }
@@ -131,21 +151,23 @@ function initFloorSel(result){
 		var optionValue;
 		var childName=child.name;
 		switch (childName) {
-		case "一层":
+		case "厂房一层":
 			optionValue=1;
 			break;
-		case "二层":
+		case "厂房二层":
 			optionValue=2;
 			break;
-		case "三层":
+		case "厂房三层":
 			optionValue=3;
 			break;
+			/*
 		case "四层":
 			optionValue=4;
 			break;
 		case "五层":
 			optionValue=5;
 			break;
+			*/
 		}
 		floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
 	}
@@ -217,6 +239,7 @@ function initSSDWCanvas(reSizeFlag){
 		$.post("initSSDWCanvasData",
 			{floor:floor,floorArrStr:floorArrStr.substring(1)},
 			function(data){
+				console.log("data.status==="+data.status);
 				if(data.status=="ok"){
 					var locationList=data.list;
 					for(var i=0;i<locationList.length;i++){

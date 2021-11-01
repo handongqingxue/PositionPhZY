@@ -38,6 +38,7 @@ var locRecListIndex=0;
 var paintInterval;
 var reSizeTimeout;
 var locRecList;
+var loadingGJ=false;
 $(function(){
 	showSSTJDiv(false);
 	initEntitySelect();
@@ -230,7 +231,6 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		//这分为两种情况：1.初次访问页面，只显示地图，不加载轨迹。这时设置reloadFlag为false;
 		//2.根据条件搜索轨迹，需要重新加载地图和轨迹，这时reloadFlag为true
 		if(reloadFlag){
-			showLoadGJDiv(false);
 			paintInterval=setInterval(function(){
 				console.log("分析....")
 				var gjfxCanvasImg = new Image();
@@ -245,6 +245,8 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 				gjfxCanvasContext = gjfxCanvas.getContext("2d");
 				gjfxCanvasContext.clearRect(0,0,gjfxCanvasWidth,gjfxCanvasHeight); 
 				gjfxCanvasImg.onload=function(){
+					if(loadingGJ)
+						showLoadGJDiv(false);
 					gjfxCanvasContext.drawImage(gjfxCanvasImg, 0, 0, gjfxCanvasWidth, gjfxCanvasHeight);
 					for(var i=0;i<=locRecListIndex;i++){
 						if(i>=1){
@@ -442,7 +444,7 @@ function loadGJFXCanvas(flag){
 			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
 			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
 			clearTimeout(reSizeTimeout);
-		},"1000");
+		},"3000");
 	}
 }
 
@@ -451,7 +453,14 @@ function showLoadMapDiv(flag){
 }
 
 function showLoadGJDiv(flag){
-	$("#load_gj_div").css("display",flag?"block":"none");
+	if(flag){
+		loadingGJ=true;
+		$("#load_gj_div").css("display","block");
+	}
+	else{
+		loadingGJ=false;
+		$("#load_gj_div").css("display","none");
+	}
 }
 </script>
 <style type="text/css">

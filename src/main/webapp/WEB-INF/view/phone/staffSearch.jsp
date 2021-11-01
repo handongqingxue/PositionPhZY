@@ -323,7 +323,7 @@ function loadRYSSCanvas(flag){
 			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
 			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
 			clearTimeout(reSizeTimeout);
-		},"1000");
+		},"3000");
 	}
 }
 

@@ -231,10 +231,6 @@ function initSSDWCanvas(reSizeFlag){
 	ssdwCanvas.height=ssdwCanvasHeight;
 	ssdwCanvasContext = ssdwCanvas.getContext("2d");
 	ssdwCanvasImg.onload=function(){
-		if(firstLoad){
-			firstLoad=false;
-			showLoadMapDiv(false);
-		}
 		ssdwCanvasContext.drawImage(ssdwCanvasImg, 0, 0, ssdwCanvasWidth, ssdwCanvasHeight);
 
 		var floorArrStr="";
@@ -262,6 +258,11 @@ function initSSDWCanvas(reSizeFlag){
 				preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
 				var ssdwCanvasDiv=document.getElementById("ssdwCanvas_div");
 				ssdwCanvasDiv.appendChild(ssdwCanvas);
+				
+				if(firstLoad){
+					firstLoad=false;
+					showLoadMapDiv(false);
+				}
 			}
 		,"json");
 		if(reSizeFlag==1)
@@ -389,7 +390,7 @@ function loadSSDWCanvas(flag){
 			smallButDiv.attr("onclick","changeCanvasSize(false,false)");
 			bigButDiv.attr("onclick","changeCanvasSize(true,false)");
 			clearTimeout(reSizeTimeout);
-		},"1000");
+		},"3000");
 	}
 }
 

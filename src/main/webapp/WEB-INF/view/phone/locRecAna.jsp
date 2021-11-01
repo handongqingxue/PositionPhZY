@@ -269,7 +269,7 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 					}
 				}
 			
-			},"100");
+			},"1000");
 		}
 		else{
 			showLoadMapDiv(true);

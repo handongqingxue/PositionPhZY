@@ -166,6 +166,7 @@ function getLocationRecords(){
 	if(checkCookieValid()){
 		if(checkStaff()){
 			if(checkYsb()){
+				showLoadGJDiv(true);
 				var tagId=$("#staff_sel").val();
 				var todayDate=$("#td_cal").val();
 				var sth=$("#sth_sel").val();
@@ -229,7 +230,9 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 		//这分为两种情况：1.初次访问页面，只显示地图，不加载轨迹。这时设置reloadFlag为false;
 		//2.根据条件搜索轨迹，需要重新加载地图和轨迹，这时reloadFlag为true
 		if(reloadFlag){
+			showLoadGJDiv(false);
 			paintInterval=setInterval(function(){
+				console.log("分析....")
 				var gjfxCanvasImg = new Image();
 				//gjfxCanvasImg.src=path+"resource/image/area2d-1.png";
 				gjfxCanvasImg.src=gjfxCanvasImgSrc;
@@ -259,7 +262,6 @@ function initGJFXCanvas(reloadFlag,reSizeFlag){
 					var gjfxCanvasDiv=document.getElementById("gjfxCanvas_div");
 					gjfxCanvasDiv.appendChild(gjfxCanvas);
 					if(locRecListIndex==locRecList.length-1){
-						//console.log(222);
 						locRecListIndex=0;
 						clearInterval(paintInterval);
 					}
@@ -447,15 +449,19 @@ function loadGJFXCanvas(flag){
 function showLoadMapDiv(flag){
 	$("#load_map_div").css("display",flag?"block":"none");
 }
+
+function showLoadGJDiv(flag){
+	$("#load_gj_div").css("display",flag?"block":"none");
+}
 </script>
 <style type="text/css">
 body{
 	margin: 0;
 }
-.load_map_div{
+.load_map_div,.load_gj_div{
 	width: 100%;height:100%;background-color: rgba(0,0,0,0.5);position: fixed;display:none;z-index: 1;
 }
-.load_map_div .text_div{
+.load_map_div .text_div,.load_gj_div .text_div{
 	width: 100%;color:#fff;text-align:center;font-size:25px;top:45%;position: absolute;
 }
 .xssstj_but_img{
@@ -584,6 +590,9 @@ body{
 <body>
 <div class="load_map_div" id="load_map_div">
 	<div class="text_div">地图加载中</div>
+</div>
+<div class="load_gj_div" id="load_gj_div">
+	<div class="text_div">轨迹加载中</div>
 </div>
 <img class="xssstj_but_img" id="xssstj_but_img" alt="" src="<%=basePath %>resource/image/005.png" onclick="showSSTJDiv(true);">
 <div class="scale_set_div">

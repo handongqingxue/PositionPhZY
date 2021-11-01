@@ -98,9 +98,9 @@ function jiSuanScale(){
 				fontSize=area.fontSize;
 				fontMarginLeft=area.fontMarginLeft;
 			}
-			//sodInterval=setInterval(function(){
+			sodInterval=setInterval(function(){
 				summaryOnlineData();
-			//},"3000");
+			},"3000");
 		}
 	,"json");
 }
@@ -247,19 +247,16 @@ function initSSDWCanvas(reSizeFlag){
 		$.post("initSSDWCanvasData",
 			{floor:floor,floorArrStr:floorArrStr.substring(1)},
 			function(data){
-				console.log("data.status==="+data.status);
 				if(data.status=="ok"){
 					var locationList=data.list;
-					/*
 					for(var i=0;i<locationList.length;i++){
 						var location=locationList[i];
 						//console.log(location.uid+","+location.x+location.y+location.entityType+","+location.entityName+","+","+","+location.floor);
 						if($("#label_list_div #select_cb"+location.entityType).prop("checked"))
 							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
 					}
-					*/
-					setEntityLocation(ssdwCanvasContext,139,166,"张晓红","staff",1);
-					setEntityLocation(ssdwCanvasContext,244,151,"迟高平","staff",1);
+					//setEntityLocation(ssdwCanvasContext,139,166,"张晓红","staff",1);
+					//setEntityLocation(ssdwCanvasContext,244,151,"迟高平","staff",1);
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");
 				preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);

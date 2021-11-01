@@ -1538,6 +1538,8 @@ public class PhoneController {
 			paramJO.put("areaId", "1");
 			Long startTimeLong = DateUtil.convertStringToLong(todayDate+" "+startTime);
 			Long endTimeLong = DateUtil.convertStringToLong(todayDate+" "+endTime);
+			//Long startTimeLong = Long.valueOf("1635696011258");
+			//Long endTimeLong = Long.valueOf("1635702257624");
 			paramJO.put("startTime", startTimeLong);
 			paramJO.put("endTime", endTimeLong);
 			bodyParamJO.put("params", paramJO);
@@ -1570,7 +1572,6 @@ public class PhoneController {
 
 			List<LocationRecord> locationRecordList = JSON.parseArray(resultJO.get("result").toString(),LocationRecord.class);
 			locationRecordService.add(locationRecordList);
-			//locationRecordList=locationRecordService.select(Long.valueOf("1624241823588"),Long.valueOf("1624242060236"));
 			locationRecordList=locationRecordService.select(startTimeLong,endTimeLong);
 			int lrListSize = locationRecordList.size();
 			//System.out.println("rlrJALength==="+rlrJALength);

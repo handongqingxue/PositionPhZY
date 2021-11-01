@@ -63,8 +63,8 @@ function jiSuanScale(){
 				var bodyWidth=$("body").width();
 				var bodyHeight=$("body").height()-$("#bottom_div").height();
 				
-				if(areaWidth<bodyWidth||areaLength<bodyHeight){
-					if(areaWidth/areaLength<bodyWidth/bodyHeight){
+				if(areaWidth<bodyWidth||areaLength<bodyHeight){//在地图区域宽度或高度小于浏览器宽度或高度时执行下面逻辑
+					if(areaWidth/areaLength<bodyWidth/bodyHeight){//为了不出现空白区域，把地图最小宽度和高度设置为浏览器宽度和高度
 						ssdwCanvasMinWidth=bodyWidth;
 						ssdwCanvasMinHeight=ssdwCanvasMinWidth*areaLength/areaWidth;
 					}
@@ -73,22 +73,22 @@ function jiSuanScale(){
 						ssdwCanvasMinWidth=areaWidth*ssdwCanvasMinHeight/areaLength
 					}
 				}
-				else{
+				else{//否则地图最小尺寸就是地图区域尺寸而不是浏览器尺寸
 					ssdwCanvasMinWidth=areaWidth;
 					ssdwCanvasMinHeight=areaLength;
 				}
-				//ssdwCanvasMinWidth=1037;
-				//ssdwCanvasMinHeight=1132;
 				ssdwCanvasStyleWidth=ssdwCanvasMinWidth;
 				ssdwCanvasStyleHeight=ssdwCanvasMinHeight;
+				
 				ssdwCanvasMaxWidth=area.picWidth;
 				ssdwCanvasMaxHeight=area.picHeight;
+				
 				ssdwCanvasWidth=ssdwCanvasMaxWidth;
 				ssdwCanvasHeight=ssdwCanvasMaxHeight;
 				ssdwCanvasImgSrc=path+area.virtualPath;
-				
-				widthScale=ssdwCanvasStyleWidth/ssdwCanvasWidth;
-				heightScale=ssdwCanvasStyleHeight/ssdwCanvasHeight;
+
+				widthScale=areaWidth/ssdwCanvasWidth;//这个宽度比例永远是地图区域宽度比地图图片宽度，便于正确缩放
+				heightScale=areaLength/ssdwCanvasHeight;//这个高度比例永远是地图区域高度比地图图片高度，便于正确缩放
 			}
 			//sodInterval=setInterval(function(){
 				summaryOnlineData();
@@ -242,12 +242,16 @@ function initSSDWCanvas(reSizeFlag){
 				console.log("data.status==="+data.status);
 				if(data.status=="ok"){
 					var locationList=data.list;
+					/*
 					for(var i=0;i<locationList.length;i++){
 						var location=locationList[i];
 						//console.log(location.uid+","+location.x+location.y+location.entityType+","+location.entityName+","+","+","+location.floor);
 						if($("#label_list_div #select_cb"+location.entityType).prop("checked"))
 							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
 					}
+					*/
+					setEntityLocation(ssdwCanvasContext,139,166,"张晓红","staff",1);
+					setEntityLocation(ssdwCanvasContext,244,151,"迟高平","staff",1);
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");
 				preSsdwCanvas.parentNode.removeChild(preSsdwCanvas);
@@ -255,7 +259,6 @@ function initSSDWCanvas(reSizeFlag){
 				ssdwCanvasDiv.appendChild(ssdwCanvas);
 			}
 		,"json");
-		//setEntityLocation(ssdwCanvasContext,268,443,"陈广银","staff",1);
 		if(reSizeFlag==1)
 			loadSSDWCanvas(0);
 	}

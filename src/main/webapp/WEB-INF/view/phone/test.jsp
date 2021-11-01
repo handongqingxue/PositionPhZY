@@ -24,7 +24,7 @@ var fontSize=50;
 var fontMarginLeft=45;
 $(function(){
 	//https://blog.csdn.net/xuerwang/article/details/107856754
-	//repaint();
+	repaint();
 	/*
 	$.post("getTagStateMap",
 		function(data){

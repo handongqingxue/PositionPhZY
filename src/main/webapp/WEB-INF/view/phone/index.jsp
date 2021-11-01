@@ -28,17 +28,17 @@ var ssdwCanvasWidth;//=ssdwCanvasMaxWidth;
 var ssdwCanvasHeight;//=ssdwCanvasMaxHeight;
 var widthScale;
 var heightScale;
-var staffImgWidth=100;
-var staffImgHeight=70;
+var staffImgWidth;//300
+var staffImgHeight;//210
 var carImgWidth=100;
 var carImgHeight=64;
 var arcR=20;
-var rectWidth=330;
-var rectHeight=100;
-var arSpace=43;
-var atSpace=78;
-var fontSize=50;
-var fontMarginLeft=45;
+var rectWidth;//990
+var rectHeight;//300
+var arSpace;//123
+var atSpace;//218
+var fontSize;//150
+var fontMarginLeft;//85
 var selectedFloorValue="";
 var sodInterval;
 var firstLoad=true;
@@ -89,6 +89,14 @@ function jiSuanScale(){
 
 				widthScale=areaWidth/ssdwCanvasWidth;//这个宽度比例永远是地图区域宽度比地图图片宽度，便于正确缩放
 				heightScale=areaLength/ssdwCanvasHeight;//这个高度比例永远是地图区域高度比地图图片高度，便于正确缩放
+				staffImgWidth=area.staffImgWidth;
+				staffImgHeight=area.staffImgHeight;
+				rectWidth=area.rectWidth;
+				rectHeight=area.rectHeight;
+				arSpace=area.arSpace;
+				atSpace=area.atSpace;
+				fontSize=area.fontSize;
+				fontMarginLeft=area.fontMarginLeft;
 			}
 			//sodInterval=setInterval(function(){
 				summaryOnlineData();

@@ -27,13 +27,13 @@ var gjfxCanvasWidth;//=gjfxCanvasMaxWidth
 var gjfxCanvasHeight;//=gjfxCanvasMaxHeight
 var widthScale;
 var heightScale;
-var lineWidth=10;
-var rectWidth=330;
-var rectHeight=100;
-var arSpace=43;
-var atSpace=78;
-var fontSize=50;
-var fontMarginLeft=45;
+var lineWidth;//30
+var rectWidth;
+var rectHeight;
+var arSpace;
+var atSpace;
+var fontSize;
+var fontMarginLeft;
 var locRecListIndex=0;
 var paintInterval;
 var reSizeTimeout;
@@ -55,19 +55,47 @@ function jiSuanScale(){
 			if(data.status=="ok"){
 				var result=data.result;
 				var area=result[0];
-				gjfxCanvasMinWidth=area.width;
-				gjfxCanvasMinHeight=area.length;
+				
+				var areaWidth=area.width;
+				var areaLength=area.length;
+				var bodyWidth=$("body").width();
+				var bodyHeight=$("body").height()-$("#bottom_div").height();
+				
+				if(areaWidth<bodyWidth||areaLength<bodyHeight){//在地图区域宽度或高度小于浏览器宽度或高度时执行下面逻辑
+					if(areaWidth/areaLength<bodyWidth/bodyHeight){//为了不出现空白区域，把地图最小宽度和高度设置为浏览器宽度和高度
+						gjfxCanvasMinWidth=bodyWidth;
+						gjfxCanvasMinHeight=gjfxCanvasMinWidth*areaLength/areaWidth;
+					}
+					else{
+						gjfxCanvasMinHeight=bodyHeight;
+						gjfxCanvasMinWidth=areaWidth*gjfxCanvasMinHeight/areaLength
+					}
+				}
+				else{//否则地图最小尺寸就是地图区域尺寸而不是浏览器尺寸
+					gjfxCanvasMinWidth=areaWidth;
+					gjfxCanvasMinHeight=areaLength;
+				}
 				gjfxCanvasStyleWidth=gjfxCanvasMinWidth;
 				gjfxCanvasStyleHeight=gjfxCanvasMinHeight;
 				
 				gjfxCanvasMaxWidth=area.picWidth;
 				gjfxCanvasMaxHeight=area.picHeight;
+				
 				gjfxCanvasWidth=gjfxCanvasMaxWidth;
 				gjfxCanvasHeight=gjfxCanvasMaxHeight;
 				gjfxCanvasImgSrc=path+area.virtualPath;
 				
-				widthScale=gjfxCanvasStyleWidth/gjfxCanvasWidth;
-				heightScale=gjfxCanvasStyleHeight/gjfxCanvasHeight;
+				widthScale=areaWidth/gjfxCanvasWidth;//这个宽度比例永远是地图区域宽度比地图图片宽度，便于正确缩放
+				heightScale=areaLength/gjfxCanvasHeight;//这个高度比例永远是地图区域高度比地图图片高度，便于正确缩放
+				staffImgWidth=area.staffImgWidth;
+				staffImgHeight=area.staffImgHeight;
+				lineWidth=area.lineWidth;
+				rectWidth=area.rectWidth;
+				rectHeight=area.rectHeight;
+				arSpace=area.arSpace;
+				atSpace=area.atSpace;
+				fontSize=area.fontSize;
+				fontMarginLeft=area.fontMarginLeft;
 				
 				initGJFXCanvas(false,false);
 			}

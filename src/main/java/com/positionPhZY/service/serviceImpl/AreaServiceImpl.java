@@ -25,6 +25,7 @@ public class AreaServiceImpl implements AreaService {
 		areaJO.put("virtualPath", area.getVirtualPath());
 		areaJO.put("staffImgWidth",area.getStaffImgWidth());
 		areaJO.put("staffImgHeight",area.getStaffImgHeight());
+		areaJO.put("lineWidth",area.getLineWidth());
 		areaJO.put("rectWidth",area.getRectWidth());
 		areaJO.put("rectHeight",area.getRectHeight());
 		areaJO.put("arSpace",area.getArSpace());

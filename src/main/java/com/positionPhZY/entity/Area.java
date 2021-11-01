@@ -39,6 +39,12 @@ public class Area {
 	public void setStaffImgHeight(Integer staffImgHeight) {
 		this.staffImgHeight = staffImgHeight;
 	}
+	public Integer getLineWidth() {
+		return lineWidth;
+	}
+	public void setLineWidth(Integer lineWidth) {
+		this.lineWidth = lineWidth;
+	}
 	public Integer getRectWidth() {
 		return rectWidth;
 	}
@@ -80,6 +86,7 @@ public class Area {
 	private String virtualPath;
 	private Integer staffImgWidth;
 	private Integer staffImgHeight;
+	private Integer lineWidth;
 	private Integer rectWidth;
 	private Integer rectHeight;
 	private Integer arSpace;

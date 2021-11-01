@@ -27,17 +27,17 @@ var ryssCanvasWidth;//ryssCanvasMaxWidth
 var ryssCanvasHeight;//ryssCanvasMaxHeight
 var widthScale;
 var heightScale;
-var staffImgWidth=100;
-var staffImgHeight=70;
+var staffImgWidth;
+var staffImgHeight;
 var carImgWidth=100;
 var carImgHeight=64;
 var arcR=20;
-var rectWidth=330;
-var rectHeight=100;
-var arSpace=43;
-var atSpace=78;
-var fontSize=50;
-var fontMarginLeft=45;
+var rectWidth;
+var rectHeight;
+var arSpace;
+var atSpace;
+var fontSize;
+var fontMarginLeft;
 var reSizeTimeout;
 var locationList;
 $(function(){
@@ -52,19 +52,46 @@ function jiSuanScale(){
 			if(data.status=="ok"){
 				var result=data.result;
 				var area=result[0];
-				ryssCanvasMinWidth=area.width;
-				ryssCanvasMinHeight=area.length;
+				
+				var areaWidth=area.width;
+				var areaLength=area.length;
+				var bodyWidth=$("body").width();
+				var bodyHeight=$("body").height()-$("#bottom_div").height();
+
+				if(areaWidth<bodyWidth||areaLength<bodyHeight){//在地图区域宽度或高度小于浏览器宽度或高度时执行下面逻辑
+					if(areaWidth/areaLength<bodyWidth/bodyHeight){//为了不出现空白区域，把地图最小宽度和高度设置为浏览器宽度和高度
+						ryssCanvasMinWidth=bodyWidth;
+						ryssCanvasMinHeight=ryssCanvasMinWidth*areaLength/areaWidth;
+					}
+					else{
+						ryssCanvasMinHeight=bodyHeight;
+						ryssCanvasMinWidth=areaWidth*ryssCanvasMinHeight/areaLength
+					}
+				}
+				else{//否则地图最小尺寸就是地图区域尺寸而不是浏览器尺寸
+					ryssCanvasMinWidth=areaWidth;
+					ryssCanvasMinHeight=areaLength;
+				}
 				ryssCanvasStyleWidth=ryssCanvasMinWidth;//画布缩放时对应的宽度，默认是画布最小宽度，之后每次缩放都会变化
 				ryssCanvasStyleHeight=ryssCanvasMinHeight;//画布缩放时对应的长度，默认是画布最小长度，之后每次缩放都会变化
 				
 				ryssCanvasMaxWidth=area.picWidth;
 				ryssCanvasMaxHeight=area.picHeight;
+				
 				ryssCanvasWidth=ryssCanvasMaxWidth;
 				ryssCanvasHeight=ryssCanvasMaxHeight;
 				ryssCanvasImgSrc=path+area.virtualPath;
 				
-				widthScale=ryssCanvasStyleWidth/ryssCanvasWidth;
-				heightScale=ryssCanvasStyleHeight/ryssCanvasHeight;
+				widthScale=areaWidth/ryssCanvasWidth;
+				heightScale=areaLength/ryssCanvasHeight;
+				staffImgWidth=area.staffImgWidth;
+				staffImgHeight=area.staffImgHeight;
+				rectWidth=area.rectWidth;
+				rectHeight=area.rectHeight;
+				arSpace=area.arSpace;
+				atSpace=area.atSpace;
+				fontSize=area.fontSize;
+				fontMarginLeft=area.fontMarginLeft;
 				
 				initRYSSCanvas(false,true);
 			}

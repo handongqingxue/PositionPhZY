@@ -1542,8 +1542,8 @@ public class PhoneController {
 			paramJO.put("endTime", endTimeLong);
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
-			//JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
-			JSONObject resultJO = APIResultUtil.getLocationRecords();
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getLocationRecords",request);
+			//JSONObject resultJO = APIResultUtil.getLocationRecords();
 			System.out.println("getLocationRecords:resultJO==="+resultJO.toString());
 			/*
 			 {"result":[
@@ -1570,7 +1570,8 @@ public class PhoneController {
 
 			List<LocationRecord> locationRecordList = JSON.parseArray(resultJO.get("result").toString(),LocationRecord.class);
 			locationRecordService.add(locationRecordList);
-			locationRecordList=locationRecordService.select(Long.valueOf("1624241823588"),Long.valueOf("1624242060236"));
+			//locationRecordList=locationRecordService.select(Long.valueOf("1624241823588"),Long.valueOf("1624242060236"));
+			locationRecordList=locationRecordService.select(startTimeLong,endTimeLong);
 			int lrListSize = locationRecordList.size();
 			//System.out.println("rlrJALength==="+rlrJALength);
 			//System.out.println("ysb==="+ysb);

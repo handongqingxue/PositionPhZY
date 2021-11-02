@@ -35,6 +35,8 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (WarnRecord warnRecord : warnRecordList) {
+			if(warnRecordDao.getCountById(warnRecord.getId())>0)
+				continue;
 			Long raiseTime = warnRecord.getRaiseTime();
 			if(!StringUtils.isEmpty(String.valueOf(raiseTime)))
 				warnRecord.setRaiseTimeYMD(DateUtil.convertLongToString(raiseTime));

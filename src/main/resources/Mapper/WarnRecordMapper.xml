@@ -168,4 +168,7 @@
 	<select id="selectPieChartData" resultType="com.positionPhZY.entity.WarnRecord">
 		select wr.areaId,CONCAT('区域',wr.areaId) areaName,wt.`name` wtName from warn_record wr,warn_trigger wt where wr.warnType=wt.warnType and wr.areaId is not null and startTimeYMD BETWEEN #{startDate} and #{endDate}
 	</select>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from warn_record where id=#{id}
+	</select>
 </mapper>

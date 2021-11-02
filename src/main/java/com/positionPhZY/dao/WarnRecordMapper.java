@@ -23,4 +23,6 @@ public interface WarnRecordMapper {
 
 	List<WarnRecord> selectPieChartData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 
+	int getCountById(@Param("id")Integer id);
+
 }

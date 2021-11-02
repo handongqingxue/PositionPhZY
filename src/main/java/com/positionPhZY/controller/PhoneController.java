@@ -91,6 +91,9 @@ public class PhoneController {
 		else if("login".equals(page)){
 			url=MODULE_NAME+"/login";
 		}
+		else if("syncDBManager".equals(page)){
+			url=MODULE_NAME+"/syncDBManager";
+		}
 		else {
 			url="redirect:goPage?page=login";
 		}
@@ -2065,7 +2068,7 @@ public class PhoneController {
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);
-			System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
+			//System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
 			 {"result":[

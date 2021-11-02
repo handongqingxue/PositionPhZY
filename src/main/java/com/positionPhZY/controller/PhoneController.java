@@ -336,6 +336,14 @@ public class PhoneController {
 		List<EntityType> entityTypeList = entityTypeService.select();
 		net.sf.json.JSONArray labelJA = net.sf.json.JSONArray.fromObject(deviceTypeList);
 		labelJA.addAll(net.sf.json.JSONArray.fromObject(entityTypeList));
+		
+		for (int i = 0; i < labelJA.size(); i++) {
+			net.sf.json.JSONObject labelJO = labelJA.getJSONObject(i);
+			if("staff".equals(labelJO.getString("id"))) {
+				labelJO.put("labelChecked", true);
+			}
+		}
+		
 		if(deviceTypeList.size()==0) {
 			resultMap.put("status", "no");
 			resultMap.put("message", "ÔÝÎÞÊý¾Ý");

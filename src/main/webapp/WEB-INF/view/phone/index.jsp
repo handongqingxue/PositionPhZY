@@ -159,6 +159,9 @@ function initFloorSel(result){
 		var optionValue;
 		var childName=child.name;
 		switch (childName) {
+		case "道路":
+			optionValue=0;
+			break;
 		case "厂房一层":
 			optionValue=1;
 			break;
@@ -168,14 +171,6 @@ function initFloorSel(result){
 		case "厂房三层":
 			optionValue=3;
 			break;
-			/*
-		case "四层":
-			optionValue=4;
-			break;
-		case "五层":
-			optionValue=5;
-			break;
-			*/
 		}
 		floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
 	}

@@ -15,17 +15,32 @@
 </head>
 <body>
 <div id="cesiumContainer" style="width: 1500px; height:700px"></div>  
+<input type="button" value="移除" onclick="removeRectImg()"/>
+<input type="button" value="添加" onclick="addRectImg()"/>
 <script>  
+var rectImg1,rectImg2;
 $(function(){
 	//initWorldViewer();
 	initViewer();
 	//loadEntitiesText();
 	//loadEntitiesEllipseImg();
-	loadEntitiesImg();
+	//loadEntitiesFlagImg();
+	loadEntitiesRectImg(-110.0, 10.0, -90.0, 30.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',1);
+	loadEntitiesRectImg(-100.0, -20.0, -90.0, -10.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',2);
+	loadEntitiesRectImg(-150.0, 10.0, -120.0, 30.0,'http://localhost:8080/PositionPhZY/upload/IMG_20200823_151415.jpg',3);
 	//loadArea2d();
 	//loadTileset();
 	//loadImageryLayers()
 });
+
+function removeRectImg(){
+	viewer.entities.removeAll();
+}
+
+function addRectImg(){
+	viewer.entities.add(rectImg1);
+	viewer.entities.add(rectImg2);
+}
 
 //https://blog.csdn.net/yk583443123/article/details/103523311
 var viewer;
@@ -86,7 +101,7 @@ function loadEntitiesEllipseImg(longitude,latitude){
 	//ellipse.material = 'http://localhost:8080/PositionPhZY/upload/area2d-1.png';
 }
 
-function loadEntitiesImg(){
+function loadEntitiesFlagImg(){
 	viewer.entities.add({
 	    rectangle : {
 	        coordinates : Cesium.Rectangle.fromDegrees(-100.0, 20.0, -90.0, 30.0),
@@ -97,6 +112,20 @@ function loadEntitiesImg(){
 	        })
 	    }
 	});
+}
+
+//https://blog.csdn.net/sinat_31213021/article/details/120024000
+function loadEntitiesRectImg(west,south,east,north,url,index){
+	var rectImg=viewer.entities.add({
+	    rectangle : {
+	        coordinates : Cesium.Rectangle.fromDegrees(west,south,east,north),
+	        material : url
+	    }
+	});
+	if(index==1)
+		rectImg1=rectImg;
+	else if(index==2)
+		rectImg2=rectImg;
 }
 
 function loadTileset(){

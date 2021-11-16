@@ -15,34 +15,59 @@
 </head>
 <body>
 <div id="cesiumContainer" style="width: 1500px; height:700px"></div>  
-<input type="button" value="移除" onclick="removeRectImg()"/>
-<input type="button" value="添加" onclick="addRectImg()"/>
+<input type="button" value="移动" onclick="moveEntities()"/>
+<input type="button" value="复位" onclick="restoreEntities()"/>
 <script>  
 var rectImg1,rectImg2;
+var textLongitude=-75.166493;
+var textLatitude=39.9060534;
+var ellipseImgLong=-103.0;
+var ellipseImgLat=40;
+var milkTruckEnLong=119.55265849594228;
+var milkTruckEnLat=37.04175799355465;
 $(function(){
 	//initWorldViewer();
 	initViewer();
-	//loadEntitiesText();
 	//loadEntitiesEllipseImg();
 	//loadEntitiesFlagImg();
-	loadEntitiesRectImg(-110.0, 10.0, -90.0, 30.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',1);
-	loadEntitiesRectImg(-100.0, -20.0, -90.0, -10.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',2);
-	loadEntitiesRectImg(-150.0, 10.0, -120.0, 30.0,'http://localhost:8080/PositionPhZY/upload/IMG_20200823_151415.jpg',3);
+	//loadEntitiesRectImg(-110.0, 10.0, -90.0, 30.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',1);
+	//loadEntitiesRectImg(-100.0, -20.0, -90.0, -10.0,'http://localhost:8080/PositionPhZY/upload/area2d-1.png',2);
+	//loadEntitiesRectImg(-150.0, 10.0, -120.0, 30.0,'http://localhost:8080/PositionPhZY/upload/IMG_20200823_151415.jpg',3);
 	//loadArea2d();
-	//loadTileset();
+	loadTileset();
+	//loadEntitiesText();
 	//loadImageryLayers()
+	setInterval(() => {
+		moveEntities();
+	}, 500);
 });
 
-function removeRectImg(){
-	viewer.entities.removeAll();
+function moveEntities(){
+	var milkTruckEn=viewer.entities.getById("milkTruck");
+	milkTruckEn.position=Cesium.Cartesian3.fromDegrees(milkTruckEnLong,milkTruckEnLat, 20);
+	milkTruckEnLong-=0.00001;
+	if(milkTruckEnLong<119.551111111111)
+		milkTruckEnLong=119.55265849594228;
+	
+	/*
+	var ellipseImg=viewer.entities.getById("ellipseImg");
+	ellipseImg.position=Cesium.Cartesian3.fromDegrees(ellipseImgLong,ellipseImgLat);
+	ellipseImgLong-=1;
+	if(ellipseImgLong<-180.166493)
+		ellipseImgLong=-103.0;
+	*/
+	//viewer.entities.remove(textEn);
 }
 
-function addRectImg(){
-	viewer.entities.add(rectImg1);
-	viewer.entities.add(rectImg2);
+function restoreEntities(){
+	var textEn=viewer.entities.getById("text");
+	textEn.position=Cesium.Cartesian3.fromDegrees(-75.166493, 39.9060534);
+	//viewer.entities.add(rectImg1);
+	//viewer.entities.add(rectImg2);
 }
 
 //https://blog.csdn.net/yk583443123/article/details/103523311
+//https://blog.csdn.net/u013594477/article/details/79578748
 var viewer;
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZWIzYTUxYy0xMmRkLTRiYTEtODE1My1kMjE1NzAyZDQwMmIiLCJpZCI6NzMyNDUsImlhdCI6MTYzNjY5NTEzOX0.rgwvu7AcuwqpYTO3kTKuZ7Pzebn1WNu2x8bKiqgbTcM'; 
 
@@ -54,12 +79,40 @@ function initWorldViewer(){
 
 function initViewer(){
 	viewer = new Cesium.Viewer('cesiumContainer');
+	
+	//获取经纬度、高度链接：https://www.cnblogs.com/telwanggs/p/11289455.html
+	//获取事件触发所在的  html Canvas容器
+    var canvas=viewer.scene.canvas;
+
+    //获取事件句柄
+    var handler=new Cesium.ScreenSpaceEventHandler(canvas);
+
+    //处理事件函数
+    handler.setInputAction(function(movement){
+
+        //拾取笛卡尔坐标
+        var ellipsoid=viewer.scene.globe.ellipsoid;//全局椭球体
+        var cartesian=viewer.scene.camera.pickEllipsoid(movement.endPosition,ellipsoid)//拾取鼠标在椭圆上的结束点笛卡尔坐标点
+        //转化笛卡尔坐标 为经纬度
+        var mesDom=document.getElementById('mes');
+        if(cartesian){
+            var cartographic=ellipsoid.cartesianToCartographic(cartesian);//笛卡尔坐标转制图坐标
+            //var coordinate="经度:"+Cesium.Math.toDegrees(cartographic.longitude).toFixed(2)+",纬度:"+Cesium.Math.toDegrees(cartographic.latitude).toFixed(2)+
+                    "相机高度:"+Math.ceil(viewer.camera.positionCartographic.height);
+            var coordinate="经度:"+Cesium.Math.toDegrees(cartographic.longitude)+",纬度:"+Cesium.Math.toDegrees(cartographic.latitude)+
+            "相机高度:"+Math.ceil(viewer.camera.positionCartographic.height);
+			console.log("coordinate==="+coordinate);
+        }else{
+        	
+        }
+    },Cesium.ScreenSpaceEventType.MOUSE_MOVE);//监听的是鼠标滑动事件
 }
 
 function loadEntitiesText(){
 	var citizensBankPark = viewer.entities.add( {
+		id:"text",
 	    name : 'Citizens Bank Park',
-	    position : Cesium.Cartesian3.fromDegrees( -75.166493, 39.9060534 ),
+	    position : Cesium.Cartesian3.fromDegrees( 39.166493, 116.9060534 ),
 	    point : { //点
 	        pixelSize : 5,
 	        color : Cesium.Color.RED,
@@ -86,6 +139,7 @@ function loadEntitiesText(){
 
 function loadEntitiesEllipseImg(longitude,latitude){
 	var entity = viewer.entities.add({
+	  id:"ellipseImg",
 	  position: Cesium.Cartesian3.fromDegrees(-103.0, 40.0),
 	  ellipse : {
 	    semiMinorAxis : 250000.0,
@@ -130,9 +184,10 @@ function loadEntitiesRectImg(west,south,east,north,url,index){
 
 function loadTileset(){
 	var tileset = new Cesium.Cesium3DTileset({
-	   url: "http://localhost:8080/PositionPhZY/upload/model1/tileset.json",
+	   url: "http://localhost:8080/PositionPhZY/upload/b3dm/tileset.json",
 	   shadows:Cesium.ShadowMode.DISABLED,//去除阴影
 	});
+	console.log(tileset)
 	viewer.scene.primitives.add(tileset);
 	tileset.readyPromise.then(function(tileset) {
 	   viewer.camera.viewBoundingSphere(tileset.boundingSphere, new Cesium.HeadingPitchRange(0, -0.5, 0));
@@ -140,7 +195,28 @@ function loadTileset(){
 	}).otherwise(function(error) {
 	    throw(error);
 	});
-
+	
+	var position = Cesium.Cartesian3.fromDegrees(milkTruckEnLong,milkTruckEnLat, 20);
+	   var heading = Cesium.Math.toRadians(135);
+	   var pitch = 0;
+	   var roll = 0;
+	   var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+	   var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+	 
+	   var entity = viewer.entities.add({
+		   id:"milkTruck",
+	       position : position,
+	       orientation : orientation,
+	       model : {
+	           uri: "http://localhost:8080/PositionPhZY/upload/CesiumMilkTruck.gltf",
+	           //uri: "http://localhost:8080/PositionPhZY/upload/Cesium_Air.glb",
+	           minimumPixelSize : 128,
+	           maximumScale : 20000
+	       }
+	   });
+	   viewer.trackedEntity = entity;
+	
+	/*
 	tileset = new Cesium.Cesium3DTileset({
 	   url: "http://localhost:8080/PositionPhZY/upload/model2/tileset.json",
 	   shadows:Cesium.ShadowMode.DISABLED,//去除阴影
@@ -157,6 +233,7 @@ function loadTileset(){
 	}).otherwise(function(error) {
 	    throw(error);
 	});
+	*/
 }
 
 function loadArea2d(){

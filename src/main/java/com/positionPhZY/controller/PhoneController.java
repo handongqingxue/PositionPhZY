@@ -94,6 +94,12 @@ public class PhoneController {
 		else if("syncDBManager".equals(page)){
 			url=MODULE_NAME+"/syncDBManager";
 		}
+		else if("testMap".equals(page)){
+			url=MODULE_NAME+"/testMap";
+		}
+		else if("testModel".equals(page)){
+			url=MODULE_NAME+"/testModel";
+		}
 		else {
 			url="redirect:goPage?page=login";
 		}

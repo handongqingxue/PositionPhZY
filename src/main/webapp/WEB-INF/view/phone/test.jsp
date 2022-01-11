@@ -12,6 +12,7 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 var path='<%=basePath %>';
+var phonePath=path+"phone/";
 var myCanvasWidth=720;
 var myCanvasHeight=670;
 var canvas;
@@ -32,6 +33,12 @@ $(function(){
 		}
 	,"json");
 	*/
+	$.post(phonePath+"insertEntityTypeData",
+		//{entityType:"staff"},
+		function(){
+			
+		}
+	,"json");
 });
 
 function repaint(){

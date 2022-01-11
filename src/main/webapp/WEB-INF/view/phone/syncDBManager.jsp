@@ -12,13 +12,19 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var phonePath=path+"phone/";
+//var tenantId="sc21090414";
+//var userId="test";
+//var password="test";
+var tenantId='${requestScope.tenantId }';
+var userId='${requestScope.userId }';
+var password='${requestScope.password }';
 $(function(){
 	login();
 });
 
 function login(){
 	$.post(phonePath+"login",
-		{tenantId:"sc21090414",userId:"test",password:"test"},
+		{tenantId:tenantId,userId:userId,password:password},
 		function(data){
 			if(data.status=="ok"){
 				makeSync();

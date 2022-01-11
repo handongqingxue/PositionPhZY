@@ -45,16 +45,20 @@ public class PhoneController {
 	
 	//这些接口不允许跨域访问，一律用127.0.0.1在本地搭建接口服务访问本地接口
 	//private static final String PUBLIC_URL="http://127.0.0.1:8081/position/public/embeded.smd";
-	private static final String PUBLIC_URL="http://124.70.38.226:8081/position/public/embeded.smd";
+	//private static final String PUBLIC_URL="http://124.70.38.226:8081/position/public/embeded.smd";
+	private static final String PUBLIC_URL="http://"+Constant.SERVICE_IP+":8081/position/public/embeded.smd";
 	//private static final String PUBLIC_URL="http://139.196.143.225:8081/position/public/embeded.smd";
 	//private static final String SERVICE_URL="http://127.0.0.1:8081/position/service/embeded.smd";
-	private static final String SERVICE_URL="http://124.70.38.226:8081/position/service/embeded.smd";
+	//private static final String SERVICE_URL="http://124.70.38.226:8081/position/service/embeded.smd";
+	private static final String SERVICE_URL="http://"+Constant.SERVICE_IP+":8081/position/service/embeded.smd";
 	//private static final String SERVICE_URL="http://139.196.143.225:8081/position/service/embeded.smd";
-	private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
+	//private static final String HWY_URL="http://124.70.38.226:8080/PositionPhZY/phone/";
+	private static final String HWY_URL="http://"+Constant.SERVICE_IP+":8080/PositionPhZY/phone/";
 	public static final String MODULE_NAME="/phone";
 	//以下这些常量是在本地接口服务不可用时，根据ip判断是本地还是远程华为云服务，若是本地，间接请求华为云服务那边的接口服务
 	public static final String LOCAL_Server_NAME="localhost";
-	public static final String HWY_SERVER_NAME="124.70.38.226";
+	//public static final String HWY_SERVER_NAME="124.70.38.226";
+	public static final String HWY_SERVER_NAME=Constant.SERVICE_IP;
 	public static final String TEST_USER_Id="test001";
 
 	@Autowired
@@ -89,9 +93,15 @@ public class PhoneController {
 			url=MODULE_NAME+"/"+page;
 		}
 		else if("login".equals(page)){
+			request.setAttribute("tenantId", Constant.TENANT_ID);
+			request.setAttribute("userId", Constant.USER_ID);
+			request.setAttribute("password", Constant.PASSWORD);
 			url=MODULE_NAME+"/login";
 		}
 		else if("syncDBManager".equals(page)){
+			request.setAttribute("tenantId", Constant.TENANT_ID);
+			request.setAttribute("userId", Constant.USER_ID);
+			request.setAttribute("password", Constant.PASSWORD);
 			url=MODULE_NAME+"/syncDBManager";
 		}
 		else {

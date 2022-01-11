@@ -19,7 +19,8 @@ public class SyncDBTask extends TimerTask {
 		// TODO Auto-generated method stub
 		try {
 			Desktop dt = Desktop.getDesktop();
-			dt.browse(new URI("http://124.70.38.226:8080/PositionPhZY/phone/goPage?page=syncDBRun"));
+			//dt.browse(new URI("http://124.70.38.226:8080/PositionPhZY/phone/goPage?page=syncDBRun"));
+			dt.browse(new URI("http://"+Constant.SERVICE_IP+":8080/PositionPhZY/phone/goPage?page=syncDBRun"));
 			//dt.browse(new URI("http://localhost:8080/PositionPhZY/phone/goPage?page=syncDBRun"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

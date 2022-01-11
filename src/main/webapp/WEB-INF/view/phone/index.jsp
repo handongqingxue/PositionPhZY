@@ -243,10 +243,11 @@ function initSSDWCanvas(reSizeFlag){
 					for(var i=0;i<locationList.length;i++){
 						var location=locationList[i];
 						//console.log(location.uid+","+location.x+location.y+location.entityType+","+location.entityName+","+","+","+location.floor);
-						if($("#label_list_div #select_cb"+location.entityType).prop("checked"))
+						if($("#label_list_div #select_cb"+location.entityType).prop("checked")){
 							setEntityLocation(ssdwCanvasContext,location.x,location.y,location.entityName,location.entityType,location.floor);
+						}
 					}
-					//setEntityLocation(ssdwCanvasContext,139,166,"张晓红","staff",1);
+					//setEntityLocation(ssdwCanvasContext,24,31,"张晓红","staff",1);
 					//setEntityLocation(ssdwCanvasContext,244,151,"迟高平","staff",1);
 				}
 				var preSsdwCanvas=document.getElementById("ssdwCanvas");

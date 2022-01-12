@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.positionPhZY.dao.ChildAreaMapper">
+ 	<insert id="add" parameterType="com.positionPhZY.entity.ChildArea">
+ 		insert into child_area
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="name!=null">
+ 				name,
+ 			</if>
+ 			<if test="value!=null">
+ 				value,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="name!=null">
+ 				#{name},
+ 			</if>
+ 			<if test="value!=null">
+ 				#{value},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.positionPhZY.entity.ChildArea">
+		update child_area set
+		<trim suffixOverrides=",">
+ 			<if test="name!=null">
+ 				name=#{name},
+ 			</if>
+			<if test="value!=null">
+				value=#{value},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+ 	<select id="querySelectData" resultType="com.positionPhZY.entity.ChildArea">
+ 		select * from child_area order by sort
+ 	</select>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from child_area where id=#{id}
+	</select>
+</mapper>

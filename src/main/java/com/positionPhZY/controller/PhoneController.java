@@ -64,6 +64,8 @@ public class PhoneController {
 	@Autowired
 	private AreaService areaService;
 	@Autowired
+	private ChildAreaService childAreaService;
+	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
 	private WarnTriggerService warnTriggerService;
@@ -93,21 +95,24 @@ public class PhoneController {
 			url=MODULE_NAME+"/"+page;
 		}
 		else if("login".equals(page)){
-			request.setAttribute("tenantId", Constant.TENANT_ID);
-			request.setAttribute("userId", Constant.USER_ID);
-			request.setAttribute("password", Constant.PASSWORD);
+			setLoginInfoInRequest(request);
 			url=MODULE_NAME+"/login";
 		}
 		else if("syncDBManager".equals(page)){
-			request.setAttribute("tenantId", Constant.TENANT_ID);
-			request.setAttribute("userId", Constant.USER_ID);
-			request.setAttribute("password", Constant.PASSWORD);
+			setLoginInfoInRequest(request);
 			url=MODULE_NAME+"/syncDBManager";
 		}
 		else {
+			setLoginInfoInRequest(request);
 			url="redirect:goPage?page=login";
 		}
 		return url;
+	}
+	
+	public void setLoginInfoInRequest(HttpServletRequest request) {
+		request.setAttribute("tenantId", Constant.TENANT_ID);
+		request.setAttribute("userId", Constant.USER_ID);
+		request.setAttribute("password", Constant.PASSWORD);
 	}
 
 	@RequestMapping(value="/initEntitySelect")
@@ -139,6 +144,9 @@ public class PhoneController {
 		if("ok".equals(ccvMap.get("status").toString())) {
 			Map<String, Object> soerMap = summaryOnlineEntity(request);
 			resultMap.put("entityResult", soerMap.get("result"));
+			
+			List<ChildArea> childAreaList=childAreaService.querySelectData();
+			resultMap.put("childAreaList", childAreaList);
 				
 			Map<String, Object> sodrMap = summaryOnlineDuty();
 			resultMap.put("dutyResult", sodrMap);
@@ -398,6 +406,27 @@ public class PhoneController {
 		else {
 			resultMap.put("status", "ok");
 			resultMap.put("list", locationList);
+		}
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertChildAreaData")
+	@ResponseBody
+	public Map<String, Object> insertChildAreaData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> soerMap = summaryOnlineEntity(request);
+		com.alibaba.fastjson.JSONObject resultJO = (com.alibaba.fastjson.JSONObject)soerMap.get("result");
+		JSONArray childrenJA = resultJO.getJSONArray("children");
+		List<ChildArea> childAreaList = JSON.parseArray(childrenJA.toString(),ChildArea.class);
+		int count=childAreaService.add(childAreaList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化子区域信息失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化子区域信息成功");
 		}
 		return resultMap;
 	}

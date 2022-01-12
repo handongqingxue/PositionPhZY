@@ -130,7 +130,8 @@ function summaryOnlineData(){
 		function(data){
 			if(data.status=="ok"){
 				var entityResult=data.entityResult;
-				initFloorSel(entityResult);
+				var childAreaList=data.childAreaList;
+				initFloorSel(entityResult,childAreaList);
 				var dutyResult=data.dutyResult;
 				initDutySel(dutyResult);
 				initSSDWCanvas(0);
@@ -145,24 +146,24 @@ function summaryOnlineData(){
 	,"json");
 }
 
-function initFloorSel(result){
+function initFloorSel(entityResult,childAreaList){
 	var floorSel=$("#floor_sel");
 	floorSel.empty();
-	var name=result.name;
-	var summary=result.summary;
+	var name=entityResult.name;
+	var summary=entityResult.summary;
 	var online=summary.online;
 	floorSel.append("<option value=\"\">"+name+" ("+online.total+")</option>");
 	
-	var children=result.children;
+	var children=entityResult.children;
 	for(var i=0;i<children.length;i++){
 		var child=children[i];
 		var optionValue;
 		var childName=child.name;
+		/*
 		switch (childName) {
 		case "道路":
 			optionValue=0;
 			break;
-			/*
 		case "厂房一层":
 			optionValue=1;
 			break;
@@ -172,21 +173,16 @@ function initFloorSel(result){
 		case "厂房三层":
 			optionValue=3;
 			break;
-			*/
-		case "F1":
-			optionValue=1;
-			break;
-		case "F2":
-			optionValue=2;
-			break;
-		case "F3":
-			optionValue=3;
-			break;
-		case "F4":
-			optionValue=4;
-			break;
 		}
-		floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
+		*/
+		for(var j=0;j<childAreaList.length;j++){
+			var childArea=childAreaList[j];
+			if(childName==childArea.name){
+				optionValue=childArea.value;
+				floorSel.append("<option value=\""+optionValue+"\" "+(selectedFloorValue==optionValue?"selected":"")+">"+childName+" ("+child.summary.online.total+")</option>");
+				break;
+			}
+		}
 	}
 	//console.log(JSON.stringify(children));
 }

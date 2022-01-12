@@ -33,7 +33,7 @@ $(function(){
 		}
 	,"json");
 	*/
-	$.post(phonePath+"insertEntityTypeData",
+	$.post(phonePath+"insertChildAreaData",
 		//{entityType:"staff"},
 		function(){
 			

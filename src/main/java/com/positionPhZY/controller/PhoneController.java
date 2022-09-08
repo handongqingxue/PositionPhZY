@@ -98,6 +98,10 @@ public class PhoneController {
 			setLoginInfoInRequest(request);
 			url=MODULE_NAME+"/login";
 		}
+		else if("noPwdLogin".equals(page)){
+			request.setAttribute("noPwdLoginUrl", "http://"+Constant.SERVICE_IP+":8081/position/embeded/vueIndex.html?sd=c2MyMTA5MDQxNA==&us=dGVzdDAwMQ==#/CurrentLocation");
+			url=MODULE_NAME+"/noPwdLogin";
+		}
 		else if("syncDBManager".equals(page)){
 			setLoginInfoInRequest(request);
 			url=MODULE_NAME+"/syncDBManager";
@@ -704,6 +708,7 @@ public class PhoneController {
 	@RequestMapping(value="/login")
 	@ResponseBody
 	public Map<String, Object> login(String tenantId, String userId, String password,HttpServletRequest request){
+		System.out.println("login...........");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
@@ -748,6 +753,7 @@ public class PhoneController {
 				LoginUser loginUser=(LoginUser)session.getAttribute("loginUser");
 				loginUser.setUserId(userId);
 				loginUser.setRole(Integer.valueOf(resultJOMap.get("role").toString()));
+				resultMap.put("cookie", loginUser.getCookie());
 			}
 			else {
 				resultMap.put("message", "用户不存在");
@@ -2299,8 +2305,8 @@ public class PhoneController {
 	}
 	
 	public static void main(String[] args) {
-		//String s = SHA256Utils.getSHA256("ts00000006"+"test001"+"test001"+"3bdfd7b5731143cda58cef2d659a4976");
-		//System.out.println("s==="+s);
+		String s = SHA256Utils.getSHA256("sc21090414"+"test001"+"test001"+"5c335f668a684f54bc60693a25d3c5e7");
+		System.out.println("s==="+s);
 		//52ac4c72590ec0d129fac7ffa3f0a2c4841875334709fbe0ac9ba65a104cc2ca
 		/*
 		System.out.println(DateUtil.convertLongToString(1624266053514L));
@@ -2313,7 +2319,7 @@ public class PhoneController {
 		*/
 		//double d=(double)19/5;
 		//System.out.println(Math.ceil(d));
-		System.out.println(APIResultUtil.getDeviceTypes());
+		//System.out.println(APIResultUtil.getDeviceTypes());
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control

@@ -60,6 +60,7 @@ public class PhoneController {
 	//public static final String HWY_SERVER_NAME="124.70.38.226";
 	public static final String HWY_SERVER_NAME=Constant.SERVICE_IP;
 	public static final String TEST_USER_Id="test001";
+	private int epFlag=Constant.CYSRHSWKJYXGS;
 
 	@Autowired
 	private AreaService areaService;
@@ -99,7 +100,24 @@ public class PhoneController {
 			url=MODULE_NAME+"/login";
 		}
 		else if("noPwdLogin".equals(page)){
-			request.setAttribute("noPwdLoginUrl", "http://"+Constant.SERVICE_IP+":8081/position/embeded/vueIndex.html?sd=c2MyMTA5MDQxNA==&us=dGVzdDAwMQ==#/CurrentLocation");
+			//http://localhost:8080/PositionPhZY/phone/goPage?page=noPwdLogin
+			String noPwdLoginUrl=null;
+			switch (epFlag) {//平台不同，需要判断调用真源那边提供的链接还是调用接口生成的token登录
+			case Constant.WFRZJXHYXGS:
+				noPwdLoginUrl="http://"+Constant.SERVICE_IP+":8081/position/embeded/vueIndex.html?sd=c2MyMTA5MDQxNA==&us=dGVzdDAwMQ==#/CurrentLocation";
+				break;
+			case Constant.CYSRHSWKJYXGS:
+				JSONObject resultJO = noPwdLoginApi(request);
+				int code = resultJO.getInt("code");
+				if(code==200) {
+					String token = resultJO.getString("token");
+					String serviceIp = request.getAttribute("serviceIp").toString();
+					String servicePort = request.getAttribute("servicePort").toString();
+					noPwdLoginUrl="http://"+serviceIp+":"+servicePort+"/#/CurrentLocate?dsToken="+token;
+				}
+				break;
+			}
+			request.setAttribute("noPwdLoginUrl", noPwdLoginUrl);
 			url=MODULE_NAME+"/noPwdLogin";
 		}
 		else if("syncDBManager".equals(page)){
@@ -2320,6 +2338,106 @@ public class PhoneController {
 		//double d=(double)19/5;
 		//System.out.println(Math.ceil(d));
 		//System.out.println(APIResultUtil.getDeviceTypes());
+	}
+	
+	public JSONObject noPwdLoginApi(HttpServletRequest request) {
+		
+		JSONObject resultJO = null;
+		try {
+			switchNoPwdLoginEp(request);
+			
+			StringBuffer sbf = new StringBuffer(); 
+			String strRead = null; 
+			String serverUrl=Constant.NO_PWD_LOGIN_URL;
+			
+			String serviceIp = request.getAttribute("serviceIp").toString();
+			String servicePort = request.getAttribute("servicePort").toString();
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
+			
+			//System.out.println("serverUrl==="+serverUrl);
+			URL url = new URL(serverUrl);
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			
+			//connection.setInstanceFollowRedirects(false); 
+			
+			connection.setRequestMethod("POST");//请求方式
+			connection.setDoInput(true); 
+			connection.setDoOutput(true); 
+			//header内的的参数在这里set    
+			//connection.setRequestProperty("key", "value");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.connect(); 
+			
+			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
+			//body参数放这里
+			String tenantId = request.getAttribute("tenantId").toString();
+			String username = request.getAttribute("username").toString();
+			String password = request.getAttribute("password").toString();
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("tenantId", tenantId);
+			bodyParamJO.put("username", username);
+			bodyParamJO.put("password", password);
+			String bodyParamStr = bodyParamJO.toString();
+			System.out.println("bodyParamStr==="+bodyParamStr);
+			writer.write(bodyParamStr);
+			writer.flush();
+			
+			InputStream is = connection.getInputStream(); 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
+			while ((strRead = reader.readLine()) != null) { 
+				sbf.append(strRead); 
+				sbf.append("\r\n"); 
+			}
+			reader.close(); 
+			
+			connection.disconnect();
+			String result = sbf.toString();
+			System.out.println("result==="+result);
+			if(result.contains("DOCTYPE")) {
+				resultJO = new JSONObject();
+				resultJO.put("status", "no");
+			}
+			else if(result.contains("error")) {
+				resultJO = new JSONObject(result);
+				resultJO.put("status", "no");
+			}
+			else {
+				resultJO = new JSONObject(result);
+				resultJO.put("status", "ok");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Exception.....");
+			resultJO = new JSONObject();
+			resultJO.put("status", "no");
+			e.printStackTrace();
+		}
+		finally {
+			return resultJO;
+		}
+	}
+	
+	public void switchNoPwdLoginEp(HttpServletRequest request) {
+		String serviceIp=null;
+		int servicePort=0;
+		String tenantId=null;
+		String username=null;
+		String password=null;
+		switch (epFlag) {
+		case Constant.CYSRHSWKJYXGS:
+			serviceIp=Constant.SERVICE_IP_CYSRHSWKJYXGS;
+			servicePort=Constant.SERVICE_PORT_CYSRHSWKJYXGS;
+			tenantId=Constant.TENANT_ID_CYSRHSWKJYXGS;
+			username=Constant.USERNAME_CYSRHSWKJYXGS;
+			password=Constant.PASSWORD_CYSRHSWKJYXGS;
+			break;
+		}
+		request.setAttribute("serviceIp", serviceIp);
+		request.setAttribute("servicePort", servicePort);
+		request.setAttribute("tenantId", tenantId);
+		request.setAttribute("username", username);
+		request.setAttribute("password", password);
 	}
 	
 	//https://blog.csdn.net/u013652912/article/details/108637590?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control

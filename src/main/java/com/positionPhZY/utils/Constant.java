@@ -25,8 +25,10 @@ public class Constant {
 	//ÈóÖÐend
 	
 	//Èðº£start
-	public static final String SERVICE_IP_CYSRHSWKJYXGS="120.224.131.123";
-	public static final Integer SERVICE_PORT_CYSRHSWKJYXGS=81;
+	//public static final String SERVICE_IP_CYSRHSWKJYXGS="120.224.131.123";
+	//public static final Integer SERVICE_PORT_CYSRHSWKJYXGS=81;
+	public static final String SERVICE_IP_CYSRHSWKJYXGS="192.168.124.154";
+	public static final Integer SERVICE_PORT_CYSRHSWKJYXGS=80;
 	public static final String TENANT_ID_CYSRHSWKJYXGS="sc21100449";
 	public static final String USERNAME_CYSRHSWKJYXGS="rhsw";
 	public static final String PASSWORD_CYSRHSWKJYXGS="rhsw";

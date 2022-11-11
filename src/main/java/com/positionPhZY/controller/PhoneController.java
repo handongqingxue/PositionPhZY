@@ -107,13 +107,14 @@ public class PhoneController {
 				noPwdLoginUrl="http://"+Constant.SERVICE_IP+":8081/position/embeded/vueIndex.html?sd=c2MyMTA5MDQxNA==&us=dGVzdDAwMQ==#/CurrentLocation";
 				break;
 			case Constant.CYSRHSWKJYXGS:
+				//http://120.224.131.123:8081/PositionPhZY/phone/goPage?page=noPwdLogin
 				JSONObject resultJO = noPwdLoginApi(request);
 				int code = resultJO.getInt("code");
 				if(code==200) {
 					String token = resultJO.getString("token");
 					String serviceIp = request.getAttribute("serviceIp").toString();
 					String servicePort = request.getAttribute("servicePort").toString();
-					noPwdLoginUrl="http://"+serviceIp+":"+servicePort+"/#/CurrentLocate?dsToken="+token;
+					noPwdLoginUrl="http://120.224.131.123:81/#/CurrentLocate?dsToken="+token;
 				}
 				break;
 			}
@@ -2354,6 +2355,7 @@ public class PhoneController {
 			String servicePort = request.getAttribute("servicePort").toString();
 			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
 			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
+			System.out.println("serviceIp==="+serviceIp);
 			
 			//System.out.println("serverUrl==="+serverUrl);
 			URL url = new URL(serverUrl);

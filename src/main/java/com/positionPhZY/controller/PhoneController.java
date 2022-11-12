@@ -105,21 +105,21 @@ public class PhoneController {
 			switch (epFlag) {//平台不同，需要判断调用真源那边提供的链接还是调用接口生成的token登录
 			case Constant.WFRZJXHYXGS:
 				noPwdLoginUrl="http://"+Constant.SERVICE_IP+":8081/position/embeded/vueIndex.html?sd=c2MyMTA5MDQxNA==&us=dGVzdDAwMQ==#/CurrentLocation";
+				request.setAttribute("noPwdLoginUrl", noPwdLoginUrl);
+				url=MODULE_NAME+"/noPwdLogin";
 				break;
 			case Constant.CYSRHSWKJYXGS:
+				//从外网访问瑞海企业内部服务器端口是8081，这里在路由器后台配置了端口映射，通过8081端口映射到企业服务器那边的8080端口
 				//http://120.224.131.123:8081/PositionPhZY/phone/goPage?page=noPwdLogin
 				JSONObject resultJO = noPwdLoginApi(request);
 				int code = resultJO.getInt("code");
 				if(code==200) {
 					String token = resultJO.getString("token");
-					String serviceIp = request.getAttribute("serviceIp").toString();
-					String servicePort = request.getAttribute("servicePort").toString();
-					noPwdLoginUrl="http://120.224.131.123:81/#/CurrentLocate?dsToken="+token;
+					noPwdLoginUrl="http://"+Constant.SERVICE_IP_CYSRHSWKJYXGS_LYQ+":"+Constant.SERVICE_PORT_CYSRHSWKJYXGS_LYQ+"/#/CurrentLocate?dsToken="+token;
 				}
+				url="redirect:"+noPwdLoginUrl;
 				break;
 			}
-			request.setAttribute("noPwdLoginUrl", noPwdLoginUrl);
-			url=MODULE_NAME+"/noPwdLogin";
 		}
 		else if("syncDBManager".equals(page)){
 			setLoginInfoInRequest(request);
@@ -2355,7 +2355,7 @@ public class PhoneController {
 			String servicePort = request.getAttribute("servicePort").toString();
 			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
 			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
-			System.out.println("serviceIp==="+serviceIp);
+			//System.out.println("serviceIp==="+serviceIp);
 			
 			//System.out.println("serverUrl==="+serverUrl);
 			URL url = new URL(serverUrl);
@@ -2428,8 +2428,8 @@ public class PhoneController {
 		String password=null;
 		switch (epFlag) {
 		case Constant.CYSRHSWKJYXGS:
-			serviceIp=Constant.SERVICE_IP_CYSRHSWKJYXGS;
-			servicePort=Constant.SERVICE_PORT_CYSRHSWKJYXGS;
+			serviceIp=Constant.SERVICE_IP_CYSRHSWKJYXGS_NW;//瑞海项目部署在企业本地服务器上，通过路由器ip映射到本地服务器ip
+			servicePort=Constant.SERVICE_PORT_CYSRHSWKJYXGS_NW;
 			tenantId=Constant.TENANT_ID_CYSRHSWKJYXGS;
 			username=Constant.USERNAME_CYSRHSWKJYXGS;
 			password=Constant.PASSWORD_CYSRHSWKJYXGS;

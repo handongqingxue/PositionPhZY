@@ -24,15 +24,15 @@ public class Constant {
 	public static final String PASSWORD="test";
 	//润中end
 	
-	//瑞海start
-	//public static final String SERVICE_IP_CYSRHSWKJYXGS="120.224.131.123";
-	//public static final Integer SERVICE_PORT_CYSRHSWKJYXGS=81;
-	public static final String SERVICE_IP_CYSRHSWKJYXGS="192.168.124.154";
-	public static final Integer SERVICE_PORT_CYSRHSWKJYXGS=80;
+	//昌邑市瑞海生物科技有限公司start
+	public static final String SERVICE_IP_CYSRHSWKJYXGS_LYQ="120.224.131.123";
+	public static final Integer SERVICE_PORT_CYSRHSWKJYXGS_LYQ=81;
+	public static final String SERVICE_IP_CYSRHSWKJYXGS_NW="192.168.124.154";
+	public static final Integer SERVICE_PORT_CYSRHSWKJYXGS_NW=80;
 	public static final String TENANT_ID_CYSRHSWKJYXGS="sc21100449";
 	public static final String USERNAME_CYSRHSWKJYXGS="rhsw";
 	public static final String PASSWORD_CYSRHSWKJYXGS="rhsw";
-	//瑞海end
+	//昌邑市瑞海生物科技有限公司end
 	
 	/*
 	//这个ip是瑞海华为云的，暂时不用了，换成本地服务器部署了
